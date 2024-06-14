@@ -1,0 +1,108 @@
+.nav{
+    height: 70px;
+    background-color: black;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding : 10px 20px;
+    font-family: Tahoma;
+}
+
+.nav h2 {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo > i {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+
+.user-profile{
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+/* sidebar */
+
+.nav-option{
+    display: flex;
+    align-items: center;
+    padding:0px 0px 0px 10px;
+    padding-bottom: 10px;
+    width: 220px;
+    gap: 20px;
+    font-family: Tahoma;
+    text-decoration: none;
+    color: #fff;
+}
+
+.nav-option > i.bi{
+    font-size: 30px;
+    color: #fff;
+    background-color: black;
+}
+
+.sidebar-container{
+    background-color: black;
+    color: #fff;
+    height: calc(100vh - 70px);
+    width: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+}
+
+.sidebar-container::-webkit-scrollbar{
+    display: none;
+}
+
+.nav-option:hover, .nav-option:hover > i.bi{
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+}
+
+.nav-option:active , .nav-option:active > i.bi{
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+}
+
+/*@media query*/
+@media screen and (min-width: 768px){
+    .navbarCollaps{
+        width: 80px;
+    }
+
+    .navbarCollaps > .nav-option > h3 {
+        display: none;
+    }
+
+    .navbarCollaps > .nav-option > i.bi {
+        font-size: 38px;
+    }
+}
+
+@media screen and (max-width: 767px){
+    .logo i{
+        display: none;
+    }
+
+    .sidebar-container{
+        display: block;
+        width: 15%;
+    }
+
+    .nav-option > h3 {
+        display: none;
+    }
+}

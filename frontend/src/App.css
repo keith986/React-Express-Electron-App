@@ -202,6 +202,92 @@ color: #fff;
 font-size: 20px;
 }
 
+.cashpay{
+background-color: rgb(5, 169, 5);
+color: #fff;
+font-size: 20px;
+}
+
+.transferpay{
+background-color: rgb(5, 101, 169);
+color: #000;
+font-size: 20px;
+}
+
+.POSpay{
+background-color: rgb(212, 26, 181);
+color: #fff;
+font-size: 20px;
+}
+
+.chequepay{
+background-color: rgb(165, 107, 14);
+color: #fff;
+font-size: 20px;
+}
+
+.todayexp{
+	background-color: rgb(241, 12, 12);
+	color: #fff;
+	font-size: 20px;	
+}
+
+.sevenexp{
+background-color: rgb(185, 16, 16);
+color: #fff;
+font-size: 20px;
+}
+
+.monthexp{
+background-color: rgb(142, 7, 7);
+color: #fff;
+font-size: 20px;
+}
+
+.monthsexp{
+background-color: rgb(72, 5, 5);
+color: #fff;
+font-size: 20px;
+}
+
+.logout{
+	display: flex;
+	align-items: center;
+	text-align: center;
+	justify-content: space-evenly;
+	width: 30%;
+	position: absolute;
+	bottom: 5%;
+	right: 30%;
+	padding: 10px;
+	background-color: red;
+	color: #fff;
+	outline: none;
+	border: none;
+	border-radius: 30px;
+	box-shadow: 0px 0px 2px 1px #333333;
+}
+
+.logout:hover{
+	box-shadow: none;
+	cursor: pointer;
+}
+
+.search-btn{
+	border-radius: 10px;
+	padding: 20px;
+	background-color: black;
+	color: #fff;
+	border: none;
+	outline: none;
+	box-shadow: 0px 0px 2px 1px #333333;
+	cursor: pointer;
+}
+
+.search-btn:hover{
+	box-shadow: none;
+}
+
 .ban{
 	background-color: rgb(198, 13, 13);
 	color: #fff;
@@ -334,6 +420,14 @@ font-size: 20px;
 
 	#tablexl{
 		margin-left: 170%;
+	}
+
+	#tablexll{
+		margin-left: 200%;
+	}
+
+	#tablexlg{
+		margin-left: 220%;
 	}
 
 	#tablext{

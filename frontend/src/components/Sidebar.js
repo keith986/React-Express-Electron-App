@@ -52,22 +52,22 @@ const Sidebar = () => {
         <i className='bi bi-list-task'></i>
           <h3>Orders</h3>
         </a>  
-        <div className='nav-option option8'>
-        <i className='bi bi-flag-fill'></i>
+        <a href='/reports' className='nav-option option8'>
+        <i className='bi bi-bar-chart-fill'></i>
           <h3>Reports</h3>
-        </div>
-        <div className='nav-option option9'>
+        </a>
+        <a href='/creditors' className='nav-option option9'>
         <i className='bi bi-person-lines-fill'></i>
           <h3>Creditors</h3>
-        </div>
-        <div className='nav-option option10'>
+        </a>
+        <a href='/expires' className='nav-option option10'>
         <i className='bi bi-slash-circle-fill'></i>
           <h3>Expired</h3>
-        </div>
-        <div className='nav-option option1'>
+        </a>
+        <a href='/settings' className='nav-option option1'>
         <i className='bi bi-gear'></i>
           <h3>Settings</h3>
-        </div>
+        </a>
       </div>
       </div>
 

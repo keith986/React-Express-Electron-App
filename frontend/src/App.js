@@ -8,6 +8,10 @@ import Suppliers from "./pages/Suppliers";
 import Categories from "./pages/Categories";
 import Products from "./pages/Products";
 import Orders from './pages/Orders';
+import Report from "./pages/Report";
+import Creditors from "./pages/Creditors";
+import Expiry from "./pages/Expiry"
+import Settings from "./pages/Settings";
 
 function App() {
 	return (
@@ -21,6 +25,10 @@ function App() {
 				<Route path='/categories' element={<Categories />}/>
 				<Route path='/products' element={<Products />}/>
 				<Route path='/orders' element={<Orders />}/>
+				<Route path='/reports' element={<Report />}/>
+				<Route path='/creditors' element={<Creditors />}/>
+				<Route path='/expires' element={<Expiry />}/>
+				<Route path='/settings' element={<Settings />}/>
 			</Routes>
 		</BrowserRouter>
 	);

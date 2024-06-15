@@ -301,7 +301,7 @@ font-size: 20px;
 .company-detail{
 	padding: 10px;
 	font-size: 20px;
-	font-family: Georgia;
+	font-family: system-ui;
 }
 
 .company-detail > p {
@@ -500,6 +500,10 @@ font-size: 20px;
 
 	.background{
 		display: none;
+	}
+
+	.logout{
+		bottom: 0;
 	}
 
 }

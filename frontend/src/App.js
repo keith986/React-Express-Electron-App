@@ -12,25 +12,51 @@ import Report from "./pages/Report";
 import Creditors from "./pages/Creditors";
 import Expiry from "./pages/Expiry"
 import Settings from "./pages/Settings";
+import RedirectNavbar from "./components/redirectNavbars/RedirectNavbar";
+import Usersbars from './components/Usersbar';
+import UserNavbar from "./components/userNavbar/UserNavbar";
+import Userpage from './pages/Userpage';
+import Usercategories from './pages/Usercategories';
+import Userproducts from './pages/Userproducts';
+import Userorders from './pages/Userorders';
+import Userreports from './pages/Userreports';
+import Usercreditor from './pages/Usercreditor';
+import Usersettings from './pages/Usersettings'
 
 function App() {
 	return (
+
 		<BrowserRouter>
-			<Sidebar />
-			<Routes>
-				<Route path='/' element={<Dashboard />}/>
+		<RedirectNavbar>
+		<Sidebar/>
+		</RedirectNavbar>
+
+		<UserNavbar>
+			<Usersbars/>
+		</UserNavbar>
+
+			<Routes>	
+				<Route path='/adminpage' element={<Dashboard />}/>
+				<Route path='/userpage' element={<Userpage />}/>
 				<Route path='/stores' element={<Stores />}/>
 				<Route path='/users' element={<Users />}/>
-				<Route path='/suplliers' element={<Suppliers />}/>
+				<Route path='/suppliers' element={<Suppliers />}/>
 				<Route path='/categories' element={<Categories />}/>
+				<Route path='/usercategories' element={<Usercategories />}/>
 				<Route path='/products' element={<Products />}/>
+				<Route path='/userproducts' element={<Userproducts />}/>
 				<Route path='/orders' element={<Orders />}/>
+				<Route path='/userorders' element={<Userorders />}/>
 				<Route path='/reports' element={<Report />}/>
+				<Route path='/userreports' element={<Userreports />}/>
 				<Route path='/creditors' element={<Creditors />}/>
+				<Route path='/usercreditors' element={<Usercreditor />}/>
 				<Route path='/expires' element={<Expiry />}/>
 				<Route path='/settings' element={<Settings />}/>
+				<Route path='/usersettings' element={<Usersettings />}/>
 			</Routes>
 		</BrowserRouter>
+
 	);
 }
 

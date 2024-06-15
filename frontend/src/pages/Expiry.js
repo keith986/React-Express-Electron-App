@@ -18,7 +18,7 @@ const Expiry = () => {
         </div>
         <div className='col-md-4 monthexp'>
             <i className='bi bi-credit-card-2-front-fill'></i>
-            <h3>Expires in this month</h3>
+            <h3>Expires this month</h3>
            <span className='changes'>0</span>
         </div>
         <div className='col-md-4 monthsexp'>

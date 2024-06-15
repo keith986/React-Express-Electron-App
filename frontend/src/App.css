@@ -257,7 +257,7 @@ font-size: 20px;
 	justify-content: space-evenly;
 	width: 30%;
 	position: absolute;
-	bottom: 5%;
+	bottom: 2%;
 	right: 30%;
 	padding: 10px;
 	background-color: red;
@@ -271,6 +271,46 @@ font-size: 20px;
 .logout:hover{
 	box-shadow: none;
 	cursor: pointer;
+}
+
+.admin-detail{
+	padding: 10px;
+	font-family: monospace;
+}
+
+.admin-detail > h3 {
+	color:rgb(63, 63, 65);
+
+}
+
+.admin-detail > p{
+	margin: 10px;
+	width: 100%;
+	font-size: 16px;
+	font-weight: bold;
+	font-style: italic;
+	color:rgb(63, 63, 65);
+	padding: 10px;
+	border-radius: 10px;
+}
+
+.admin-detail > p > i {
+	font-size: 18px;
+}
+
+.company-detail{
+	padding: 10px;
+	font-size: 20px;
+	font-family: Georgia;
+}
+
+.company-detail > p {
+	margin: 10px;
+	border: 1px solid #000;
+	width: 100%;
+	font-size: 16px;
+	padding: 10px;
+	border-radius: 10px;
 }
 
 .search-btn{

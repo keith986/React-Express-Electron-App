@@ -15,6 +15,7 @@ const Sidebar = () => {
       </div>
       <div className='user-profile'>
       <h3>John Doe</h3>
+      <span>admin</span>
       </div>
       </nav>
 

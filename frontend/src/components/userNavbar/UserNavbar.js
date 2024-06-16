@@ -9,7 +9,7 @@ const UserNavbar = ({children}) => {
 
     useEffect(()=>{
        // console.log(location)
-        if(location.pathname === '/userpage' || location.pathname === '/usercategories' || location.pathname === '/userproducts' || location.pathname === '/userorders'  || location.pathname === '/usercreditors' || location.pathname === '/userreports' || location.pathname === '/usersettings' ){
+        if(location.pathname === '/userpage' || location.pathname === '/usercategories' || location.pathname === '/POS' || location.pathname === '/userproducts' || location.pathname === '/userorders'  || location.pathname === '/usercreditors' || location.pathname === '/userreports' || location.pathname === '/usersettings' ){
             setIsNavbar(true)
         }else{
             setIsNavbar(false)

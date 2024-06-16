@@ -1,14 +1,25 @@
 
 /* Filename: App.css */
 
-* {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.body{
-    width: 100vw;
+body{
+    background: #e9d8ff;
+    min-height: 100vh;
+	width: 100vw;
+    overflow: hidden;
+}
+
+.container{
+	width: 100vw;
+	overflow-y: auto;
+	overflow-x: hidden;
+	color: #000;
+	font-family: Tahoma;
 }
 
 .container-fluid{
@@ -20,11 +31,42 @@
 	overflow-x: hidden;
 }
 
-
 .container-fluid > h2 {
 	text-align: center;
 	font-size: 16px;
 	margin: 10px;
+}
+
+.pageone{
+	margin-top: 50px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.container > h1 {
+	margin-top: 50px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+#gen{
+	background-color: #000;
+	color: #fff;
+}
+
+.continue{
+	margin-top: 50px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.container > i {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 100px;
+	text-align: center;
+	display: flex;
+	justify-content: space-evenly;
 }
 
 .modalopener{
@@ -421,10 +463,92 @@ font-size: 20px;
 	overflow-y: hidden;
 }
 
+.names-input{
+	width: 40%;
+	display: flex;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	border-radius: 30px;
+}
+
+#add-cart{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: rgb(17, 143, 17);
+	border: none;
+	outline: none;
+	cursor: pointer;
+	box-shadow: 0px 0px 2px 1px gray;
+	color: #fff;
+}
+
+#add-cart:hover{
+	box-shadow: none;
+}
+
+#jump{
+	margin: 10px;
+}
+
+#jum-down{
+	margin-top: 50px;
+}
+
+.generate{
+	width: 50%;
+	background-color: rgb(8, 103, 181);
+	color: #000;
+	font-weight: bold;
+	padding: 10px;
+	border-radius: 30px;
+	border: none;
+	outline: none;
+	box-shadow: 0px 0px 2px 1px #333333;
+	cursor: pointer;
+}
+
+.generate:hover{
+	box-shadow: none;
+}
+
+#jum-down > input {
+	background-color: #000;
+	color: #fff;
+	border: none;
+	outline: none;
+}
+
+#opentwo{
+	display: none;
+}
+
+#cont{
+	display: block;
+}
+
+.continue{
+	display: none;
+}
+
+.backto{
+	display: none !important;
+}
+
+.backone{
+	display: block !important;
+}
+
 /*query*/
 @media  screen and  (min-width: 768px) {
 	.container-fluid{
 		margin-left: 15%;
+	}
+
+	.row{
+		margin-top: 5px;
+		margin-bottom: 5px;
 	}
 }
 
@@ -503,7 +627,15 @@ font-size: 20px;
 	}
 
 	.logout{
-		bottom: -8%;
+		bottom: 0;
+	}
+
+	.names-input{
+		width: 100%;
+	}
+
+	.generate{
+		display: relative;
 	}
 
 }

@@ -15,6 +15,7 @@ const Sidebar = () => {
       </div>
       <div className='user-profile'>
       <h3>Smith Row</h3>
+      <span>staff</span>
       </div>
       </nav>
 
@@ -33,7 +34,7 @@ const Sidebar = () => {
           <h3>Products</h3>
         </a>
         <a href='/POS' className='nav-option option7'>
-        <i className='bi bi-upc-scan'></i>
+        <i className='bi bi-cart-check-fill'></i>
           <h3>POS</h3>
         </a>
         <a href='/userorders' className='nav-option option7'>

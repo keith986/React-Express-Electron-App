@@ -7,25 +7,16 @@ const dotenv = require('dotenv')
 dotenv.config()
 require('colors')
 
-dbconn()
+dbconn();
  
-const app = express()
-
-//middlewares
-app.use(cors())
-app.use(morgan('dev'))
-app.use(express.json())
-app.use(bodyparser.json())
-app.use(bodyparser.urlencoded({extended : false}))
-
+const app = express();
  
-//routers
-app.get('/getMe', (req,res) => {
-    res.send('hello you? the way')
-})
+//routes
+const userRouters = require('./routers/router')
+app.use('/', userRouters);
 
 //listening to port
 app.listen('5000', function(err){
     if(err) throw err;
     console.log('App is running..')    
-})
+}) 

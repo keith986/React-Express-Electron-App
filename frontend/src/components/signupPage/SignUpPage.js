@@ -8,7 +8,7 @@ const SignUpPage = ({children}) => {
 
     useEffect(()=>{
         //console.log(location)
-        if(location.pathname === '/signup'){
+        if(location.pathname === '/signup' || location.pathname === 'register'){
             setIsSignUp(true);
         }else{
             setIsSignUp(false);

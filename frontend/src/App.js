@@ -29,11 +29,20 @@ import SignUpPage from "./components/signupPage/SignUpPage";
 import Signup from './pages/Signup/Signup'
 import NewActivation from "./components/NewActivation/NewActivation";
 import Activation from "./pages/Activation/Activation";
+import axios from "axios";
+import {Toaster} from 'react-hot-toast';
+
+//connecting to backend
+axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.withCredentials = true;
 
 function App() {
 	return (
 
 		<BrowserRouter>
+
+         <Toaster position="top-center" toastOptions={{duration: 5000}}/>
+
 		<RedirectNavbar>
 		<Sidebar/>
 		</RedirectNavbar>

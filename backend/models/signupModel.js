@@ -3,46 +3,46 @@ const Schema = mongoose.Schema;
 
 const signupSchema = new Schema({
     companyname : {
-        type: Array,
+        type: String,
         require: true
     },
     companyemail : {
-        type: Array,
+        type: String,
         require: true
     },
     companyphone : {
-        type: Array,
+        type: String,
         require: true
     },
     companylocation: {
-        type : Array,
+        type : String,
         require: true
     },
     fullname : {
-        type: Array,
+        type: String,
         require: true
     },
     adminemail:{
-        type: Array,
+        type: String,
         require: true
     },
     adminphone:{
-        type: Array,
+        type: String,
         require: true
     },
     username:{
-        type: Array,
+        type: String,
         require: true
     },
     password: {
-        type: Array,
+        type: String,
         require: true
     },
     accounttype : {
-        type : Array,
+        type : String,
         require: true
     }
-})
+},{timestamps: true})
 
 const Users = mongoose.model('Users', signupSchema)
 module.exports = Users

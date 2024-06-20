@@ -40,20 +40,20 @@ const Signup = () => {
       e.preventDefault(); 
       try{
 
-       //  if(isValue.companyname !== '' && isValue.companyemail !== '' && isValue.companyphone !== '' && isValue.companylocation !== '' && isValue.fullname !== '' && isValue.adminemail !== '' && isValue.adminphone !== '' && isValue.adminusername !== '' && isValue.adminpassword !== ''){
-      //   }else{}
           await axios.post('/signup', {isValue})
-                     .then(result => {
+                     .then((result) => {
+                      //  console.log(result)
                         var datas = result.data;
-                        console.log(datas.error)
+                      //  console.log(datas.error)
                       if(datas.error){
                            toast.error(datas.error);
-                           navigate('/signup')
-                        }else{
+                        }
+                        if(datas.success){
                            setIsValue({})
                            toast.success('successfully signed up!');
                            navigate('/login')
                         }
+                        
                      })
                      .catch(err => toast.error(err))
 

@@ -1,5 +1,5 @@
 const Users = require('../models/signupModel')
-const bcrypt = require('bcrypt')
+const {hashPassword, comparePassword} = require('../configs/passwordauth')
 
 const preview = async(req, res) => {
     try{
@@ -16,117 +16,163 @@ const signup = async(req, res) => {
 
         const vpass = value.adminpassword;
         const admpass = vpass.toString();
-        console.log(admpass);
 
-        const passcode = await bcrypt.hash(admpass, 10);
+        const passcode = await hashPassword(admpass);
+
+
+        console.log(passcode);
 
         if(value.companyname === ''){  
-            res.json({
+          return  res.json({
                 error  : 'Company name required!'
-            })
+            });
         }
 
         if(value.companyemail === ''){
-            res.json({
+            return res.json({
                 error :  'Company Email required!'
-            })
+            });
         }
 
         if(value.companyphone === ''){
-            res.json({
+            return res.json({
                 error :  'Company phone number required!'
-            })
+            });
         }
 
         if(value.companylocation === ''){
-            res.json({
+            return res.json({
                 error : 'Company address required!'
-            })
+            });
         }
 
         if(value.fullname === ''){
-            res.json({
-                error : 'Amin Full name required!'
-            })
+            return res.json({
+                error : 'Admin Full name required!'
+            });
         }
 
-        if(value.adminusernname === ''){
-            res.json({
+        if(value.adminusername === ''){
+            return res.json({
                 error : 'Admin username required!'
-            })
+            });
         }
 
         if(value.adminemail === ''){
-            res.json({
+            return res.json({
                 error : 'Admin email required!'
-            })
+            });
         }
 
         if(value.adminphone === ''){
-            res.json({
+            return res.json({
                 error : 'Admin phone number required!'
+            });
+        }
+
+        if(value.adminpassword === ''){
+                return res.json({
+                    error : 'Admin password required!'
+                });
+        }
+
+        var admemail = value.adminemail.toString();
+        var compemail = value.adminemail.toString();
+
+        const existing = await Users.findOne({compemail})
+        if(existing){
+            return res.json({
+                error : "Company Email address already taken"
             })
         }
 
-        if(value.adminpassword === '' || vpass.length < 8){
-                res.json({
-                    error : 'Admin password required and should be longer than 8 characters!'
-                })
+        const exist = await Users.findOne({admemail})
+        if(exist){
+            return res.json({
+                error : "Admin Email address already taken"
+            })
         }
 
-        var admemail = value.adminemail;
-        var compemail = value.adminemail
-        const exist = await Users.findOne({compemail});
-
-             if(exist){
-                res.json({
-                    error : "Company Email address already taken"
-                })
-             }
-
-             const exists = await Users.findOne({admemail});
-
-             if(exists){
-                res.json({
-                    error : "Admin Email address already taken"
-                })
-             }
-
-        if(value.companyname !== '' && value.companyemail !== '' && value.companyphone !== '' && value.companylocation !== '' && value.fullname !== '' && value.adminemail !== '' && value.adminphone !== '' && value.adminusername !== '' && value.adminpassword !== ''){
-     
-        const usersdata = Users({
-            companyname : value.companyname,
-            companyemail: value.companyemail,
-            companyphone: value.companyphone,
-            companylocation: value.companylocation,
-            fullname: value.fullname,
-            username: value.adminusername,
-            adminemail: value.adminemail,
-            adminphone: value.adminphone,
-            adminpassword: passcode,
+        const usersdata = await Users({
+            companyname : value.companyname.toString(),
+            companyemail: value.companyemail.toString(),
+            companyphone: value.companyphone.toString(),
+            companylocation: value.companylocation.toString(),
+            fullname: value.fullname.toString(),
+            username: value.adminusername.toString(),
+            adminemail: value.adminemail.toString(),
+            adminphone: value.adminphone.toString(),
+            password: passcode,
             accounttype: 'Admin'
         })
 
         usersdata.save()
-                 .then((result) => {
-                   res.json('success')
+                 .then((result) => {   
                     console.log('New Admin Account created')
+                    return res.json({
+                        success : "successfully signed up"
+                    })
                  })
                  .catch(err => {
-                    res.json('failed')
                     console.log('THE ERROR IS HERE ' + err)
-                 })
-       
-                }else{
-                    console.log('errors')
-                }         
+                    return res.json({
+                        error : "something went wrong please try again!"
+                    })
+                 })      
 
     } catch (error) {
         console.log(error.message)
     }
 }
 
+const login = async (req, res) => {
+    try{
+        console.log(req.body)
+        const userlogins = req.body.login;
+        const user_name = userlogins.username;
+        const usernames = user_name.toString();
+        const userpass = userlogins.password;
+        const user_password = userpass.toString();
+
+        const userdata = await Users.find({usernames})
+console.log(userdata)
+        if(!userdata.length){
+            return res.json({
+                error: "Username not found!"
+            }) 
+        }else{
+        const password_match = await comparePassword(user_password, userdata.password);
+        if(password_match){
+            if(userdata.accounttype === 'Admin'){
+            return res.json({
+                admin : "admin",
+                success: "logged In Successfully!"
+            })
+            }
+
+            if(userdata.accounttype === 'User'){
+                return res.json({
+                    admin : "user",
+                    success: "logged In Successfully!"
+                })
+            }
+
+
+        }else{
+            return res.json({
+                error: "Incorrect Password"
+            })
+        }
+
+    }
+
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
 module.exports = {
     signup,
-    preview
+    preview,
+    login
 }

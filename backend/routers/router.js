@@ -33,5 +33,6 @@ const useController = require('../controllers/Controller')
 
 use_route.get('/', useController.preview)
 use_route.post('/signup', useController.signup)
+use_route.post('/login', useController.login)
 
 module.exports = use_route;

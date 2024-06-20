@@ -134,9 +134,9 @@ const login = async (req, res) => {
         const userpass = userlogins.password;
         const user_password = userpass.toString();
 
-        const userdata = await Users.find({usernames})
-console.log(userdata)
-        if(!userdata.length){
+        const userdata = await Users.findOne({username: usernames});
+        console.log(userdata)
+        if(!userdata){
             return res.json({
                 error: "Username not found!"
             }) 

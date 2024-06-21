@@ -31,6 +31,7 @@ import NewActivation from "./components/NewActivation/NewActivation";
 import Activation from "./pages/Activation/Activation";
 import axios from "axios";
 import {Toaster} from 'react-hot-toast';
+import { UserContextProvider } from "./context/useContext";
 
 //connecting to backend
 axios.defaults.baseURL = 'http://localhost:5000';
@@ -40,7 +41,7 @@ function App() {
 	return (
 
 		<BrowserRouter>
-
+<UserContextProvider>
          <Toaster position="top-center" toastOptions={{duration: 5000}}/>
 
 		<RedirectNavbar>
@@ -84,6 +85,7 @@ function App() {
 				<Route path='/settings' element={<Settings />}/>
 				<Route path='/usersettings' element={<Usersettings />}/>
 			</Routes>
+	</UserContextProvider>
 		</BrowserRouter>
 
 	);

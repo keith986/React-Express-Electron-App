@@ -1,5 +1,6 @@
 const Users = require('../models/signupModel')
 const {hashPassword, comparePassword} = require('../configs/passwordauth')
+const jwt = require('jsonwebtoken')
 
 const preview = async(req, res) => {
     try{
@@ -127,7 +128,7 @@ const signup = async(req, res) => {
 
 const login = async (req, res) => {
     try{
-        console.log(req.body)
+        
         const userlogins = req.body.login;
         const user_name = userlogins.username;
         const usernames = user_name.toString();
@@ -135,14 +136,18 @@ const login = async (req, res) => {
         const user_password = userpass.toString();
 
         const userdata = await Users.findOne({username: usernames});
-        console.log(userdata)
+       
         if(!userdata){
             return res.json({
                 error: "Username not found!"
-            }) 
+            })  
         }else{
         const password_match = await comparePassword(user_password, userdata.password);
         if(password_match){
+            jwt.sign({email: userdata.adminemail, id: userdata._id, name : userdata.username}, process.env.JWT_SECRET, {}, (err, token) => {
+                if(err) throw err;
+               return res.cookie('token',token).json(userdata);
+            })
             if(userdata.accounttype === 'Admin'){
             return res.json({
                 admin : "admin",
@@ -171,8 +176,24 @@ const login = async (req, res) => {
     }
 }
 
+const getProfile = async (req, res) => {
+    try{
+        const {token} = req.cookie;
+        if(token){
+            jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+                console.log(user)
+               return res.json(user)
+            })
+        }else{
+            console.log('null')
+            return res.json(null)
+        }
+    }catch(err){console.log(err.message)}
+}
+
 module.exports = {
     signup,
     preview,
-    login
+    login,
+    getProfile
 }

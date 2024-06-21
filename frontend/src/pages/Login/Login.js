@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault()
     await axios.post('/login', {login})
                .then((result) => {
-                   //  console.log(result)
+                     console.log(result)
                    var datas = result.data;
                    //  console.log(datas.error)
                    if(datas.error){

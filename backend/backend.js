@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const bodyparser = require('body-parser')
 const dbconn = require('../backend/configs/config')
 const dotenv = require('dotenv')
+const cookieParser = require('cookie-parser')
 dotenv.config()
 require('colors')
 
@@ -14,6 +15,7 @@ const app = express();
 //routes 
 const userRouters = require('./routers/router')
 app.use('/', userRouters);
+app.use(cookieParser())
 
 //listening to port
 app.listen('5000', function(err){

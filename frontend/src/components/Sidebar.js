@@ -21,7 +21,7 @@ const Sidebar = () => {
       </div>
       <div className='user-profile'>
       {!!user && (<h3>Hi {user.username}</h3>)}
-      <span>admin</span>
+      <span>{!!user && user.accounttype}</span>
       </div>
       </nav>
 

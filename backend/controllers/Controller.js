@@ -1,6 +1,7 @@
 const Users = require('../models/signupModel')
 const {hashPassword, comparePassword} = require('../configs/passwordauth')
 const jwt = require('jsonwebtoken')
+const Store = require('../models/storeModel')
 
 const preview = async(req, res) => {
     try{
@@ -204,9 +205,18 @@ const getProfile = async (req, res) => {
     }catch(err){console.log(err.message)}
 }
 
+const store = async(req, res) => {
+    try{
+
+        const storedata = req.body.store;
+
+    }catch(err){console.log(err.message)}
+}
+
 module.exports = {
     signup,
     preview,
     login,
-    getProfile
+    getProfile,
+    store
 }

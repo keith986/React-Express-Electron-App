@@ -144,21 +144,33 @@ const login = async (req, res) => {
         }else{
         const password_match = await comparePassword(user_password, userdata.password);
         if(password_match){
-            jwt.sign({email: userdata.adminemail, id: userdata._id, name : userdata.username}, process.env.JWT_SECRET, {}, (err, token) => {
-                if(err) throw err;
-               return res.cookie('token',token).json(userdata);
-            })
             if(userdata.accounttype === 'Admin'){
-            return res.json({
-                admin : "admin",
-                success: "logged In Successfully!"
+
+            jwt.sign({userdata}, process.env.JWT_SECRET, {}, (err, token) => {
+                if(err) throw err;
+                console.log(token)
+               return res.cookie('token',token).json({
+                                                      admin : "admin",
+                                                      success: "logged In Successfully!",
+                                                      user: userdata
+                                                    });
+               
             })
+              
             }
+           
 
             if(userdata.accounttype === 'User'){
-                return res.json({
-                    admin : "user",
-                    success: "logged In Successfully!"
+
+                jwt.sign({userdata}, process.env.JWT_SECRET, {}, (err, token) => {
+                    if(err) throw err;
+                    console.log(token)
+                   return res.cookie('token',token).json({
+                                                          user : "user",
+                                                          success: "logged In Successfully!",
+                                                          user: userdata
+                                                        });
+                   
                 })
             }
 
@@ -178,7 +190,8 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
     try{
-        const {token} = req.cookie;
+        const {token} = req.cookies;
+        console.log(req.cookies)
         if(token){
             jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
                 console.log(user)
@@ -186,7 +199,7 @@ const getProfile = async (req, res) => {
             })
         }else{
             console.log('null')
-            return res.json(null)
+            return res.json(null) 
         }
     }catch(err){console.log(err.message)}
 }

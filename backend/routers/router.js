@@ -1,12 +1,13 @@
 var use_route = require('express')();
 var express = require('express');
 const morgan = require('morgan')
-const session = require('express-session')
+//const session = require('express-session')
 var cors = require('cors')
 var path = require('path')
 const cookieParser = require('cookie-parser')
-const {SESSION_SECRET} = process.env;
+//const {SESSION_SECRET} = process.env;
 
+/*
 use_route.use(session(
     {
     secret : SESSION_SECRET,
@@ -15,6 +16,7 @@ use_route.use(session(
    // cookie : {secure : true}
    }
 ))
+*/
 
 //middleware
 //connect to frontend
@@ -27,8 +29,8 @@ use_route.use(cors({
 use_route.use(morgan('dev'))
 use_route.use(cookieParser())
 //url extend url
-use_route.use(express.urlencoded({limit: '50mb',extended: false}))
-use_route.use(express.json({limit: '50mb'}))
+use_route.use(express.urlencoded({extended: false}))
+use_route.use(express.json())
 
 const useController = require('../controllers/Controller')
 

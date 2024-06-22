@@ -31,7 +31,7 @@ import NewActivation from "./components/NewActivation/NewActivation";
 import Activation from "./pages/Activation/Activation";
 import axios from "axios";
 import {Toaster} from 'react-hot-toast';
-import { UserContextProvider } from "./context/useContext";
+import { UserContextProvider } from "./context/userContext";
 
 //connecting to backend
 axios.defaults.baseURL = 'http://localhost:5000';

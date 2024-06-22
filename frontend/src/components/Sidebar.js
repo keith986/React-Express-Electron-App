@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './Sidebar.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import { UserContext } from '../context/userContext'
 
 const Sidebar = () => {
 
+  const {user} = useContext(UserContext)
+  //var userdata = user.data;
+  //var user_data = userdata.user;
     const [navbarCollapse, setNavCollapse] = useState(false);
+
+   console.log(user)
 
   return (
     <div className={`container`}>
@@ -14,7 +20,7 @@ const Sidebar = () => {
       <i className='bi bi-justify' onClick={e => setNavCollapse(!navbarCollapse)}></i>
       </div>
       <div className='user-profile'>
-      <h3>John Doe</h3>
+      {!!user && (<h3>Hi {user.username}</h3>)}
       <span>admin</span>
       </div>
       </nav>

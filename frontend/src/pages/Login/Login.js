@@ -32,7 +32,7 @@ const Login = () => {
                         if(datas.admin){
                         navigate('/adminpage')
                         }
-                        if(datas.user){
+                        if(datas.User){
                            navigate('/userpage')
                         }
                      }

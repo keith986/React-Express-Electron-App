@@ -2,7 +2,9 @@ import React from 'react'
 import '../App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
+
 const Dashboard = () => {
+
   return (
     <div className='container-fluid'>
      <h2>Admin Dashboard</h2>

@@ -1,19 +1,19 @@
 import axios from 'axios';
 import { createContext, useEffect, useState } from 'react';
 
-export const UserContext = createContext({})
+export const UserContext = createContext({});
 
 export function UserContextProvider({children}) {
-    const [users, setUser] = useState(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if(!users) {
-            axios.get('/profile')
-                 .then((data) => {
-                    setUser(data);
+        if(!user) {
+            axios.get('/profile').then((result) => {
+                    setUser(result.data.userdata);
+                    console.log(result.data.userdata)
                  });
-        };
-    },[])
+        }
+    }, [user])
 
     return (
         <UserContext.Provider value={{user, setUser}}>

@@ -39,5 +39,6 @@ use_route.post('/signup', useController.signup)
 use_route.post('/login', useController.login)
 use_route.get('/profile', useController.getProfile)
 use_route.post('/store', useController.store)
+use_route.get('/storeData', useController.storeData)
 
 module.exports = use_route;

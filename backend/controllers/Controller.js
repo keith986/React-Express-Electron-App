@@ -192,25 +192,107 @@ const login = async (req, res) => {
 const getProfile = async (req, res) => {
     try{
         const {token} = req.cookies;
-        console.log(req.cookies)
         if(token){
             jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-                console.log(user)
                return res.json(user)
             })
         }else{
-            console.log('null')
             return res.json(null) 
         }
-    }catch(err){console.log(err.message)}
+    }catch(err){
+        console.log(err.message)
+    }
 }
 
 const store = async(req, res) => {
     try{
+    const storedata = req.body.store;
+    console.log(storedata);
 
-        const storedata = req.body.store;
+    if(storedata.storename === ''){
+        return res.json({
+            error : 'Store name is required'
+        })
+    }
 
+    if(storedata.manager === ''){
+        return res.json({
+            error : 'Name of the Manager is required'
+        })
+    }
+
+    if(storedata.phone === ''){
+        return res.json({
+            error : 'Phone Number is required'
+        })
+    }
+
+    if(storedata.location === ''){
+        return res.json({
+            error : 'Store Address is required'
+        })
+    }
+
+    if(storedata.status === ''){
+        return res.json({
+            error : 'Status is required'
+        })
+    }
+
+    const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+
+            if(err) throw err;
+
+            const userID = user.userdata._id;
+
+    const store_data = Store({
+                       userid : userID,
+                       storename : storedata.storename.toString(),
+                       manager : storedata.manager.toString(),
+                       location : storedata.location.toString(),
+                       phone: storedata.phone.toString(),
+                       status : storedata.status.toString()
+                       })
+
+         store_data.save()
+                   .then((result) => {
+                      return res.json({
+                        success : 'Successfully Added Store!'
+                      })
+                   }) 
+                   .catch((err) => {
+                      return res.json({
+                        error : "Failed, Try Again!"
+                      })
+
+        })             
+                   })             
     }catch(err){console.log(err.message)}
+}
+
+const storeData = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+
+            if(err) throw err;
+            const userid = user.userdata._id;
+
+              Store.find({userid : userid})
+                   .then((result) => {
+                       res.json(result)
+                       console.log(result)
+                   })
+                   .catch((err) => {
+                     res.json(err)
+                   }) 
+
+        })
+    }catch(error){console.log(error.message)}
 }
 
 module.exports = {
@@ -218,5 +300,6 @@ module.exports = {
     preview,
     login,
     getProfile,
-    store
+    store,
+    storeData
 }

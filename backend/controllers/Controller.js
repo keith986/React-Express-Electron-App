@@ -207,7 +207,6 @@ const getProfile = async (req, res) => {
 const store = async(req, res) => {
     try{
     const storedata = req.body.store;
-    console.log(storedata);
 
     if(storedata.storename === ''){
         return res.json({
@@ -295,11 +294,80 @@ const storeData = async (req, res) => {
     }catch(error){console.log(error.message)}
 }
 
+const editStore = async (req, res) => {
+    try{
+        const storedt = req.body.store;
+
+        if(storedt.storename === ''){
+            return res.json({
+                error : 'Store name is required'
+            })
+        }
+    
+        if(storedt.manager === ''){
+            return res.json({
+                error : 'Name of the Manager is required'
+            })
+        }
+    
+        if(storedt.phone === ''){
+            return res.json({
+                error : 'Phone Number is required'
+            })
+        }
+    
+        if(storedt.location === ''){
+            return res.json({
+                error : 'Store Address is required'
+            })
+        }
+    
+        if(storedt.status === ''){
+            return res.json({
+                error : 'Status is required'
+            })
+        }
+
+       const {token} = req.cookies;
+
+       jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+        
+        if(err) throw err;
+
+        const userID = user.userdata._id;
+        const storeID = req.body.storeid;
+
+        Store.findByIdAndUpdate(storeID, {
+                       userid : userID,
+                       storename : storedt.storename.toString(),
+                       manager : storedt.manager.toString(),
+                       location : storedt.location.toString(),
+                       phone: storedt.phone.toString(),
+                       status : storedt.status.toString()
+               })
+             .then((result) => {
+                res.json({
+                    success: 'Successfully Updated' + storedt.storename.toString()
+                })
+             })
+             .catch((err) => {
+                res.json({
+                    error : err
+                })
+             })
+
+       })
+        
+    
+    }catch(err){console.log(err.message)}
+}
+
 module.exports = {
     signup,
     preview,
     login,
     getProfile,
     store,
-    storeData
+    storeData,
+    editStore
 }

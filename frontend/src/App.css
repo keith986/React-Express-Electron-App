@@ -90,11 +90,11 @@ body{
 	border-top: 1px solid #333333;
 }
 
-#tr-icon{
+.tr-icon{
 	font-size: 25px;
 }
 
-#tr-icon:hover{
+.tr-icon:hover{
 	cursor: pointer;
 	opacity: 0.7;
 }

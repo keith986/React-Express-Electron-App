@@ -17,13 +17,15 @@ const Stores = () => {
   });
   const [isModalOpen, setIsOpenModal] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
+  const [storeid, setStoreId] = useState(null)
 
   const handleOpener = () =>{
     setIsOpenModal(true)
   }
 
-  const handleEditOpener = () => {
+  const handleEditOpener = (event) => {
     setIsEditOpen(true)
+    setStoreId(event.target.id)
   }
 
   function handleClose(){
@@ -61,7 +63,7 @@ const Stores = () => {
   const submitEditChange = async (e) => {
      e.preventDefault();
 
-     await axios.post('/editstore', {store})
+     await axios.post('/editstore', {store, storeid})
                 .then((result) => {
 
                   if(result.data.error){
@@ -90,7 +92,7 @@ const Stores = () => {
     <div className={`container-fluid`}>
    
     <div className={`${isModalOpen ? "background" : ""}`}></div>
-    <div className={`${isModalOpen ? "background" : ""}`}></div>
+    <div className={`${isEditOpen ? "background" : ""}`}></div>
     <h2>Stores</h2>
    <div className='row'>
       <button type='button' className='modalopener' onClick={handleOpener}>Add Store</button>
@@ -194,8 +196,8 @@ const Stores = () => {
                                   <td>{data.phone}</td>
                                   <td>{data.status}</td>
                                   <td>
-                                    <i className='bi bi-pencil-fill' id='tr-icon' onClick={handleEditOpener}></i>
-                                    <i className='bi bi-trash-fill' id='tr-icon'></i>
+                                    <i className='bi bi-pencil-fill tr-icon' id={data._id} onClick={handleEditOpener}></i>
+                                    <i className='bi bi-trash-fill tr-icon' id={data._id}></i>
                                   </td>
                                </tr>
                     );

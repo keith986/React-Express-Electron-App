@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const signupSchema = new Schema({
+    adminId : {
+        type : String,
+        require
+    },
     companyname : {
         type: String,
         require: true
@@ -37,6 +41,18 @@ const signupSchema = new Schema({
     password: {
         type: String,
         require: true
+    },
+    warehouse : {
+        type : String,
+        require
+    },
+    role : {
+        type : String,
+        require
+    },
+    useremail: {
+        type : String,
+        require
     },
     accounttype : {
         type : String,

@@ -81,21 +81,12 @@ const signup = async(req, res) => {
         var admemail = value.adminemail.toString();
         var compemail = value.adminemail.toString();
 
-        const existing = await Users.findOne({compemail})
-        if(existing){
-            return res.json({
-                error : "Company Email address already taken"
-            })
-        }
-
-        const exist = await Users.findOne({admemail})
-        if(exist){
-            return res.json({
-                error : "Admin Email address already taken"
-            })
-        }
 
         const usersdata = await Users({
+            adminId : '',
+            warehouse: '',
+            role: '',
+            useremail : '',
             companyname : value.companyname.toString(),
             companyemail: value.companyemail.toString(),
             companyphone: value.companyphone.toString(),
@@ -151,7 +142,7 @@ const login = async (req, res) => {
                 if(err) throw err;
                 console.log(token)
                return res.cookie('token',token).json({
-                                                      admin : "admin",
+                                                      admin : "Admin",
                                                       success: "logged In Successfully!",
                                                       user: userdata
                                                     });
@@ -161,13 +152,13 @@ const login = async (req, res) => {
             }
            
 
-            if(userdata.accounttype === 'User'){
+            if(userdata.accounttype === 'staff'){
 
                 jwt.sign({userdata}, process.env.JWT_SECRET, {}, (err, token) => {
                     if(err) throw err;
                     console.log(token)
                    return res.cookie('token',token).json({
-                                                          user : "user",
+                                                          user : "staff",
                                                           success: "logged In Successfully!",
                                                           user: userdata
                                                         });
@@ -284,7 +275,6 @@ const storeData = async (req, res) => {
               Store.find({userid : userid})
                    .then((result) => {
                        res.json(result)
-                       console.log(result)
                    })
                    .catch((err) => {
                      res.json(err)
@@ -362,6 +352,257 @@ const editStore = async (req, res) => {
     }catch(err){console.log(err.message)}
 }
 
+const deletestore = async(req,res) => {
+    try{
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {} , (err, user) => {
+            if (err) throw err;
+
+            const storeIDentity = req.body.deleting;
+
+            Store.findByIdAndDelete(storeIDentity)
+                 .then((result) => {
+                    return res.json({
+                                success: 'Successfully Deleted!'
+                                   })
+                 })
+                 .catch((err) =>{
+                    return res.json({
+                                error: err
+                                   })
+                 })
+
+        })
+
+    }catch(err){res.json({error: err})}
+}
+
+const adduser = async(req,res) => {
+    try{
+        const {token} = req.cookies;
+        var value = req.body.addUser;
+
+            const vpass = value.password;
+            const userpass = vpass.toString();
+    
+            const passcode = await hashPassword(userpass);
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+    
+            if(value.fullname === ''){  
+              return  res.json({
+                    error  : 'Full name required!'
+                });
+            }
+    
+            if(value.email === ''){
+                return res.json({
+                    error :  'Email Address required!'
+                });
+            }
+    
+            if(value.username === ''){
+                return res.json({
+                    error :  'Username is required!'
+                });
+            }
+    
+            if(value.password === ''){
+                return res.json({
+                    error : 'Password is required!'
+                });
+            }
+    
+            if(value.role === ''){
+                return res.json({
+                    error : 'User role is required!'
+                });
+            }
+    
+            if(value.warehouse === ''){
+                return res.json({
+                    error : 'Warehouse is required!'
+                });
+            }
+
+            const userdetail = Users({
+                adminId : user.userdata._id,
+                fullname : value.fullname.toString(),
+                useremail : value.email.toString(),
+                username : value.username.toString(),
+                accounttype: value.password.toString(),
+                warehouse: value.warehouse.toString(),
+                role: value.role.toString(),
+                companyname : '',
+                companyemail: '',
+                companyphone: '',
+                companylocation: '',
+                adminemail: '',
+                adminphone: '',
+                password: passcode,
+            })
+
+            userdetail.save()
+                      .then((result) => {
+                          return res.json({
+                            success : 'Successfully added User'
+                          })
+                        })
+                      .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+
+                        console.log(err)
+                      })
+    
+        })
+
+    }catch(err){ return res.json({error : err})}
+}
+
+const users = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminId = user.userdata._id;
+
+            Users.find({adminId : adminId})
+                 .then((result) => {
+                    return res.json(result)
+                 })
+                 .catch(err => {
+                    return res.json({
+                        error : err
+                    })
+                 })
+
+        })
+
+    }catch(err){res.json({error : err})}
+}
+
+const deleteuser = async (req, res) => {
+    try{
+
+        const deleteId = req.body.deleting;
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+
+            Users.findByIdAndDelete(deleteId)
+                 .then((result) => {
+                    return res.json({
+                              success : 'Successfully Deleted User' 
+                            })
+                 })
+                 .catch((error) => {
+                    return res.json({
+                        error : error
+                    })
+                 })
+                 
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const edituser = async (req,res) => {
+    try{
+
+        const {token} = req.cookies;
+        var value = req.body.addUser;
+
+            const vpass = value.password;
+            const userpass = vpass.toString();
+    
+            const passcode = await hashPassword(userpass);
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+    
+            if(value.fullname === ''){  
+              return  res.json({
+                    error  : 'Full name required!'
+                });
+            }
+    
+            if(value.email === ''){
+                return res.json({
+                    error :  'Email Address required!'
+                });
+            }
+    
+            if(value.username === ''){
+                return res.json({
+                    error :  'Username is required!'
+                });
+            }
+    
+            if(value.password === ''){
+                return res.json({
+                    error : 'Password is required!'
+                });
+            }
+    
+            if(value.role === ''){
+                return res.json({
+                    error : 'User role is required!'
+                });
+            }
+    
+            if(value.warehouse === ''){
+                return res.json({
+                    error : 'Warehouse is required!'
+                });
+            }
+
+            const usersID = req.body.storeid;
+
+            Users.findByIdAndUpdate(usersID, {
+                adminId : user.userdata._id,
+                fullname : value.fullname.toString(),
+                useremail : value.email.toString(),
+                username : value.username.toString(),
+                accounttype: value.password.toString(),
+                warehouse: value.warehouse.toString(),
+                role: value.role.toString(),
+                companyname : '',
+                companyemail: '',
+                companyphone: '',
+                companylocation: '',
+                adminemail: '',
+                adminphone: '',
+                password: passcode,
+                       })
+                      .then((result) => {
+                          return res.json({
+                            success : 'User Updated Successfully!'
+                          })
+                        })
+                      .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                        })
+
+                    })
+    
+
+    }catch(error){
+        res.json({
+            error : error
+        })
+    }
+}
+
 module.exports = {
     signup,
     preview,
@@ -369,5 +610,10 @@ module.exports = {
     getProfile,
     store,
     storeData,
-    editStore
+    editStore,
+    deletestore,
+    adduser,
+    users,
+    deleteuser,
+    edituser
 }

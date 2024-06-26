@@ -6,11 +6,7 @@ import { UserContext } from '../context/userContext'
 const Sidebar = () => {
 
   const {user} = useContext(UserContext)
-  //var userdata = user.data;
-  //var user_data = userdata.user;
     const [navbarCollapse, setNavCollapse] = useState(false);
-
-   console.log(user)
 
   return (
     <div className={`container`}>

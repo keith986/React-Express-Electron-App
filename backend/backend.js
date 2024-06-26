@@ -15,7 +15,7 @@ const app = express();
 //routes 
 const userRouters = require('./routers/router')
 app.use('/', userRouters);
-app.use(cookieParser());
+app.use(cookieParser()); 
 
 //listening to port
 app.listen('5000', function(err){

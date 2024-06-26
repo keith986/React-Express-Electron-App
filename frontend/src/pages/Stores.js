@@ -18,6 +18,8 @@ const Stores = () => {
   const [isModalOpen, setIsOpenModal] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [storeid, setStoreId] = useState(null)
+  const [deleting, setDeleting] = useState(null)
+  const [filterData, setFilterData] = useState({})  
 
   const handleOpener = () =>{
     setIsOpenModal(true)
@@ -28,12 +30,23 @@ const Stores = () => {
     setStoreId(event.target.id)
   }
 
+  const handleDelete = (event) => {
+    setDeleting(event.target.id)
+    const parent =document.getElementById(event.target.id);
+    parent.style.display = 'none';
+  }
+
   function handleClose(){
     setIsOpenModal(false)
   }
 
   const handleEditClose = () => {
     setIsEditOpen(false)
+  }
+
+  const handlefilter = (event) => {
+     const resp = filterData.filter(f => f.storename.includes(event.target.value))
+     setUseData(resp)
   }
 
   const handleChange = async (event) => {
@@ -51,6 +64,7 @@ const Stores = () => {
                    }
 
                    if(result.data.success){
+                    setStore({})
                     toast.success(result.data.success)
                     navigate('/stores')
                    }
@@ -84,9 +98,27 @@ const Stores = () => {
             .then((result) => {
               console.log(result)
               setUseData(result.data)
+              setFilterData(result.data)
             })
             .catch(err => console.log(err))
   }, [])
+
+  useEffect(() => {
+       axios.post('/deletestore', {deleting})
+            .then((result) => {
+
+              if(result.data.error){
+                toast.error(result.data.error)
+              }
+
+              if(result.data.success){
+               toast.success(result.data.success)
+            
+              }
+
+              })
+            .catch(err => toast.error(err.message))
+  }, [deleting])
 
   return (
     <div className={`container-fluid`}>
@@ -136,8 +168,8 @@ const Stores = () => {
         <div className='modal-dialog'>
           <div className='modal-content'>
             <div className='modal-header'>
-              <h2>New Store</h2>
-              <i className='bi bi-bag-fill'></i>
+              <h2 style={{color: 'blue'}}>Update Store</h2>
+               <i className='bi bi-bag-fill' style={{color: 'blue'}}></i>
             </div>
             <div className='modal-body'>
             <span className='name'>Name</span>
@@ -158,7 +190,7 @@ const Stores = () => {
             <div className='modal-footer'>
             <span>.</span>
             <button type='button' className='back' onClick={handleEditClose}>Back</button>
-            <button type='submit' className='send'>Add Store</button>
+            <button type='submit' className='send' style={{background: 'blue'}}>Update Store</button>
             </div>
           </div>
         </div>
@@ -168,11 +200,8 @@ const Stores = () => {
    </div>
     <div className='row'>
     <div className='col-divide'>
-       <select className='select'>
-        <option>5 of 5</option>
-        <option>10 of 10</option>
-      </select>
-      <input type='search' className='search' placeholder='Search By Name'/>
+      <p>Search : </p>
+      <input type='search' className='search' placeholder='Search By Name' onChange={handlefilter}/>
     </div>
     </div>
       <div className='row'>
@@ -189,15 +218,15 @@ const Stores = () => {
 
                  {!!usedata && usedata.map((data) => {
                     return (
-                               <tr className='tr-row'>
+                               <tr className='tr-row' id={data._id}>
                                   <td>{data.storename}</td>
                                   <td>{data.location}</td>
                                   <td>{data.manager}</td>
-                                  <td>{data.phone}</td>
-                                  <td>{data.status}</td>
+                                  <td>{data.phone}</td> 
+                                  <td style={{backgroundColor: 'gray'}}>{data.status}</td>
                                   <td>
                                     <i className='bi bi-pencil-fill tr-icon' id={data._id} onClick={handleEditOpener}></i>
-                                    <i className='bi bi-trash-fill tr-icon' id={data._id}></i>
+                                    <i className='bi bi-trash-fill tr-icon' id={data._id} onClick={handleDelete}></i>
                                   </td>
                                </tr>
                     );

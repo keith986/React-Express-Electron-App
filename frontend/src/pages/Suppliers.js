@@ -32,14 +32,10 @@ const Suppliers = () => {
             <input type='text' className='manager-input'/>
             <span className='name'>Email</span>
             <input type='text' className='location-input'/>
-            <span className='name'>Password</span>
-            <input type='tel' className='phone-input'/>
-            <span className='name'>Role</span>
-            <select className='status-input'>
-              <option disabled>Choose...</option>
-              <option>Admin</option>
-              <option>staff</option>
-            </select>
+            <span className='name'>Phone number</span>
+            <input type='tel' className='location-input'/>
+            <span className='name'>Address</span>
+            <input type='text' className='location-input'/>
             <span className='name'>Warehouse</span>
             <select className='status-input'>
               <option disabled>Choose...</option>

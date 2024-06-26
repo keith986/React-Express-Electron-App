@@ -41,5 +41,10 @@ use_route.get('/profile', useController.getProfile)
 use_route.post('/store', useController.store)
 use_route.get('/storeData', useController.storeData)
 use_route.post('/editstore', useController.editStore)
+use_route.post('/deletestore', useController.deletestore)
+use_route.post('/adduser', useController.adduser)
+use_route.get('/users', useController.users)
+use_route.post('/edituser', useController.edituser)
+use_route.post('/deleteuser', useController.deleteuser)
 
 module.exports = use_route;

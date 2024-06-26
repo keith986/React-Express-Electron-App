@@ -2,6 +2,8 @@ const Users = require('../models/signupModel')
 const {hashPassword, comparePassword} = require('../configs/passwordauth')
 const jwt = require('jsonwebtoken')
 const Store = require('../models/storeModel')
+const Suppliers = require('../models/supplierModel')
+const Categories = require('../models/categoryModel')
 
 const preview = async(req, res) => {
     try{
@@ -584,7 +586,7 @@ const edituser = async (req,res) => {
                        })
                       .then((result) => {
                           return res.json({
-                            success : 'User Updated Successfully!'
+                            success : 'User Updated Successfully!' + value.email.toString()
                           })
                         })
                       .catch((err) => {
@@ -603,6 +605,249 @@ const edituser = async (req,res) => {
     }
 }
 
+const addsupplier = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (error, user) => {
+            if (error) throw error;
+            const adminId = user.userdata._id;
+
+            const supp_liers = Suppliers({
+                adminId : adminId,
+                name : req.body.supplier.name.toString(),
+                email : req.body.supplier.email.toString(),
+                company: req.body.supplier.company.toString(),
+                phone : req.body.supplier.phone.toString(),
+                location : req.body.supplier.location.toString()
+            })
+
+            supp_liers.save()
+                      .then((result) => {
+                        return res.json({
+                            success : 'Supplier successfully Added'
+                        })
+                      })
+                      .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                      })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error: error
+        })
+    }
+}
+
+const getsuppliers = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+
+            if (err) throw err;
+
+            var adminId = user.userdata._id;
+
+            Suppliers.find({adminId: adminId})
+                     .then((result) => {
+                        return res.json(result)
+                     })
+                     .catch(err =>{ 
+                        return res.json({error : err})
+                     })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const editsupplier = async(req,res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (error, user) => {
+            if (error) throw error;
+            const adminId = user.userdata._id;
+            const supId = req.body.storeid;
+
+        Suppliers.findByIdAndUpdate(supId, {
+                adminId : adminId,
+                name : req.body.supplier.name.toString(),
+                email : req.body.supplier.email.toString(),
+                company: req.body.supplier.company.toString(),
+                phone : req.body.supplier.phone.toString(),
+                location : req.body.supplier.location.toString()
+                })
+                .then((result) => {
+                    return res.json({
+                        success : 'Successfully updated supplier' + req.body.supplier.name.toString()
+                    })
+                })
+                .catch((error) => {
+                    return res.json({
+                        error : error
+                    })
+                })
+
+        })
+
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const deletesupplier = async (req, res) => {
+    try{
+
+       const {token} = req.cookies;
+       
+       jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+        
+        const supID = req.body.deleting;
+
+        Suppliers.findByIdAndDelete(supID)
+                 .then((result) => {
+                    return res.json({
+                        success : 'deleted successfully!'
+                    })
+                 })
+                 .catch((error) => {
+                    return res.json({
+                        error : error
+                    })
+                 })
+        
+       })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const addcategory = async(req, res) => {
+    try{
+
+        console.log(req.body)
+
+        const {token} = req.cookies;
+
+        if(req.body.categorys.categoryname === ''){
+            return res.json({
+                error : 'Product category name is required'
+            })
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            if (err) throw err;
+
+            const adminId = user.userdata._id;
+
+            const cate_gory = Categories({
+                adminId : adminId,
+                categoryname : req.body.categorys.categoryname.toString()
+            })
+
+            cate_gory.save()
+                     .then((result) => {
+                        return res.json({
+                            success : 'New Category Added!'
+                        })
+                     })
+                     .catch(err => {
+                        console.log('ERROR' + err.message)
+                        return res.json({
+                            error : err
+                        })
+                     })
+
+        })
+
+    }catch(error){
+        console.log('ERRORs' + error.message)
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const getcategories = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            if (err) throw err;
+
+            const adminId = user.userdata._id;
+
+            Categories.find({
+                         adminId : adminId
+                           })
+                      .then((result) => {
+                        res.json(result)
+                      })
+                      .catch(err => {
+                        return res.json({
+                            error : err
+                        })
+                      })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const deletecategory = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+
+            const dltId = req.body.deleting;
+
+            Categories.findByIdAndDelete(dltId)
+                      .then((result) => {
+                         return res.json({
+                            success : 'Deleted Successfully'
+                         })
+                      })
+                      .catch((err) => {
+                         return res.json({
+                            error : err
+                         })
+                      })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
 module.exports = {
     signup,
     preview,
@@ -615,5 +860,12 @@ module.exports = {
     adduser,
     users,
     deleteuser,
-    edituser
+    edituser,
+    addsupplier,
+    getsuppliers,
+    editsupplier,
+    deletesupplier,
+    addcategory,
+    getcategories,
+    deletecategory
 }

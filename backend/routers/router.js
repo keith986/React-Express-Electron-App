@@ -46,5 +46,12 @@ use_route.post('/adduser', useController.adduser)
 use_route.get('/users', useController.users)
 use_route.post('/edituser', useController.edituser)
 use_route.post('/deleteuser', useController.deleteuser)
+use_route.post('/addsupplier', useController.addsupplier)
+use_route.get('/getsuppliers', useController.getsuppliers)
+use_route.post('/deletesupplier', useController.deletesupplier)
+use_route.post('/editsupplier', useController.editsupplier)
+use_route.post('/addcategory', useController.addcategory)
+use_route.get('/getcategories', useController.getcategories)
+use_route.post('/deletecategory', useController.deletecategory)
 
 module.exports = use_route;

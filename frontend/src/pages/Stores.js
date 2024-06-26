@@ -32,7 +32,7 @@ const Stores = () => {
 
   const handleDelete = (event) => {
     setDeleting(event.target.id)
-    const parent =document.getElementById(event.target.id);
+    const parent = document.getElementById(event.target.id);
     parent.style.display = 'none';
   }
 

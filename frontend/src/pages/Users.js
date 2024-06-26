@@ -23,6 +23,7 @@ const Users = () => {
   const handleOpener = () =>{
     setIsOpenModal(true)
   }
+
   const handleEditOpener = (event) => {
     setIsEditOpen(true)
     setStoreId(event.target.id)
@@ -92,7 +93,7 @@ const Users = () => {
               setStoreData(result.data)
             })
             .catch(err => console.log(err))
-  }, [])
+  }, [storedata])
 
   useEffect(() => {
        axios.get('/users')
@@ -105,7 +106,7 @@ const Users = () => {
               console.log(result)
             })
             .catch(err => toast.error(err))
-  }, [])
+  }, [usersDatas])
 
 
   const submitUser = async (e) => {

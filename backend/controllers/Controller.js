@@ -1137,8 +1137,8 @@ const adminlogout = async (req, res) => {
 
         const {token} = req.cookies;
 
-        jwt.verify(token, process.env.JWT_SECRET, {expiresIn : 0}, (err, user) => {
-            res.clearCookie("jwt");
+        jwt.verify(token, process.env.JWT_SECRET, {expiresIn : new Date(0)}, (err, user) => {
+            res.clearCookie('token')
              console.log(user)
              return res.json({
                 user : user,

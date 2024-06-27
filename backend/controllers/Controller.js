@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const Store = require('../models/storeModel')
 const Suppliers = require('../models/supplierModel')
 const Categories = require('../models/categoryModel')
+const Products = require('../models/productModel')
 
 const preview = async(req, res) => {
     try{
@@ -193,7 +194,7 @@ const getProfile = async (req, res) => {
             return res.json(null) 
         }
     }catch(err){
-        console.log(err.message)
+        console.log('prof' + err.message)
     }
 }
 
@@ -848,6 +849,311 @@ const deletecategory = async (req, res) => {
     }
 }
 
+const addproduct = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        const val = req.body.products;
+        console.log(val)
+
+        if(val.batchno === ''){
+            return res.json({
+                error : 'Batch Number is required'
+            })
+        }
+
+        if(val.name === ''){
+            return res.json({
+                error : 'Product name is required'
+            })
+        }
+
+        if(val.description === ''){
+            return res.json({
+                error : 'Product description is required'
+            })
+        }
+
+        if(val.costprice === ''){
+            return res.json({
+                error : 'Cst Price is required'
+            })
+        }
+
+        if(val.sellingprice === ''){
+            return res.json({
+                error : 'Selling Price is required'
+            })
+        }
+
+        if(val.quantity === ''){
+            return res.json({
+                error : 'Qunatity is required'
+            })
+        }
+
+        if(val.warehouse === ''){
+            return res.json({
+                error : 'Select warehouse'
+            })
+        }
+
+        if(val.categories === ''){
+            return res.json({
+                error : 'Product category is required'
+            })
+        }
+
+        if(val.supplier === ''){
+            return res.json({
+                error : 'Select supplier'
+            })
+        }
+
+        if(val.mandate === ''){
+            return res.json({
+                error : 'Manufactury date is required'
+            })
+        }
+
+        if(val.expdate === ''){
+            return res.json({
+                error : 'Expiry Date is required'
+            })
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminId = user.userdata._id;
+
+            const pro_duct = Products({
+                adminId : adminId,
+                name : req.body.products.name.toString(),
+                batchno : req.body.products.batchno.toString(),
+                description : req.body.products.description.toString(),
+                costprice : req.body.products.costprice.toString(),
+                sellingprice : req.body.products.sellingprice.toString(),
+                quantity : req.body.products.quantity.toString(),
+                categories : req.body.products.categories.toString(),
+                warehouse: req.body.products.warehouse.toString(),
+                supplier : req.body.products.supplier.toString(),
+                mandate : req.body.products.mandate.toString(),
+                expdate : req.body.products.expdate.toString()
+            })
+
+            pro_duct.save()
+                    .then((result) => {
+                        return res.json({
+                            success : 'Product Added Successfully!'
+                        })
+                    })
+                    .catch((error) => {
+                        console.log('errorw' + error)
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(error){
+        console.log('Eroe' + error)
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const editproduct = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        const val = req.body.products;
+
+        if(val.batchno === ''){
+            return res.json({
+                error : 'Batch Number is required'
+            })
+        }
+
+        if(val.name === ''){
+            return res.json({
+                error : 'Product name is required'
+            })
+        }
+
+        if(val.description === ''){
+            return res.json({
+                error : 'Product description is required'
+            })
+        }
+
+        if(val.costprice === ''){
+            return res.json({
+                error : 'Cst Price is required'
+            })
+        }
+
+        if(val.sellingprice === ''){
+            return res.json({
+                error : 'Selling Price is required'
+            })
+        }
+
+        if(val.quantity === ''){
+            return res.json({
+                error : 'Qunatity is required'
+            })
+        }
+
+        if(val.warehouse === ''){
+            return res.json({
+                error : 'Select warehouse'
+            })
+        }
+
+        if(val.categories === ''){
+            return res.json({
+                error : 'Product category is required'
+            })
+        }
+
+        if(val.supplier === ''){
+            return res.json({
+                error : 'Select supplier'
+            })
+        }
+
+        if(val.mandate === ''){
+            return res.json({
+                error : 'Manufactury date is required'
+            })
+        }
+
+        if(val.expdate === ''){
+            return res.json({
+                error : 'Expiry Date is required'
+            })
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminId = user.userdata._id;
+            const prodId = req.body.products._id;
+
+            Products.findByIdAndUpdate(prodId, {
+                name : req.body.products.name.toString(),
+                batchno : req.body.products.batchno.toString(),
+                description : req.body.products.description.toString(),
+                costprice : req.body.products.costprice.toString(),
+                sellingprice : req.body.products.sellingprice.toString(),
+                quantity : req.body.products.quantity.toString(),
+                categories : req.body.products.categories.toString(),
+                warehouse: req.body.products.warehouse.toString(),
+                supplier : req.body.products.supplier.toString(),
+                mandate : req.body.products.mandate.toString(),
+                expdate : req.body.products.expdate.toString()
+                                       })
+                    .then((result) => {
+                        return res.json({
+                            success : 'Product Updated Successfully!'
+                        })
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const getproducts = async (req ,res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminId = user.userdata._id;
+
+            Products.find({
+                         adminId : adminId
+                          })
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((error) => {
+                       return  res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(error){
+       return res.json({
+        error : error
+       })
+    }
+}
+
+const deleteproduct = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const prodID  = req.body.deleting;
+
+            Products.findByIdAndDelete(prodID)
+                    .then((result) => {
+                        return res.json({
+                            success : 'Successfully Deleted!'
+                        })
+                    })
+                    .catch(error => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const adminlogout = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {expiresIn : 0}, (err, user) => {
+            res.clearCookie("jwt");
+             console.log(user)
+             return res.json({
+                user : user,
+                success: 'Successfully logout'
+             })
+           })
+
+    }catch(error){
+        console.log(error)
+        return res.json({
+            error : error
+        })
+    }
+}
+
 module.exports = {
     signup,
     preview,
@@ -855,7 +1161,7 @@ module.exports = {
     getProfile,
     store,
     storeData,
-    editStore,
+    editStore, 
     deletestore,
     adduser,
     users,
@@ -867,5 +1173,10 @@ module.exports = {
     deletesupplier,
     addcategory,
     getcategories,
-    deletecategory
+    deletecategory,
+    addproduct,
+    getproducts,
+    editproduct, 
+    deleteproduct,
+    adminlogout
 }

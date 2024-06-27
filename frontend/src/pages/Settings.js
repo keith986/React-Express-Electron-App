@@ -1,10 +1,30 @@
 import React, {useContext} from 'react'
 import logo from '../assets/images/userlogo.png'
 import { UserContext } from '../context/userContext'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const Settings = () => {
 
   const {user} = useContext(UserContext)
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    axios.post('/adminlogout')
+         .then((result) => {
+           if(result.data.success){
+            toast.success(result.data.success)
+            navigate('/login')
+           }
+           if(result.data.error){
+            toast.error(result.data.error)
+           }
+         })
+         .catch(error => {
+          toast.error(error)
+         })
+  }
 
   return (
     <div className='container-fluid'>
@@ -33,11 +53,11 @@ const Settings = () => {
       <div className='row'>
         <div className='col'>
         <h2>Authentication detail</h2>
-        <p>user: {user.accounttype}</p>
+        <p>user: {!!user && user.accounttype}</p>
         <p>Last Login : 12th May 2024 , 9:00 pm</p>
         </div>
       </div>
-      <button className='logout'>Logout</button>
+      <button className='logout' onClick={handleLogout}>Logout</button>
     </div>
   )
 }

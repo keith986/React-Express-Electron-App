@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser')
 dotenv.config()
 require('colors')
 
-dbconn();
+dbconn(); 
  
 const app = express();
  

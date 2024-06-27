@@ -2,10 +2,17 @@ import React, { useContext, useState } from 'react'
 import './Sidebar.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { UserContext } from '../context/userContext'
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
 
-  const {user} = useContext(UserContext)
+  const {user} = useContext(UserContext);
+  const navigate = useNavigate();
+
+  if(!user){
+    navigate('/login')
+  }
+
     const [navbarCollapse, setNavCollapse] = useState(false);
 
   return (

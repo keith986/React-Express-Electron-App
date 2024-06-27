@@ -17,7 +17,8 @@ const Suppliers = () => {
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
     const [deleting, setDeleting] = useState(null)
-    const [filterDatas, setFilterData] = useState(null)  
+    const [filterDatas, setFilterData] = useState(null) 
+    const [storedata, setStoreData] = useState(null) 
 
   const handleOpener = () =>{
     setIsOpenModal(true)
@@ -108,6 +109,14 @@ const Suppliers = () => {
    .catch(err => toast.error(err.message))
  }
 
+ useEffect(() => {
+  axios.get('/storeData')
+       .then((result) => {
+         setStoreData(result.data)
+       })
+       .catch(err => console.log(err))
+}, [storedata])
+
   return (
     <div className={`container-fluid`}>
     <div className={`${isModalOpen ? "background" : ""}`}></div>
@@ -136,9 +145,12 @@ const Suppliers = () => {
             <input type='text' className='location-input' name='location' onChange={handleChange}/>
             <span className='name'>Warehouse</span>
             <select className='status-input' name='warehouse' onChange={handleChange}>
-              <option >Choose...</option>
-              <option>Store 1</option>
-              <option>Store 2</option>
+              {!!storedata && storedata.map((str) => {
+                return (
+                    <option value={`${str.storename}`}>{str.storename}</option>
+                       )
+                })
+              }
             </select>
             </div>
             <div className='modal-footer'>
@@ -173,9 +185,12 @@ const Suppliers = () => {
             <input type='text' className='location-input' name='location' onChange={handleChange}/>
             <span className='name'>Warehouse</span>
             <select className='status-input' name='warehouse' onChange={handleChange}>
-              <option >Choose...</option>
-              <option>Store 1</option>
-              <option>Store 2</option>
+            {!!storedata && storedata.map((str) => {
+                return (
+                    <option value={`${str.storename}`}>{str.storename}</option>
+                       )
+                })
+              }
             </select>
             </div>
             <div className='modal-footer'>

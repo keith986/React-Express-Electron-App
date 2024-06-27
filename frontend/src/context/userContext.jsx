@@ -8,9 +8,13 @@ export function UserContextProvider({children}) {
 
     useEffect(() => {
         if(!user) {
-            axios.get('/profile').then((result) => {
+            axios.get('/profile')
+                 .then((result) => {
                     setUser(result.data.userdata);
-                 });
+                 })
+                 .catch(err => {
+                    console.log(err);
+                 })
         }
     }, [user])
 

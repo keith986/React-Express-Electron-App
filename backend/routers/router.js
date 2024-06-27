@@ -53,5 +53,10 @@ use_route.post('/editsupplier', useController.editsupplier)
 use_route.post('/addcategory', useController.addcategory)
 use_route.get('/getcategories', useController.getcategories)
 use_route.post('/deletecategory', useController.deletecategory)
+use_route.post('/addproduct', useController.addproduct)
+use_route.get('/getproducts', useController.getproducts) 
+use_route.post('/deleteproduct', useController.deleteproduct)
+use_route.post('/editproduct', useController.editproduct)
+use_route.post('/adminlogout', useController.adminlogout)
 
 module.exports = use_route;

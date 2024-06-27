@@ -14,8 +14,9 @@ const Settings = () => {
     axios.post('/adminlogout')
          .then((result) => {
            if(result.data.success){
-            toast.success(result.data.success)
             navigate('/login')
+            toast.success(result.data.success)
+            window.location.reload()
            }
            if(result.data.error){
             toast.error(result.data.error)

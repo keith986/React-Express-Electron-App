@@ -47,9 +47,9 @@ const POS = () => {
   }, [iscart])
 
   const quantityChange = (event) => {
-    //const sellingprice = document.getElementById('selling-' + event.target.id).innerHTML;
-    //document.getElementById('ttl-' + event.target.id).innerHTML;
-    alert('Next we calculate!')
+    const sellingprice = document.getElementById('selling-' + event.target.id).innerHTML;
+    document.getElementById('ttl-' + event.target.id).innerHTML = sellingprice * event.target.innerHTML;
+    alert(sellingprice)
    // totalprice = sellingprice * event.target.value;
 
   }
@@ -132,7 +132,7 @@ const POS = () => {
                   return (
                           <tr className='tr-row' id={itm._id}>
                               <td>{itm.name}</td>
-                              <td className='itm-qty' id={`qty-${itm._id}`} contentEditable={true} onInput={quantityChange}>1</td>
+                              <td className='itm-qty' id={itm._id} contentEditable={true} onInput={quantityChange}>1</td>
                               <td id={`selling-${itm._id}`}>{itm.sellingprice}</td>
                               <td id={`ttl-${itm._id}`}>{itm.sellingprice}</td>
                               <td>

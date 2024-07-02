@@ -44,14 +44,11 @@ const POS = () => {
          .catch((error) => {
            toast.error(error)
           })  
-  }, [iscart])
+  }, [iscart]) 
 
   const quantityChange = (event) => {
     const sellingprice = document.getElementById('selling-' + event.target.id).innerHTML;
     document.getElementById('ttl-' + event.target.id).innerHTML = sellingprice * event.target.innerHTML;
-    alert(sellingprice)
-   // totalprice = sellingprice * event.target.value;
-
   }
 
   const handleDelete = (event) => {

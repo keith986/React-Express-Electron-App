@@ -3,6 +3,7 @@ import '../App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const Dashboard = () => {
+
   return (
     <div className='container-fluid'>
      <h2>User Dashboard</h2>
@@ -38,7 +39,7 @@ const Dashboard = () => {
         <div className='col-md-4 ext'>
             <i className='bi bi-bag-fill' style={{color: "purple"}}></i>
             <h3>Available Product</h3>
-               KES<span className='changes'>0.00</span>
+               <span className='changes'>0</span>
         </div>
      </div>
 

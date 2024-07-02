@@ -103,6 +103,12 @@ body{
 	display: none;
 }
 
+.cart-qty {
+	background: transparent;
+	outline : none;
+	border: none;
+}
+
 .modal{
 	position: absolute;
 	margin-top: 50px;

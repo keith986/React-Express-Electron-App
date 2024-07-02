@@ -8,6 +8,7 @@ const Categories = () => {
     const [categorys, setCategory] = useState({categoryname : ''})
     const [categoryData, setCategoryData] = useState(null)
     const [deleting, setDeleting] = useState(null)
+    const [filterDatas, setFilterData] = useState(null)
 
     const handleOpener = () =>{
       setIsOpenModal(true)
@@ -26,6 +27,11 @@ const Categories = () => {
       // const parent = document.getElementById(event.target.id)
       // parent.style.display = 'none'
     }
+
+    const handlefilter = (event) => {
+      const resp = filterDatas.filter(s => s.categoryname.includes(event.target.value))
+      setCategoryData(resp)
+   }
 
     const submitChange = (event) => {
       event.preventDefault();
@@ -51,6 +57,7 @@ const Categories = () => {
      axios.get('/getcategories')
           .then((result) => {
              setCategoryData(result.data)
+             setFilterData(result.data)
           })
           .catch((error) => {
             toast.error(error)
@@ -105,7 +112,7 @@ const Categories = () => {
       <div className='row'>
       <div className='col-divide'>
          <p>Search : </p>
-        <input type='search' className='search' placeholder='Search By Name...'/>
+        <input type='search' className='search' placeholder='Search By Name...' onChange={handlefilter}/>
       </div>
       </div>
         <div className='row'>

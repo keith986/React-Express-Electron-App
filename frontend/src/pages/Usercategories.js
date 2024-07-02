@@ -1,7 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../App.css'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
-const Categories = () => {
+const UserCategories = () => {
+
+  const [categoryData, setCategoryData] = useState(null)
+  const [filterDatas, setFilterData] = useState(null)
+
+  const handlefilter = (event) => {
+    const resp = filterDatas.filter(s => s.categoryname.includes(event.target.value))
+    setCategoryData(resp)
+ }
+
+  useEffect(() => {
+    axios.get('/getcategories')
+         .then((result) => {
+            setCategoryData(result.data)
+            setFilterData(result.data)
+           
+         })
+         .catch((error) => {
+           toast.error(error)
+         })
+ }, [categoryData]) 
    
     return (
       <div className={`container-fluid`}>
@@ -9,26 +31,28 @@ const Categories = () => {
    
       <div className='row'>
       <div className='col-divide'>
-         <select className='select'>
-          <option>5 of 5</option>
-          <option>10 of 10</option>
-        </select>
-        <input type='search' className='search' placeholder='Search By Name...'/>
+        <p>Search : </p>
+        <input type='search' className='search' placeholder='Search By Name...' onChange={handlefilter}/>
       </div>
       </div>
         <div className='row'>
         <div className='col'>
               <table className='table'>
-                <tr>
-                  <th>No.</th>
+                <tr>  
                   <th>Category Name</th>
                   <th>Created At</th>
                 </tr>
-                <tr>
-                  <td>No entry</td>
-                  <td>No entry</td>
-                  <td>No entry</td>
-                </tr>
+                
+                  {!!categoryData && categoryData.map((cate) => {
+                    return (
+                            <tr className='tr-row' id={cate._id}>
+                            <td>{cate.categoryname}</td>
+                            <td>{cate.createdAt}</td>
+                            </tr>
+                           );
+                  })
+                  }
+                
               </table>
   
             </div>
@@ -37,4 +61,4 @@ const Categories = () => {
     )
 }
 
-export default Categories
+export default UserCategories

@@ -5,6 +5,7 @@ const Store = require('../models/storeModel')
 const Suppliers = require('../models/supplierModel')
 const Categories = require('../models/categoryModel')
 const Products = require('../models/productModel')
+const rows = require('../models/rowModel')
 
 const preview = async(req, res) => {
     try{
@@ -161,7 +162,7 @@ const login = async (req, res) => {
                     if(err) throw err;
                     console.log(token)
                    return res.cookie('token',token).json({
-                                                          user : "staff",
+                                                          staff : "staff",
                                                           success: "logged In Successfully!",
                                                           user: userdata
                                                         });
@@ -799,8 +800,11 @@ const getcategories = async (req, res) => {
             const adminId = user.userdata._id;
 
             Categories.find({
-                         adminId : adminId
-                           })
+                      $or : [
+                         {adminId : adminId},
+                         {adminId : user.userdata.adminId} 
+                          ] 
+                          })
                       .then((result) => {
                         res.json(result)
                       })
@@ -1083,7 +1087,10 @@ const getproducts = async (req ,res) => {
             const adminId = user.userdata._id;
 
             Products.find({
-                         adminId : adminId
+                 $or : [
+                         {adminId : adminId},
+                         {adminId : user.userdata.adminId}
+                       ]
                           })
                     .then((result) => {
                         return res.json(result)
@@ -1154,6 +1161,81 @@ const adminlogout = async (req, res) => {
     }
 }
 
+const addcart = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const prodID = req.body.isselected;
+            const staffID  = user.userdata._id;
+            console.log(prodID)
+
+            Products.find({
+                    _id : prodID
+                     })
+                    .then((result) => {
+                        console.log(result.sellingprice)
+                        const rows_data = rows({
+                            staffId : staffID,
+                            item : result
+                        })
+
+                        rows_data.save()
+                                 .then((results) => {
+                                    console.log('SUCCESS')
+                                    return res.json({
+                                        success : 'Success'
+                                    })
+                                 })
+                                 .catch((error) => {
+                                    console.log(error)
+                                 })
+                    })
+                    .catch(error => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const getcart = async(req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+
+            rows.find({
+                 staffId : staffID
+                     })
+                .then((result) => {
+                    return res.json(result)
+                     })
+                .catch((ers) =>{
+                    return res.json({
+                        error : ers
+                    })
+                    })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
 module.exports = {
     signup,
     preview,
@@ -1178,5 +1260,7 @@ module.exports = {
     getproducts,
     editproduct, 
     deleteproduct,
-    adminlogout
+    adminlogout,
+    addcart,
+    getcart
 }

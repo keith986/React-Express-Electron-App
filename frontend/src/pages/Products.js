@@ -314,7 +314,7 @@ const Products = () => {
                                   <td>{prod.name}</td>
                                   <td>{prod.categories}</td>
                                   <td>{prod.expdate}</td>
-                                  <td>{prod.sellingprice}</td>
+                                  <td>Kes. {prod.sellingprice}</td>
                                   <td>{prod.quantity}</td>
                                   <td>{prod.warehouse}</td>
                                   <td>

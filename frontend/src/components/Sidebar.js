@@ -9,7 +9,7 @@ const Sidebar = () => {
   const {user} = useContext(UserContext);
   const navigate = useNavigate();
 
-  if(!user){
+  if(!!user && user.accounttype !== 'Admin'){
     navigate('/login')
   }
 

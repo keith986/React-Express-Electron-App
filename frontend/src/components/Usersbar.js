@@ -1,8 +1,18 @@
 import React, { useState } from 'react'
 import './Sidebar.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import { useContext } from 'react'
+import { UserContext } from '../context/userContext'
+import { useNavigate } from 'react-router-dom'
 
 const Sidebar = () => {
+
+    const {user} = useContext(UserContext);
+    const navigate = useNavigate();
+
+    if(!!user && user.accounttype !== 'staff'){
+      navigate('/login');
+    }
 
     const [navbarCollapse, setNavCollapse] = useState(false);
 
@@ -14,8 +24,8 @@ const Sidebar = () => {
       <i className='bi bi-justify' onClick={e => setNavCollapse(!navbarCollapse)}></i>
       </div>
       <div className='user-profile'>
-      <h3>Smith Row</h3>
-      <span>staff</span>
+      <h3>{!!user && user.username}</h3>
+      <span>{!!user && user.accounttype}</span>
       </div>
       </nav>
 

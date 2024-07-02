@@ -58,5 +58,7 @@ use_route.get('/getproducts', useController.getproducts)
 use_route.post('/deleteproduct', useController.deleteproduct)
 use_route.post('/editproduct', useController.editproduct)
 use_route.post('/adminlogout', useController.adminlogout)
+use_route.post('/addcart', useController.addcart)
+use_route.get('/getcart', useController.getcart)
 
 module.exports = use_route;

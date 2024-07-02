@@ -109,6 +109,22 @@ body{
 	border: none;
 }
 
+.deleteall {
+	margin: 10px;
+	padding: 10px;
+	background-color: red;
+	color: #fff;
+	border: none;
+	outline: none;
+	border-radius: 30px;
+	font-family: Tahoma;
+}
+
+.deleteall:hover{
+	cursor: pointer;
+	box-shadow:  2px 2px 5px 5px #000;
+}
+
 .modal{
 	position: absolute;
 	margin-top: 50px;

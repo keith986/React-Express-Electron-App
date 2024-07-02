@@ -1236,6 +1236,63 @@ const getcart = async(req, res) => {
     }
 }
 
+const deleteone = async(req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const itemID = req.body.itemId;
+            rows.findByIdAndDelete(itemID)
+                .then((result) => {
+                    return res.json({
+                        success : 'success'
+                    })
+                })
+                .catch((error) => {
+                    return res.json({
+                        error : error
+                    })
+                })  
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })  
+    }
+}
+
+const deletemany = async(req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            
+            const staffID = user.userdata._id;
+            rows.findOneAndDelete({staffId : staffID})
+                .then((result) => {
+                    return res.json({
+                        success : 'success'
+                    })
+                })
+                .catch((error) => {
+                    return res.json({
+                        error : error
+                    })
+                })  
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })  
+    }
+}
+
 module.exports = {
     signup,
     preview,
@@ -1262,5 +1319,7 @@ module.exports = {
     deleteproduct,
     adminlogout,
     addcart,
-    getcart
+    getcart,
+    deleteone,
+    deletemany
 }

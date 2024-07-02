@@ -46,6 +46,39 @@ const POS = () => {
           })  
   }, [iscart])
 
+  const quantityChange = (event) => {
+    //const sellingprice = document.getElementById('selling-' + event.target.id).innerHTML;
+    //document.getElementById('ttl-' + event.target.id).innerHTML;
+    alert('Next we calculate!')
+   // totalprice = sellingprice * event.target.value;
+
+  }
+
+  const handleDelete = (event) => {
+    const itemId = event.target.id;
+    axios.post('/deleteone', {itemId})
+         .then((result) => {
+           if(result.data.success){
+             toast.success('Deleted')
+           }
+         })
+         .catch((error) => {
+           toast.error(error)
+         })
+  }
+
+  const handleDeleteMany = (event) => {
+  
+    axios.post('/deletemany')
+         .then((result) => {
+           if(result.data.success){
+             toast.success('Deleted All')
+           }
+         })
+         .catch((error) => {
+           toast.error(error)
+         })
+  }
 
   return (
     <div className='container-fluid'>
@@ -95,21 +128,27 @@ const POS = () => {
                  var items = data.item;
 
                   var detail = items.map((itm) => {
+                    
                   return (
                           <tr className='tr-row' id={itm._id}>
                               <td>{itm.name}</td>
-                              <td className='itm-qty' id={`qty-${itm._id}`} contentEditable={true}>1</td>
+                              <td className='itm-qty' id={`qty-${itm._id}`} contentEditable={true} onInput={quantityChange}>1</td>
                               <td id={`selling-${itm._id}`}>{itm.sellingprice}</td>
                               <td id={`ttl-${itm._id}`}>{itm.sellingprice}</td>
+                              <td>
+                                <i className='bi bi-trash-fill' id={data._id} style={{color: 'red'}} onClick={handleDelete}></i>
+                              </td>
                           </tr>
                          );
                   
                   });  
+
                   return detail;        
-                            })                         
+                                                   })                         
                 }
              
         </table>
+        <button className='deleteall' onClick={handleDeleteMany}><i className='bi bi-trash-fill'></i> DELETE ALL</button>
         </div>
       </div>
       <div className='row' id='jump'>

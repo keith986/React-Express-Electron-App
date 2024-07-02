@@ -1272,7 +1272,7 @@ const deletemany = async(req, res) => {
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             
             const staffID = user.userdata._id;
-            rows.findOneAndDelete({staffId : staffID})
+            rows.deleteMany({staffId : staffID})
                 .then((result) => {
                     return res.json({
                         success : 'success'

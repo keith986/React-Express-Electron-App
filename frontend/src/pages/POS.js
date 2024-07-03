@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import $ from 'jquery'
 
 const POS = () => {
   const [isProd, setIsProd] = useState(null)
@@ -29,7 +30,8 @@ const POS = () => {
      })
     .catch((error) => {
         toast.error(error)
-     })  
+     }) 
+    
   }
 
   useEffect( () => {
@@ -38,8 +40,16 @@ const POS = () => {
           var datas = result.data;
      
             setIsCart(datas)
-        
-          
+            var sum = 0;
+            $('.ttl').each(function(){
+             sum += parseFloat($(this).text());  
+              });
+             $('#grand-total').val(sum)
+             var grand_total = parseFloat($('#grand-total').val());
+             var discount_percent = parseFloat($('#discount').val())
+             var discount = parseFloat((discount_percent * grand_total) / 100);
+             var amount = grand_total + discount;
+              $('#amount').val(amount);
           })
          .catch((error) => {
            toast.error(error)
@@ -49,6 +59,17 @@ const POS = () => {
   const quantityChange = (event) => {
     const sellingprice = document.getElementById('selling-' + event.target.id).innerHTML;
     document.getElementById('ttl-' + event.target.id).innerHTML = sellingprice * event.target.innerHTML;
+    
+    var sum = 0;
+   $('.ttl').each(function(){
+    sum += parseFloat($(this).text());  
+     });
+    $('#grand-total').val(sum)
+    var grand_total = parseFloat($('#grand-total').val());
+    var discount_percent = parseFloat($('#discount').val())
+    var discount = parseFloat((discount_percent * grand_total) / 100);
+    var amount = grand_total + discount;
+     $('#amount').val(amount);
   }
 
   const handleDelete = (event) => {
@@ -75,6 +96,13 @@ const POS = () => {
          .catch((error) => {
            toast.error(error)
          })
+  }
+
+  const discountChange = (e) => {
+    var grand_total = parseFloat($('#grand-total').val());
+    var discount = parseFloat((e.target.value * grand_total) / 100);
+    var amount = grand_total + discount;
+     $('#amount').val(amount);
   }
 
   return (
@@ -131,9 +159,9 @@ const POS = () => {
                               <td>{itm.name}</td>
                               <td className='itm-qty' id={itm._id} contentEditable={true} onInput={quantityChange}>1</td>
                               <td id={`selling-${itm._id}`}>{itm.sellingprice}</td>
-                              <td id={`ttl-${itm._id}`}>{itm.sellingprice}</td>
+                              <td id={`ttl-${itm._id}`} className='ttl'>{itm.sellingprice}</td>
                               <td>
-                                <i className='bi bi-trash-fill' id={data._id} style={{color: 'red'}} onClick={handleDelete}></i>
+                                <i className='bi bi-trash-fill' id={data._id} style={{color: 'red', cursor : 'pointer'}} onClick={handleDelete}></i>
                               </td>
                           </tr>
                          );
@@ -141,7 +169,7 @@ const POS = () => {
                   });  
 
                   return detail;        
-                                                   })                         
+                                             })                         
                 }
              
         </table>
@@ -150,11 +178,11 @@ const POS = () => {
       </div>
       <div className='row' id='jump'>
         <h4>Grand Total</h4>
-        <input type='number' className='names-input' placeholder='0.00' readOnly/>
+        <input type='number' className='names-input' id='grand-total' placeholder='0.00' readOnly/>
       </div>
       <div className='row' id='jump'>
         <h4>Discount (%)</h4>
-        <input type='number' className='names-input' placeholder='0.00'/>
+        <input type='number' className='names-input' id='discount' placeholder='0.00' onChange={discountChange}/>
       </div>
       <div className='row' id='jump'>
         <h4>Payment Method</h4>
@@ -168,7 +196,7 @@ const POS = () => {
       </div>
       <div className='row' id='jum-down'>
         <h4>Amount Rendered</h4>
-        <input type='number' className='names-input' placeholder='0.00' readOnly/>
+        <input type='number' className='names-input' id='amount' placeholder='0.00' readOnly/>
       </div>
       <div className='row' id='jum-down'>
         <button type='button' className='generate'>GENERATE INVOICE</button>

@@ -6,6 +6,14 @@ import $ from 'jquery'
 const POS = () => {
   const [isProd, setIsProd] = useState(null)
   const [iscart, setIsCart] = useState(null)
+  const [isDiscount, setIsDiscount] = useState(null)
+  const [isInvoice, setIsInvoice] = useState({
+    customername : '',
+    customeremail : '',
+    customerphone : '',
+    grandtotal: '',
+    amount : ''
+  })
 
   useEffect(() => {
     axios.get('/getproducts')
@@ -99,30 +107,51 @@ const POS = () => {
   }
 
   const discountChange = (e) => {
+    setIsDiscount(e.target.value)
     var grand_total = parseFloat($('#grand-total').val());
     var discount = parseFloat((e.target.value * grand_total) / 100);
     var amount = grand_total + discount;
      $('#amount').val(amount);
   }
 
+  const handleChange = (e) => {
+    setIsInvoice({...isInvoice, [e.target.name] : [e.target.value]})
+  }
+
+  const submitChange = async () => {
+    axios.post('/invoices', {isInvoice, isDiscount})
+         .then((result) => {
+           if(result.data.success){
+            toast.success('Invoice Successfully Generated!')
+            isInvoice({})
+           }
+           if(result.data.error){
+            toast.error(result.data.error)
+           }
+         })
+         .catch(error => {
+          toast.error(error)
+         })
+  }
+
   return (
     <div className='container-fluid'>
     <h2>CART</h2>
-   
+   <form onSubmit={submitChange}>
       <div className='row'>
         <h5 className='name'>Customer Name <i>*Optional [Required for credit Sales]*</i></h5>
         <h5 className='name'>Customer Email <i>*Optional [Required for credit Sales]*</i></h5>
       </div>
       <div className='row'>
-        <input type='text' className='names-input' placeholder='Optional [Required for credit Sales]'/>
-        <input type='text' className='names-input' placeholder='Optional [Required for credit Sales]'/>
+        <input type='text' className='names-input' name='customername' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
+        <input type='text' className='names-input' name='customeremail' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
       </div>
         <div className='row'>
         <h5 className='name'>Customer Phone <i>*Optional [Required for credit Sales]*</i></h5>
         <h5>select product</h5>
         </div>
         <div className='row'>
-        <input type='number' className='names-input' placeholder='Optional [Required for credit Sales]'/>
+        <input type='number' className='names-input' name='customerphone' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
         <select className='names-input' id='selectvalue'>
             <option>Choose..</option>
             {!!isProd && isProd.map((stri) => {
@@ -178,29 +207,30 @@ const POS = () => {
       </div>
       <div className='row' id='jump'>
         <h4>Grand Total</h4>
-        <input type='number' className='names-input' id='grand-total' placeholder='0.00' readOnly/>
+        <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly onChange={handleChange}/>
       </div>
       <div className='row' id='jump'>
         <h4>Discount (%)</h4>
-        <input type='number' className='names-input' id='discount' placeholder='0.00' onChange={discountChange}/>
+        <input type='number' className='names-input' id='discount' placeholder='0.00' onChange={discountChange} required/>
       </div>
       <div className='row' id='jump'>
         <h4>Payment Method</h4>
-        <select className='names-input'>
-            <option disabled>select...</option>
-            <option>POS payment</option>
-            <option>Transfer payment</option>
-            <option>Cash payment</option>
-            <option>Cheque payment</option>
+        <select className='names-input' name='payment' onChange={handleChange}>
+            <option >Choose</option>
+            <option value='POS'>POS payment</option>
+            <option value='transfer'>Transfer payment</option>
+            <option value='cash'>Cash payment</option>
+            <option value='cheque'>Cheque payment</option>
         </select>
       </div>
       <div className='row' id='jum-down'>
         <h4>Amount Rendered</h4>
-        <input type='number' className='names-input' id='amount' placeholder='0.00' readOnly/>
+        <input type='number' className='names-input' id='amount' name='amount' placeholder='0.00' readOnly onChange={handleChange}/>
       </div>
       <div className='row' id='jum-down'>
-        <button type='button' className='generate'>GENERATE INVOICE</button>
+        <button type='submit' className='generate'>GENERATE INVOICE</button>
       </div>
+      </form>
     </div>
   )
 }

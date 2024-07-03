@@ -12,7 +12,8 @@ const POS = () => {
     customeremail : '',
     customerphone : '',
     grandtotal: '',
-    amount : ''
+    amount : '',
+    payment : ''
   })
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const POS = () => {
              var grand_total = parseFloat($('#grand-total').val());
              var discount_percent = parseFloat($('#discount').val())
              var discount = parseFloat((discount_percent * grand_total) / 100);
-             var amount = grand_total + discount;
+             var amount = grand_total - discount;
               $('#amount').val(amount);
           })
          .catch((error) => {
@@ -76,7 +77,7 @@ const POS = () => {
     var grand_total = parseFloat($('#grand-total').val());
     var discount_percent = parseFloat($('#discount').val())
     var discount = parseFloat((discount_percent * grand_total) / 100);
-    var amount = grand_total + discount;
+    var amount = grand_total - discount;
      $('#amount').val(amount);
   }
 
@@ -110,7 +111,7 @@ const POS = () => {
     setIsDiscount(e.target.value)
     var grand_total = parseFloat($('#grand-total').val());
     var discount = parseFloat((e.target.value * grand_total) / 100);
-    var amount = grand_total + discount;
+    var amount = grand_total - discount;
      $('#amount').val(amount);
   }
 
@@ -118,12 +119,15 @@ const POS = () => {
     setIsInvoice({...isInvoice, [e.target.name] : [e.target.value]})
   }
 
-  const submitChange = async () => {
+  const submitChange = async (e) => {
+    
+    e.preventDefault();
+
     axios.post('/invoice', {isInvoice, isDiscount})
          .then((result) => {
            if(result.data.success){
             toast.success('Invoice Successfully Generated!')
-            isInvoice({})
+            
            }
            if(result.data.error){
             toast.error(result.data.error)
@@ -225,7 +229,7 @@ const POS = () => {
       </div>
       <div className='row' id='jum-down'>
         <h4>Amount Rendered</h4>
-        <input type='number' className='names-input' id='amount' name='amount' placeholder='0.00' readOnly onChange={handleChange}/>
+        <input type='number' className='names-input' id='amount' name='amount' placeholder='0.00' onChange={handleChange}/>
       </div>
       <div className='row' id='jum-down'>
         <button type='submit' className='generate'>GENERATE INVOICE</button>

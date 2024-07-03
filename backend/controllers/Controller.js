@@ -6,6 +6,7 @@ const Suppliers = require('../models/supplierModel')
 const Categories = require('../models/categoryModel')
 const Products = require('../models/productModel')
 const rows = require('../models/rowModel')
+const invoices = require('../models/invoiceModel')
 
 const preview = async(req, res) => {
     try{
@@ -1298,11 +1299,71 @@ const invoice = async (req, res) => {
 
         const {token} = req.cookies;  
 
+        if(req.body.isInvoice.payment === ''){
+            return res.json({
+                error : 'Payment Methos is required'
+            })
+        }
+
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            console.log(req.body);
+
+            const staffID = user.userdata._id;
+            const adminID = user.userdata.adminId;
+
+            rows.find({
+                  staffId : staffID
+                 })
+                .then((results) => {
+            
+            const inv_oice = invoices({
+                staffId : staffID,
+                adminId : adminID,
+                customername : req.body.isInvoice.customername,
+                customeremail : req.body.isInvoice.customeremail,
+                customerphone: req.body.isInvoice.customerphone,
+                grandtotal : req.body.isInvoice.grandtotal,
+                totalamount: req.body.isInvoice.amount,
+                discount: req.body.isDiscount,
+                method : req.body.isInvoice.payment,
+                item: results
+            })
+            
+            inv_oice.save()
+                    .then((resultes) => {
+                       console.log(resultes)
+                        rows.deleteMany({staffId : staffID})
+                            .then((result) => {
+                               console.log('deleted')
+                            })
+                            .catch(error => {
+                                return res.json({
+                                    error : error
+                                })
+                            })
+
+                         return res.json({
+                                success : 'success'
+                            })
+                    })
+                    .catch((errors) => {
+                        console.log(errors)
+                        return res.json({
+                            error : errors
+                        })
+                    })
+            
+                 })
+                .catch((errs) => {
+                    console.log(errs)
+                    return res.json({
+                        error : errs
+                    })
+                })
+
         }) 
 
     }catch(err){
+        console.log('My ERROR ' + err)
         return res.json({
             error : err
         })

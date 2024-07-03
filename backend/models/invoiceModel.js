@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const POSSchema = new Schema ({
+const InvoiceSchema = new Schema ({
     adminId: {
         type: String
     },
-    staff: {
+    staffId: {
         type: String
     },
     customername: {
@@ -18,13 +18,7 @@ const POSSchema = new Schema ({
         type: String
     },
     item : {
-        type : String
-    },
-    quantity: {
-        type: String
-    },
-    totalprice : {
-        type : String
+        type : Array
     },
     grandtotal : {
         type : String
@@ -33,7 +27,7 @@ const POSSchema = new Schema ({
         type: String
     },
     method: {
-        type: String
+        type: Array
     },
     totalamount:{
         type: String
@@ -42,3 +36,6 @@ const POSSchema = new Schema ({
         type: String
     }
 })
+
+const invoices = mongoose.model('invoices', InvoiceSchema)
+module.exports = invoices 

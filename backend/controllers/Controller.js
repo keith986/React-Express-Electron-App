@@ -1293,6 +1293,22 @@ const deletemany = async(req, res) => {
     }
 }
 
+const invoice = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;  
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            console.log(req.body);
+        }) 
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
 module.exports = {
     signup,
     preview,
@@ -1321,5 +1337,6 @@ module.exports = {
     addcart,
     getcart,
     deleteone,
-    deletemany
+    deletemany,
+    invoice
 }

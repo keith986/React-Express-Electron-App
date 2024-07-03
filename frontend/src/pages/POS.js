@@ -119,7 +119,7 @@ const POS = () => {
   }
 
   const submitChange = async () => {
-    axios.post('/invoices', {isInvoice, isDiscount})
+    axios.post('/invoice', {isInvoice, isDiscount})
          .then((result) => {
            if(result.data.success){
             toast.success('Invoice Successfully Generated!')

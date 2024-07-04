@@ -1317,32 +1317,6 @@ const invoice = async (req, res) => {
             statuses = 'Fully Paid';
         }
 
-        var dates = new Date();
-        var month =  dates.getMonth + 1;
-        var dat = dates.getDate;
-        var year = dates.getFullYear;
-
-        var min = dates.getMinutes;
-        var hrs = dates.getHours;
-        var sec = dates.getSeconds;
-        var session = 'am';
-
-        if(hrs >= 12){
-            hrs = hrs - 12;
-            session = 'pm';
-        }
-
-        if(min < 10){
-            min  = '0' + min;
-        }
-
-        if(sec < 10){
-            sec = '0' + sec;
-        }
-
-        var thee_date = dat + ' / ' + month + ' / ' + year;
-        var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session
-
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
 
             const staffID = user.userdata._id;
@@ -1364,8 +1338,8 @@ const invoice = async (req, res) => {
                 item: req.body.info,
                 status : statuses,
                 paid : req.body.isInvoice.paid.toString(),
-                date : thee_date,
-                time : thee_time
+                date : req.body.thee_date,
+                time : req.body.thee_time
             })
             
             inv_oice.save()

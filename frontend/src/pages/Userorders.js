@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import '../App.css'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import jsPDF from 'jspdf';
 
 const Orders = () => {
 
@@ -26,6 +27,20 @@ const Orders = () => {
          })
   }, [])
 
+  const handleDownload = () => {
+    const elemHtml = document.querySelector('#receipt');
+    let docPDF = new jsPDF();
+    docPDF.html(elemHtml,{
+      callback:function(docPDF){
+          docPDF.save('receipt.pdf');
+      },
+  x: 15,
+  y: 15,
+  width: 170,
+  windowWidth: 650
+  })
+  }
+
   return (
     <div className='container-fluid'>
     <h2>All Orders</h2>
@@ -36,7 +51,7 @@ const Orders = () => {
     
     <div className={`modal ${isModal ? "open" : ""}`}>
         <div className='modal-dialog'>
-        <form>
+        
           <div className='modal-content'>
             <div className='modal-header'>
               <h2>Download Receipt</h2>
@@ -103,11 +118,11 @@ const Orders = () => {
             <div className='modal-footer'>
             <span>.</span>
             <button type='button' className='back' onClick={handleClose}>Back</button>
-            <button type='submit' className='send'>Download</button>
+            <button type='button' className='send' onClick={handleDownload}>Download</button>
             </div>
 
           </div>
-          </form>
+  
         </div>
       </div>
 

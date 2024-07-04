@@ -142,7 +142,34 @@ const POS = () => {
       info.push(rowData);
     }
 
-    axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount})
+    //time and date
+    var dates = new Date();
+        var month =  dates.getMonth() + 1;
+        var dat = dates.getDate();
+        var year = dates.getFullYear();
+
+        var min = dates.getMinutes();
+        var hrs = dates.getHours();
+        var sec = dates.getSeconds();
+        var session = 'am';
+
+        if(hrs >= 12){
+            hrs = hrs - 12;
+            session = 'pm';
+        }
+
+        if(min < 10){
+            min  = '0' + min;
+        }
+
+        if(sec < 10){
+            sec = '0' + sec;
+        }
+
+        var thee_date = dat + ' / ' + month + ' / ' + year;
+        var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session
+
+    axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount, thee_time, thee_date})
          .then((result) => {
            if(result.data.success){
             toast.success('Invoice Successfully Generated!')
@@ -222,7 +249,7 @@ const POS = () => {
                   });  
 
                   return detail;        
-                                             })                         
+                                                })                         
                 }
              
         </table>

@@ -8,6 +8,9 @@ const InvoiceSchema = new Schema ({
     staffId: {
         type: String
     },
+    invoiceno : {
+        type : String
+    },
     staffname : {
         type : String,
     },
@@ -39,6 +42,12 @@ const InvoiceSchema = new Schema ({
         type : String
     },
     status : {
+        type : String
+    },
+    date : {
+        type : String
+    },
+    time : {
         type : String
     }
 }, {timestamps: true})

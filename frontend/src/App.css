@@ -580,6 +580,11 @@ font-size: 20px;
 	display: block !important;
 }
 
+#receipt {
+	background-color: #fff;
+	border: 1px solid #000;
+}
+
 /*query*/
 @media  screen and  (min-width: 768px) {
 	.container-fluid{
@@ -597,6 +602,11 @@ font-size: 20px;
 
 	.container-fluid{
 		margin-left: 15%;
+	}
+
+	#receipt-tbl {
+		margin-left: -60%;
+		max-width: 50%;
 	}
 
 	.row{
@@ -636,7 +646,7 @@ font-size: 20px;
 	}
 
 	#tablext{
-		margin-left: 335%;
+		margin-left: 280%;
 	}
 
 	.modal{

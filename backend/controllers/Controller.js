@@ -1305,6 +1305,9 @@ const invoice = async (req, res) => {
             })
         }
 
+        var random = 1000000;
+
+        var mathran = Math.floor(Math.random() * random);
 
         var statuses = '';
 
@@ -1314,6 +1317,31 @@ const invoice = async (req, res) => {
             statuses = 'Fully Paid';
         }
 
+        var dates = new Date();
+        var month =  dates.getMonth + 1;
+        var dat = dates.getDate;
+        var year = dates.getFullYear;
+
+        var min = dates.getMinutes;
+        var hrs = dates.getHours;
+        var sec = dates.getSeconds;
+        var session = 'am';
+
+        if(hrs >= 12){
+            hrs = hrs - 12;
+            session = 'pm';
+        }
+
+        if(min < 10){
+            min  = '0' + min;
+        }
+
+        if(sec < 10){
+            sec = '0' + sec;
+        }
+
+        var thee_date = dat + ' / ' + month + ' / ' + year;
+        var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session
 
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
 
@@ -1322,6 +1350,7 @@ const invoice = async (req, res) => {
             const adminID = user.userdata.adminId;
             
             const inv_oice = invoices({
+                invoiceno : mathran,
                 staffId : staffID,
                 adminId : adminID,
                 staffname : staffName,
@@ -1334,7 +1363,9 @@ const invoice = async (req, res) => {
                 method : req.body.isInvoice.payment.toString(),
                 item: req.body.info,
                 status : statuses,
-                paid : req.body.isInvoice.paid.toString()
+                paid : req.body.isInvoice.paid.toString(),
+                date : thee_date,
+                time : thee_time
             })
             
             inv_oice.save()

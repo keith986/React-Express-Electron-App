@@ -8,6 +8,9 @@ const InvoiceSchema = new Schema ({
     staffId: {
         type: String
     },
+    staffname : {
+        type : String,
+    },
     customername: {
         type: String
     },
@@ -27,15 +30,18 @@ const InvoiceSchema = new Schema ({
         type: String
     },
     method: {
-        type: Array
+        type: String
     },
     totalamount:{
         type: String
     },
-    status: {
-        type: String
+    paid : {
+        type : String
+    },
+    status : {
+        type : String
     }
-})
+}, {timestamps: true})
 
-const invoices = mongoose.model('invoices', InvoiceSchema)
-module.exports = invoices 
+const invoices = mongoose.model('invoices', InvoiceSchema);
+module.exports = invoices; 

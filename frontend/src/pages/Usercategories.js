@@ -18,7 +18,6 @@ const UserCategories = () => {
          .then((result) => {
             setCategoryData(result.data)
             setFilterData(result.data)
-           
          })
          .catch((error) => {
            toast.error(error)

@@ -11,9 +11,8 @@ const POS = () => {
     customername : '',
     customeremail : '',
     customerphone : '',
-    grandtotal: '',
-    amount : '',
-    payment : ''
+    payment : '',
+    paid : ''
   })
 
   useEffect(() => {
@@ -78,7 +77,7 @@ const POS = () => {
     var discount_percent = parseFloat($('#discount').val())
     var discount = parseFloat((discount_percent * grand_total) / 100);
     var amount = grand_total - discount;
-     $('#amount').val(amount);
+    $('#amount').val(amount);
   }
 
   const handleDelete = (event) => {
@@ -112,7 +111,7 @@ const POS = () => {
     var grand_total = parseFloat($('#grand-total').val());
     var discount = parseFloat((e.target.value * grand_total) / 100);
     var amount = grand_total - discount;
-     $('#amount').val(amount);
+    $('#amount').val(amount);
   }
 
   const handleChange = (e) => {
@@ -123,7 +122,27 @@ const POS = () => {
     
     e.preventDefault();
 
-    axios.post('/invoice', {isInvoice, isDiscount})
+    var grandtotal = $('#grand-total').val();
+    var amount = $('#amount').val();
+
+    //cart's table
+    var tabl = document.getElementById('cart-table');
+    var info = [];
+    var headers = [];
+
+    for(let i = 0; i < tabl.rows[0].cells.length; i++){
+      headers.push(tabl.rows[0].cells[i].innerHTML);
+    }
+
+    for(let i = 1; i < tabl.rows.length; i++){
+      var rowData = {};
+      for(let j = 0; j < tabl.rows[i].cells.length; j++){
+         rowData[headers[j]] = tabl.rows[i].cells[j].innerHTML;
+      }
+      info.push(rowData);
+    }
+
+    axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount})
          .then((result) => {
            if(result.data.success){
             toast.success('Invoice Successfully Generated!')
@@ -132,7 +151,7 @@ const POS = () => {
            if(result.data.error){
             toast.error(result.data.error)
            }
-         })
+          })
          .catch(error => {
           toast.error(error)
          })
@@ -172,12 +191,13 @@ const POS = () => {
      
       <div className='row'>
       <div className='col'>
-        <table className='table'>
+        <table className='table' id='cart-table'>
             <tr>
                 <th>Item</th>
                 <th>Quantity</th>
                 <th>Price</th>
-                <th>TOTAL</th>
+                <th>Total</th>
+                <th>Action</th>
             </tr>
             <tr className='tr-row' id='mytable'>
             </tr>
@@ -211,14 +231,14 @@ const POS = () => {
       </div>
       <div className='row' id='jump'>
         <h4>Grand Total</h4>
-        <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly onChange={handleChange}/>
+        <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly/>
       </div>
       <div className='row' id='jump'>
         <h4>Discount (%)</h4>
         <input type='number' className='names-input' id='discount' placeholder='0.00' onChange={discountChange} required/>
       </div>
       <div className='row' id='jump'>
-        <h4>Payment Method</h4>
+        <h4>Payment Method *</h4>
         <select className='names-input' name='payment' onChange={handleChange}>
             <option >Choose</option>
             <option value='POS'>POS payment</option>
@@ -228,8 +248,12 @@ const POS = () => {
         </select>
       </div>
       <div className='row' id='jum-down'>
-        <h4>Amount Rendered</h4>
-        <input type='number' className='names-input' id='amount' name='amount' placeholder='0.00' onChange={handleChange}/>
+        <h4>Amount Payable</h4>
+        <input type='number' className='names-input' id='amount' name='amount' placeholder='0.00' readOnly/>
+      </div>
+      <div className='row' id='jum-down'>
+        <h4>Amount Paid *</h4>
+        <input type='number' className='names-input' id='amount' name='paid' placeholder='0.00' onChange={handleChange} required/>
       </div>
       <div className='row' id='jum-down'>
         <button type='submit' className='generate'>GENERATE INVOICE</button>

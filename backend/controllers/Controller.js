@@ -1301,36 +1301,44 @@ const invoice = async (req, res) => {
 
         if(req.body.isInvoice.payment === ''){
             return res.json({
-                error : 'Payment Methos is required'
+                error : 'Payment Method is required'
             })
         }
+
+
+        var statuses = '';
+
+        if(req.body.isInvoice.paid !== req.body.amount){
+            statuses = 'Partially Paid';
+        }else{
+            statuses = 'Fully Paid';
+        }
+
 
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
 
             const staffID = user.userdata._id;
+            const staffName = user.userdata.username;
             const adminID = user.userdata.adminId;
-
-            rows.find({
-                  staffId : staffID
-                 })
-                .then((results) => {
             
             const inv_oice = invoices({
                 staffId : staffID,
                 adminId : adminID,
-                customername : req.body.isInvoice.customername,
-                customeremail : req.body.isInvoice.customeremail,
-                customerphone: req.body.isInvoice.customerphone,
-                grandtotal : req.body.isInvoice.grandtotal,
-                totalamount: req.body.isInvoice.amount,
+                staffname : staffName,
+                customername : req.body.isInvoice.customername.toString(),
+                customeremail : req.body.isInvoice.customeremail.toString(),
+                customerphone: req.body.isInvoice.customerphone.toString(),
+                grandtotal : req.body.grandtotal,
+                totalamount: req.body.amount,
                 discount: req.body.isDiscount,
-                method : req.body.isInvoice.payment,
-                item: results
+                method : req.body.isInvoice.payment.toString(),
+                item: req.body.info,
+                status : statuses,
+                paid : req.body.isInvoice.paid.toString()
             })
             
             inv_oice.save()
                     .then((resultes) => {
-                       console.log(resultes)
                         rows.deleteMany({staffId : staffID})
                             .then((result) => {
                                console.log('deleted')
@@ -1352,18 +1360,39 @@ const invoice = async (req, res) => {
                         })
                     })
             
-                 })
-                .catch((errs) => {
-                    console.log(errs)
-                    return res.json({
-                        error : errs
-                    })
-                })
-
         }) 
 
     }catch(err){
         console.log('My ERROR ' + err)
+        return res.json({
+            error : err
+        })
+    }
+}
+
+const getinvoice = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            
+            var staffID = user.userdata._id;
+
+             invoices.find({
+                staffId: staffID
+                          })
+                     .then((result) => {
+                        return res.json(result)
+                     })
+                     .catch((errors) => {
+                        return res.json({
+                            error: errors
+                        })
+                     })
+        })
+
+    }catch(err){
         return res.json({
             error : err
         })
@@ -1399,5 +1428,6 @@ module.exports = {
     getcart,
     deleteone,
     deletemany,
-    invoice
+    invoice,
+    getinvoice
 }

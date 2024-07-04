@@ -1308,7 +1308,7 @@ const invoice = async (req, res) => {
 
         var statuses = '';
 
-        if(req.body.isInvoice.paid !== req.body.amount){
+        if(req.body.isInvoice.paid.toString() !== req.body.amount){
             statuses = 'Partially Paid';
         }else{
             statuses = 'Fully Paid';

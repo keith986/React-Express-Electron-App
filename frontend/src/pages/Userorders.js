@@ -6,6 +6,15 @@ import toast from 'react-hot-toast'
 const Orders = () => {
 
   const [invoice, setInvoice] = useState(null)
+  const [isModal, setIsModal] = useState(false)
+
+  const handleClick = () => {
+    setIsModal(true)
+  }
+
+  const handleClose = () => {
+    setIsModal(false)
+  }
 
   useEffect(() => {
     axios.get('/getinvoice')
@@ -19,8 +28,32 @@ const Orders = () => {
 
   return (
     <div className='container-fluid'>
+     <div className={`${isModal ? "background" : ""}`}></div>
     <h2>All Orders</h2>
-      
+
+  <div className={`modal ${isModal ? "edit" : ""}`}>
+        <div className='modal-dialog'>
+        <form>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h2 style={{color: 'green'}}>Complete Payment</h2>
+              <i className='bi bi-coin' style={{color: 'green'}}></i>
+            </div>
+            <div className='modal-body'>
+            <span className='name'>Enter Creditor's Balance</span>
+            <input type='number' className='name-input' name='name' placeholder='Enter Amount...'/>
+            </div>
+            <div className='modal-footer'>
+            <span>.</span>
+            <button type='button' className='back' onClick={handleClose}>Back</button>
+            <button type='submit' className='send'>Update Payment</button>
+            </div>
+
+          </div>
+          </form>
+        </div>
+      </div>
+
       <div className='row'>
       <div className='col-divide'>
        <p>Search : </p>
@@ -46,8 +79,7 @@ const Orders = () => {
               </tr>
               {!!invoice && invoice.map((inv) => {
 
-                var pay = parseFloat((inv.grandtotal * inv.discount) / 100);
-                var payable = parseFloat(inv.grandtotal - pay)              
+                             
 
                 return (
                   <tr className='tr-row'>
@@ -56,13 +88,13 @@ const Orders = () => {
                     <td>{inv.customerphone}/{inv.customeremail}</td>
                     <td>{inv.grandtotal}</td>
                     <td>{inv.discount}</td>
-                    <td>{payable}</td>
+                    <td>{inv.totalamount}</td>
                     <td>{inv.paid}</td>
                     <td>{inv.method}</td>
                     <td style={{background: 'gray'}}>{inv.status}</td>
                     <td>{inv.staffname}</td>
                     <td>
-                      <i className='bi bi-pencil-fill'></i>
+                      <i className='bi bi-pencil-fill' style={{cursor : 'pointer'}} onClick={handleClick}></i>
                     </td>
                   </tr>
                       );

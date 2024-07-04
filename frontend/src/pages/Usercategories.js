@@ -13,6 +13,7 @@ const UserCategories = () => {
     setCategoryData(resp)
  }
 
+
   useEffect(() => {
     axios.get('/getcategories')
          .then((result) => {

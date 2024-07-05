@@ -1044,7 +1044,7 @@ const editproduct = async (req, res) => {
 
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const adminId = user.userdata._id;
-            const prodId = req.body.products._id;
+            const prodId = req.body.storeid;
 
             Products.findByIdAndUpdate(prodId, {
                 name : req.body.products.name.toString(),
@@ -1075,6 +1075,35 @@ const editproduct = async (req, res) => {
     }catch(error){
         return res.json({
             error : error
+        })
+    }
+}
+
+const previewProduct = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const preId = req.body.previewId;
+
+            Products.find({
+                     _id : preId
+                         })
+                    .then((result) => {
+                        res.json(result)
+                     })
+                    .catch((erre) => {
+                        return res.json({
+                            error : erre
+                        })
+                    })
+
+        })
+
+    }catch(errs){
+        return res.json({
+            error : errs
         })
     }
 }
@@ -1176,7 +1205,6 @@ const addcart = async (req, res) => {
                     _id : prodID
                      })
                     .then((result) => {
-                        console.log(result.sellingprice)
                         const rows_data = rows({
                             staffId : staffID,
                             item : result
@@ -1298,6 +1326,7 @@ const invoice = async (req, res) => {
     try{
 
         const {token} = req.cookies;  
+        
 
         if(req.body.isInvoice.payment === ''){
             return res.json({
@@ -1344,6 +1373,7 @@ const invoice = async (req, res) => {
             
             inv_oice.save()
                     .then((resultes) => {
+
                         rows.deleteMany({staffId : staffID})
                             .then((result) => {
                                console.log('deleted')
@@ -1354,12 +1384,54 @@ const invoice = async (req, res) => {
                                 })
                             })
 
+                            var decode = req.body.info;
+
+                            for (const prop of decode){
+                                const product_name = prop.Item;
+                                const product_quantity = prop.Quantity;
+                                
+                                Products.find({
+                                    adminId: adminID
+                                             })
+                                        .then((answer) => {
+
+                                            for(const prod of answer){
+                                                const prodname = prod.name;
+                                                const prodqty = prod.quantity;
+                                                const prodId = prod._id;
+
+                                                var remainder = 0;
+
+                                                if(product_name === prodname){
+                                                    remainder = prodqty - product_quantity;
+                                                }else{
+                                                    remainder = prodqty;
+                                                }
+
+                                                Products.findByIdAndUpdate(prodId,{quantity : remainder})
+                                                        .then((updat) => {
+                                                            console.log(updat)
+                                                        })
+                                                        .catch((erss) => {
+                                                            console.log(erss)
+                                                        })
+
+                                            }
+
+                                        })
+                                        .then((ers) => {
+                                            console.log(ers)
+                                        })
+                                
+                            }    
+
+
                          return res.json({
-                                success : 'success'
+                                success : resultes
                             })
                     })
                     .catch((errors) => {
-                        console.log(errors)
+                        console.log(errors) 
                         return res.json({
                             error : errors
                         })
@@ -1386,7 +1458,7 @@ const getinvoice = async (req, res) => {
 
              invoices.find({
                 staffId: staffID
-                          })
+                          }).sort({createdAt : -1})
                      .then((result) => {
                         return res.json(result)
                      })
@@ -1403,6 +1475,35 @@ const getinvoice = async (req, res) => {
         })
     }
 }
+
+const receipts = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+            const receiptID = req.body.receiptId;
+
+            invoices.find({_id : receiptID})
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                     })
+                     })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
 
 module.exports = {
     signup,
@@ -1434,5 +1535,7 @@ module.exports = {
     deleteone,
     deletemany,
     invoice,
-    getinvoice
+    getinvoice,
+    receipts,
+    previewProduct
 }

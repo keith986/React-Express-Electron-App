@@ -26,6 +26,7 @@ const Products = () => {
     const [storedata, setStoreData] = useState(null)
     const [supplier, setSupplier] = useState(null)
     const [category, setCategory] = useState(false)
+    const [previewer, setPreviewer] = useState(null)
 
     const handleChange = (e) => {
       setProducts({...products, [e.target.name] : [e.target.value]})
@@ -37,7 +38,16 @@ const Products = () => {
 
     const handleEditOpener = (event) => {
       setIsEditOpen(true)
-      setStoreId(event.target.id)
+      setStoreId(event.target.id);
+
+      axios.post('/previewproduct', {previewId: event.target.id})
+           .then((result) => {
+               setPreviewer(result.data)
+            })
+           .catch((error) => {
+              toast.error(error)
+            })
+
     }
   
     const handleDelete = (event) => {
@@ -55,7 +65,7 @@ const Products = () => {
     const handlefilter = (event) => {
       const resp = filterData.filter(f => f.name.includes(event.target.value))
       setIsProd(resp)
-   }
+    }
 
     function submitChange (e) {
       e.preventDefault();
@@ -112,7 +122,6 @@ const Products = () => {
                    if(result.data.success){
                      toast.success(result.data.success)
                     }
- 
      })
      .catch(err => toast.error(err.message))
    }
@@ -163,7 +172,7 @@ const Products = () => {
               </div>
               <div className='modal-body'>
               <span className='name'>Batch No.</span>
-              <input type='text' className='name-input' name='batchno' placeholder='enter the barcode of the product for scanning' onChange={handleChange}/>
+              <input type='text' className='name-input' name='batchno' placeholder='enter the barcode of the product for scanning' value={!!previewer && previewer.map((prev) => {return prev.batchno;})} onChange={handleChange}/>
               <span className='name'>Product Name</span>
               <input type='text' className='name-input' name='name' onChange={handleChange}/>
               <span className='name'>Product description</span>

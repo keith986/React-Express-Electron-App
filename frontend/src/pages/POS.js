@@ -78,6 +78,7 @@ const POS = () => {
     var discount = parseFloat((discount_percent * grand_total) / 100);
     var amount = grand_total - discount;
     $('#amount').val(amount);
+
   }
 
   const handleDelete = (event) => {
@@ -167,13 +168,12 @@ const POS = () => {
         }
 
         var thee_date = dat + ' / ' + month + ' / ' + year;
-        var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session
+        var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session;
 
     axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount, thee_time, thee_date})
          .then((result) => {
            if(result.data.success){
-            toast.success('Invoice Successfully Generated!')
-            
+            toast.success('Invoice Successfully Generated!');
            }
            if(result.data.error){
             toast.error(result.data.error)

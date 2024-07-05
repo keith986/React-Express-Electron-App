@@ -22,7 +22,7 @@ const Products = () => {
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
     const [deleting, setDeleting] = useState(null)
-    const [filterData, setFilterData] = useState(null) 
+    const [filterDatas, setFilterDatas] = useState(null) 
     const [storedata, setStoreData] = useState(null)
     const [supplier, setSupplier] = useState(null)
     const [category, setCategory] = useState(false)
@@ -63,8 +63,8 @@ const Products = () => {
     }
 
     const handlefilter = (event) => {
-      const resp = filterData.filter(f => f.name.includes(event.target.value))
-      setIsProd(resp)
+      const respo = filterDatas.filter(s => s.name.includes(event.target.value))
+      setIsProd(respo)
     }
 
     function submitChange (e) {
@@ -85,7 +85,7 @@ const Products = () => {
       axios.get('/getproducts')
            .then((result) => {
               setIsProd(result.data)
-              setFilterData(result.data)
+              setFilterDatas(result.data)
            })
            .catch((error) => {
             toast.error(error)
@@ -172,7 +172,7 @@ const Products = () => {
               </div>
               <div className='modal-body'>
               <span className='name'>Batch No.</span>
-              <input type='text' className='name-input' name='batchno' placeholder='enter the barcode of the product for scanning' value={!!previewer && previewer.map((prev) => {return prev.batchno;})} onChange={handleChange}/>
+              <input type='text' className='name-input' name='batchno' placeholder='enter the batchno of the product'  onChange={handleChange}/>
               <span className='name'>Product Name</span>
               <input type='text' className='name-input' name='name' onChange={handleChange}/>
               <span className='name'>Product description</span>
@@ -234,22 +234,22 @@ const Products = () => {
           <form onSubmit={submitEditChange}>
             <div className='modal-content'>
               <div className='modal-header'>
-                <h2>Add Product</h2>
+                <h2>Edit Product</h2>
                 <i className='bi bi-bag-fill'></i>
               </div>
               <div className='modal-body'>
               <span className='name'>Batch No.</span>
-              <input type='text' className='name-input' name='batchno' placeholder='enter the barcode of the product for scanning' onChange={handleChange}/>
+              <input type='text' className='name-input' name='batchno' placeholder={!!previewer && previewer.batchno} onChange={handleChange}/>
               <span className='name'>Product Name</span>
-              <input type='text' className='name-input' name='name' onChange={handleChange}/>
+              <input type='text' className='name-input' name='name' placeholder={!!previewer && previewer.name} onChange={handleChange}/>
               <span className='name'>Product description</span>
-              <input type='text' className='manager-input' placeholder='e.g Men shoes' name='description' onChange={handleChange}/>
+              <input type='text' className='manager-input' placeholder={!!previewer && previewer.description} name='description' onChange={handleChange}/>
               <span className='name'>Cost Price</span>
-              <input type='number' className='location-input' placeholder='1000' name='costprice' onChange={handleChange}/>
+              <input type='number' className='location-input' placeholder={!!previewer && previewer.costprice} name='costprice' onChange={handleChange}/>
               <span className='name'>Selling Price</span>
-              <input type='tel' className='phone-input' placeholder='1500' name='sellingprice' onChange={handleChange}/>
+              <input type='tel' className='phone-input' placeholder={!!previewer && previewer.sellingprice} name='sellingprice' onChange={handleChange}/>
               <span className='name'>Quantity</span>
-              <input type='number' className='phone-input' name='quantity' onChange={handleChange}/>
+              <input type='number' className='phone-input' name='quantity' placeholder={!!previewer && previewer.quantity} onChange={handleChange}/>
               <span className='name'>Categories</span>
               <select className='status-input' name='categories' onChange={handleChange}>
                 <option>Choose...</option>

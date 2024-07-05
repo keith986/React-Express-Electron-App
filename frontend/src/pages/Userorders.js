@@ -21,7 +21,6 @@ const Orders = () => {
 
     axios.post('/receipts', {receiptId : e.target.id})
          .then((result) => {
-          console.log(result)
            setIsReceipt(result.data)
           })
          .catch((error) => {
@@ -44,7 +43,6 @@ const Orders = () => {
           toast.error(err)
          })
   }, [])
-
 
   const handleDownload = () => {
     const elemHtml = document.querySelector('#receipt');

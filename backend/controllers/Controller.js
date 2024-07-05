@@ -1087,11 +1087,9 @@ const previewProduct = async (req, res) => {
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const preId = req.body.previewId;
 
-            Products.find({
-                     _id : preId
-                         })
+            Products.findById(preId)
                     .then((result) => {
-                        res.json(result)
+                        return res.json(result);
                      })
                     .catch((erre) => {
                         return res.json({

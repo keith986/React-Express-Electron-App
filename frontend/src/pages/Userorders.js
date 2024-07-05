@@ -9,6 +9,12 @@ const Orders = () => {
   const [invoice, setInvoice] = useState(null)
   const [isModal, setIsModal] = useState(false)
   const [isreceipt, setIsReceipt] = useState(null)
+  const [filterData, setFilterData] = useState(null)
+
+  const handlefilter = (event) => {
+    const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
+    setInvoice(resp)
+  }
 
   const handleClick = (e) => {
     setIsModal(true)
@@ -32,6 +38,7 @@ const Orders = () => {
     axios.get('/getinvoice')
          .then((result) => {
            setInvoice(result.data)
+           setFilterData(result.data)
          })
          .catch(err => {
           toast.error(err)
@@ -143,7 +150,7 @@ const Orders = () => {
 
     <div className='col-divide'>
        <p>Search : </p>
-      <input type='search' className='search' placeholder='Search By ORDER ID...'/>
+      <input type='search' className='search' placeholder='Search By ORDER ID...' onChange={handlefilter}/>
     </div>
     </div>
 

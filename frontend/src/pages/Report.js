@@ -43,16 +43,20 @@ const Report = () => {
 
       <div className='row'>
         <div className='col'>
-            <table className='table' id='tablexlg'>
+        <table className='table' id='tablexlg'>
                 <tr>
-                    <th>PRODUCT</th>
-                    <th>STOCK QTY</th>
-                    <th>SUPPLIER</th>
-                    <th>EXPIRY DATE</th>
-                    <th>STATUS</th>
-                    <th>ACTION</th>
+                    <th>ORDERID</th>
+                    <th>CUSTOMER</th>
+                    <th>PHONE/EMAIL</th>
+                    <th>TOTAL</th>
+                    <th>DISCOUNT(%)</th>
+                    <th>PAYABLE</th>
+                    <th>PAID</th>
+                    <th>PAYMENT</th>
                 </tr>
                 <tr>
+                    <td>No entry</td>
+                    <td>No entry</td>
                     <td>No entry</td>
                     <td>No entry</td>
                     <td>No entry</td>

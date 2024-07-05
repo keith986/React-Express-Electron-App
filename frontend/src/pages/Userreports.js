@@ -1,7 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../App.css'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 const Report = () => {
+
+const [isreport, setIsReport] = useState(null)
+
+useEffect(() => {
+  axios.get('/userreports')
+     .then((result) => {
+      console.log(result.data)
+       setIsReport(result.data)
+     })
+     .catch((error) => {
+      toast.error(error)
+     })
+}, [])
+
   return (
     <div className='container-fluid'>
       <h2>Sales Reports</h2>
@@ -43,23 +59,36 @@ const Report = () => {
 
       <div className='row'>
         <div className='col'>
+            
             <table className='table' id='tablexlg'>
                 <tr>
-                    <th>PRODUCT</th>
-                    <th>STOCK QTY</th>
-                    <th>SUPPLIER</th>
-                    <th>EXPIRY DATE</th>
-                    <th>STATUS</th>
-                    <th>ACTION</th>
+                    <th>ORDERID</th>
+                    <th>CUSTOMER</th>
+                    <th>PHONE/EMAIL</th>
+                    <th>TOTAL</th>
+                    <th>DISCOUNT(%)</th>
+                    <th>PAYABLE</th>
+                    <th>PAID</th>
+                    <th>PAYMENT</th>
                 </tr>
-                <tr>
-                    <td>No entry</td>
-                    <td>No entry</td>
-                    <td>No entry</td>
-                    <td>No entry</td>
-                    <td>No entry</td>
-                    <td>No entry</td>
-                </tr>
+            
+                    {!!isreport && isreport.map((port) => {
+                     
+                         return (
+                           <tr className='tr-row'>
+                            <td>{port.invoiceno}</td>
+                            <td>{port.customername}</td>
+                            <td>{port.customerphone} / {port.customeremail}</td>
+                            <td>{port.grandtotal}</td>
+                            <td>{port.discount}</td>
+                            <td>{port.totalamount}</td>
+                            <td>{port.paid}</td>
+                            <td>{port.method}</td>
+                           </tr>
+                               );
+                      
+                    })}
+                
             </table>
         </div>
       </div>

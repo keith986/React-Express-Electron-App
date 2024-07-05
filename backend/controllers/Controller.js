@@ -1502,6 +1502,34 @@ const receipts = async (req, res) => {
     }
 }
 
+const userreports = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+
+            invoices.find({
+                      staffId : staffID
+                       })
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
 
 module.exports = {
     signup,
@@ -1535,5 +1563,6 @@ module.exports = {
     invoice,
     getinvoice,
     receipts,
-    previewProduct
+    previewProduct,
+    userreports
 }

@@ -66,5 +66,6 @@ use_route.post('/deletemany', useController.deletemany)
 use_route.post('/invoice', useController.invoice)
 use_route.get('/getinvoice', useController.getinvoice)
 use_route.post('/receipts', useController.receipts)
+use_route.get('/userreports', useController.userreports)
 
 module.exports = use_route;

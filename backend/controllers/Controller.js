@@ -1382,11 +1382,6 @@ const invoice = async (req, res) => {
                                 })
                             })
 
-                            var decode = req.body.info;
-
-                            for (const prop of decode){
-                                const product_name = prop.Item;
-                                const product_quantity = prop.Quantity;
                                 
                                 Products.find({
                                     adminId: adminID
@@ -1397,6 +1392,13 @@ const invoice = async (req, res) => {
                                                 const prodname = prod.name;
                                                 const prodqty = prod.quantity;
                                                 const prodId = prod._id;
+                                                
+                                                var decode = req.body.info;
+
+                                                for (const prop of decode){
+                                                    const product_name = prop.Item;
+                                                    const product_quantity = prop.Quantity;
+                                                console.log(product_quantity, product_name)
 
                                                 var remainder = 0;
 
@@ -1406,7 +1408,7 @@ const invoice = async (req, res) => {
                                                     remainder = prodqty;
                                                 }
 
-                                                Products.findByIdAndUpdate(prodId,{quantity : remainder})
+                                                Products.findByIdAndUpdate({_id : prodId},{$set : {quantity : remainder}})
                                                         .then((updat) => {
                                                             console.log(updat)
                                                         })
@@ -1415,13 +1417,13 @@ const invoice = async (req, res) => {
                                                         })
 
                                             }
+                                        }
 
                                         })
                                         .then((ers) => {
                                             console.log(ers)
                                         })
-                                
-                            }    
+                                  
 
 
                          return res.json({
@@ -1459,12 +1461,12 @@ const getinvoice = async (req, res) => {
                           }).sort({createdAt : -1})
                      .then((result) => {
                         return res.json(result)
-                     })
+                          })
                      .catch((errors) => {
                         return res.json({
                             error: errors
-                        })
-                     })
+                          })
+                          })
         })
 
     }catch(err){
@@ -1512,7 +1514,158 @@ const userreports = async (req, res) => {
 
             invoices.find({
                       staffId : staffID
+                       }).sort({createdAt : -1})
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
+const cashreport = async (req, res) => {
+   try {
+
+    const {token} = req.cookies;
+
+    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+        const staffID = user.userdata._id;
+        
+        invoices.find({
+                 staffId : staffID,
+                 method: 'cash'
+                    })
+                .then((result) => {
+       
+                        return res.json(result)
+
+                })
+                .catch((eror) => { 
+                    return res.json({
+                        error : eror
+                    })
+                })
+
+    })
+
+   }catch(error){
+    return res.json({
+        error : error
+    })
+   }
+}
+
+const transferReport = async(req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+
+            invoices.find({
+                      staffId : staffID,
+                      method: 'transfer'
                        })
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
+const chequereport = async(req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+
+            invoices.find({
+                      staffId : staffID,
+                      method: 'cheque'
+                       })
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
+const POSreport = async(req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+
+            invoices.find({
+                      staffId : staffID,
+                      method: 'POS'
+                       })
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
+const userCreditors = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+
+            invoices.find({
+                      staffId : staffID
+                       }).sort({createdAt : -1})
                     .then((result) => {
                         return res.json(result)
                     })
@@ -1564,5 +1717,10 @@ module.exports = {
     getinvoice,
     receipts,
     previewProduct,
-    userreports
+    userreports,
+    cashreport,
+    transferReport,
+    POSreport,
+    chequereport,
+    userCreditors
 }

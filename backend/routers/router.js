@@ -67,5 +67,10 @@ use_route.post('/invoice', useController.invoice)
 use_route.get('/getinvoice', useController.getinvoice)
 use_route.post('/receipts', useController.receipts)
 use_route.get('/userreports', useController.userreports)
+use_route.get('/cashreport', useController.cashreport)
+use_route.get('/transferreport', useController.transferReport)
+use_route.get('/POSreport', useController.POSreport)
+use_route.get('/chequereport', useController.chequereport)
+use_route.get('/usercreditors', useController.userCreditors)
 
 module.exports = use_route;

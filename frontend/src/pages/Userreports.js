@@ -2,21 +2,98 @@ import React, { useEffect, useState } from 'react'
 import '../App.css'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import $ from 'jquery'
 
 const Report = () => {
 
 const [isreport, setIsReport] = useState(null)
+const [iscash, setIsCash] = useState(null)
+const [istransfer, setIsTransfer] = useState(null)
+const [isPOS, setIsPOS] = useState(null)
+const [ischeque, setIsCheque] = useState(null)
 
 useEffect(() => {
   axios.get('/userreports')
      .then((result) => {
-      console.log(result.data)
        setIsReport(result.data)
      })
-     .catch((error) => {
+     .catch((error) => { 
       toast.error(error)
      })
 }, [])
+
+useEffect(() => {
+  axios.get('/cashreport')
+       .then((result) => {
+         setIsCash(result.data);
+       })
+       .catch((error) => {
+        toast.error(error)
+       })
+}, [])
+
+useEffect(() => {
+  var sum = 0;
+  $('.pay').each(function(){
+   sum += parseFloat($(this).text());  
+    });
+   $('#cashyp').html(sum + '.00');
+}, [iscash])
+
+useEffect(() => {
+  axios.get('/transferreport')
+       .then((result) => {
+         setIsTransfer(result.data)
+       })
+       .catch((err) => {
+        toast.error(err)
+       })
+}, [])
+
+
+useEffect(() => {
+  var sum = 0;
+  $('.trans').each(function(){
+   sum += parseFloat($(this).text());  
+    });
+   $('#transferp').html(sum + '.00');
+}, [istransfer])
+
+useEffect(() => {
+  axios.get('/POSreport')
+       .then((result) => {
+         setIsPOS(result.data)
+        })
+       .catch((err) => {
+        toast.error(err)
+        })
+}, [])
+
+useEffect(() => {
+  var sum = 0;
+  $('.poss').each(function(){
+   sum += parseFloat($(this).text());  
+    });
+   $('#posp').html(sum + '.00');
+}, [isPOS])
+
+useEffect(() => {
+  axios.get('/chequereport')
+       .then((result) => {
+         setIsCheque(result.data)
+        })
+       .catch((err) => {
+        toast.error(err)
+        })
+}, [])
+
+useEffect(() => {
+  var sum = 0;
+  $('.cheq').each(function(){
+   sum += parseFloat($(this).text());  
+    });
+   $('#cheqp').html(sum + '.00');
+}, [ischeque])
 
   return (
     <div className='container-fluid'>
@@ -25,22 +102,42 @@ useEffect(() => {
       <div className='col-md-4 cashpay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
             <h3>Cash Payment</h3>
-           KES <span className='changes'>0.00</span>
+            {!!iscash && iscash.map((cas) => {
+                return (
+                    <span className='pay' style={{display: 'none'}}>{cas.paid}</span>         
+                       );
+              })}
+           KES <span className='changes' id='cashyp'></span>
         </div>
         <div className='col-md-4 transferpay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
             <h3>Transfer Payment</h3>
-           KES <span className='changes'>0.00</span>
+            {!!istransfer && istransfer.map((cas) => {
+                return (
+                    <span className='trans' style={{display: 'none'}}>{cas.paid}</span>         
+                       );
+              })}
+           KES <span className='changes' id='transferp'></span>
         </div>
         <div className='col-md-4 POSpay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
             <h3>POS Payment</h3>
-           KES <span className='changes'>0.00</span>
+            {!!isPOS && isPOS.map((cas) => {
+                return (
+                    <span className='poss' style={{display: 'none'}}>{cas.paid}</span>         
+                       );
+              })}
+           KES <span className='changes' id='posp'></span>
         </div>
         <div className='col-md-4 chequepay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
             <h3>Cheque Payment</h3>
-           KES <span className='changes'>0.00</span>
+            {!!ischeque && ischeque.map((cas) => {
+                return (
+                    <span className='cheq' style={{display: 'none'}}>{cas.paid}</span>         
+                       );
+              })}
+           KES <span className='changes' id='cheqp'></span>
         </div>
       </div>
 

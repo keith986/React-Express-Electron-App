@@ -72,7 +72,8 @@ const POS = () => {
    $('.ttl').each(function(){
     sum += parseFloat($(this).text());  
      });
-    $('#grand-total').val(sum)
+    $('#grand-total').val(sum);
+    
     var grand_total = parseFloat($('#grand-total').val());
     var discount_percent = parseFloat($('#discount').val())
     var discount = parseFloat((discount_percent * grand_total) / 100);
@@ -144,7 +145,7 @@ const POS = () => {
     }
 
     //time and date
-    var dates = new Date();
+        var dates = new Date();
         var month =  dates.getMonth() + 1;
         var dat = dates.getDate();
         var year = dates.getFullYear();
@@ -182,7 +183,7 @@ const POS = () => {
          .catch(error => {
           toast.error(error)
          })
-  }
+    }
 
   return (
     <div className='container-fluid'>

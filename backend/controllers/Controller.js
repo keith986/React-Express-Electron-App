@@ -1684,6 +1684,38 @@ const userCreditors = async (req, res) => {
     }
 }
 
+const userbalance = async(req,res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_TOKEN, {}, (err, user) => {
+            const bal_id = req.body.balId;
+            const bal_ance = req.body.isblc.balance.toString();
+
+            invoices.findByIdAndUpdate(bal_id,{bal : bal_ance})
+                    .then((result) => {
+                      
+                            return res.json({
+                                success : 'success'
+                            })
+                       
+                    })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                        })
+                    })
+
+        })
+
+    }catch(errors){
+        return res.json({
+            error : errors
+        })
+    }
+}
+
 module.exports = {
     signup,
     preview,
@@ -1722,5 +1754,6 @@ module.exports = {
     transferReport,
     POSreport,
     chequereport,
-    userCreditors
+    userCreditors,
+    userbalance
 }

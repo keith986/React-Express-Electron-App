@@ -72,5 +72,6 @@ use_route.get('/transferreport', useController.transferReport)
 use_route.get('/POSreport', useController.POSreport)
 use_route.get('/chequereport', useController.chequereport)
 use_route.get('/usercreditors', useController.userCreditors)
+use_route.post('/userbalance', useController.userbalance)
 
 module.exports = use_route;

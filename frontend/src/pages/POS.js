@@ -58,6 +58,7 @@ const POS = () => {
              var discount = parseFloat((discount_percent * grand_total) / 100);
              var amount = grand_total - discount;
               $('#amount').val(amount);
+              
           })
          .catch((error) => {
            toast.error(error)
@@ -73,7 +74,7 @@ const POS = () => {
     sum += parseFloat($(this).text());  
      });
     $('#grand-total').val(sum);
-    
+
     var grand_total = parseFloat($('#grand-total').val());
     var discount_percent = parseFloat($('#discount').val())
     var discount = parseFloat((discount_percent * grand_total) / 100);

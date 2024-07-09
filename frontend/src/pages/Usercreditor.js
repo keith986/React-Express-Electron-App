@@ -7,10 +7,19 @@ const Creditors = () => {
 
   const [invoice, setInvoice] = useState(null)
   const [filterData, setFilterData] = useState(null)
+  const [isModal, setIsModal] = useState(false)
+  const [balId, setBalId] = useState(null)
+  const [isblc, setIsBlc] = useState({
+    balance : ''
+  })
 
   const handlefilter = (event) => {
     const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
     setInvoice(resp)
+  }
+
+  const handleChange = (event) => {
+    setIsBlc({...isblc, [event.target.name] : [event.target.value]})
   }
 
   useEffect(() => {
@@ -24,11 +33,67 @@ const Creditors = () => {
          })
   }, [])
 
+  const handleClick = (event) => {
+    setIsModal(true)
+    setBalId(event.target.id)
+  }
+
+  const handleClose = () => {
+    setIsModal(false)
+  }
+
+  const handleSubmit = (e) => {
+
+    e.preventDefault();
+
+    axios.post('/userbalance', {balId, isblc})
+         .then((result) => {
+    
+          if(result.data.success){
+            toast.success('Balance Cleared!!')
+          }
+
+          if(result.data.error){
+            toast.error(result.data.error)
+          }
+
+         })
+         .catch((error) => {
+            toast.error(error)
+         })
+  }
+
   return (
     <div className='container-fluid'>
       <h2>Credit Sale Records</h2>
-
+      <div className={`${isModal ? "background" : ""}`}></div>
       <div className='row'>
+      <form onSubmit={handleSubmit}>
+      <div className={`modal ${isModal ? "open" : ""}`}>
+        <div className='modal-dialog'>
+        
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h3>CLEAR BALANCE</h3>
+              <i className='bi bi-receipt'></i>
+            </div>
+            
+           <div className='modal-body'>
+            <input type='number' className='name-input' id='balance' name='balance' onChange={handleChange}/> 
+           </div>
+            
+            <div className='modal-footer' id='modal-footer'>
+            <span>.</span>
+            <button type='button' className='back' onClick={handleClose}>Back</button>
+            <button type='submit' className='send'>PAY NOW</button>
+            </div>
+
+          </div>
+  
+        </div>
+      </div>
+      </form>
+
       <div className='col-divide'>
        <p>Search : </p>
       <input type='search' className='search' placeholder='Search By INVOICE NO.' onChange={handlefilter}/>
@@ -66,7 +131,7 @@ const Creditors = () => {
     <td>{inv.paid}</td>
     <td>{inv.staffname}</td>
     <td>
-      <i className='bi bi-credit-card-2-back-fill' id={inv._id} style={{cursor : 'pointer', color: 'green', fontSize : '20px'}} ></i>
+      <i className='bi bi-credit-card-2-back-fill' id={inv._id} style={{cursor : 'pointer', color: 'green', fontSize : '25px'}} onClick={handleClick}></i>
     </td>
   </tr>
    );

@@ -41,6 +41,10 @@ const InvoiceSchema = new Schema ({
     paid : {
         type : String
     },
+    bal : {
+        type: String,
+        default : 0
+    },
     status : {
         type : String
     },

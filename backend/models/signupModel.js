@@ -57,7 +57,13 @@ const signupSchema = new Schema({
     accounttype : {
         type : String,
         require: true
-    }
+    },
+    time: {
+        type: String,
+    },
+    date : {
+        type : String,
+    },
 },{timestamps: true})
 
 const Users = mongoose.model('Users', signupSchema)

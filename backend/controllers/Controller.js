@@ -1173,12 +1173,24 @@ const adminlogout = async (req, res) => {
         const {token} = req.cookies;
 
         jwt.verify(token, process.env.JWT_SECRET, {expiresIn : new Date(0)}, (err, user) => {
-            res.clearCookie('token')
-             console.log(user)
-             return res.json({
-                user : user,
-                success: 'Successfully logout'
-             })
+            var ID = user.userdata._id;
+            var tme = req.body.thee_time;
+            var dte = req.body.thee_date;
+
+            Users.findByIdAndUpdate(ID, {time : tme, date : dte})
+                 .then((result) => {
+                    res.clearCookie('token');
+                    console.log(user)
+                    return res.json({
+                       user : user,
+                       success : 'success'
+                    })
+                  })
+                 .catch(err => {
+                    return res.json({
+                        error : err
+                    })
+                  })
            })
 
     }catch(error){
@@ -1366,7 +1378,9 @@ const invoice = async (req, res) => {
                 status : statuses,
                 paid : req.body.isInvoice.paid.toString(),
                 date : req.body.thee_date,
-                time : req.body.thee_time
+                time : req.body.thee_time,
+                month : req.body.month,
+                year : req.body.year
             })
             
             inv_oice.save()
@@ -1689,17 +1703,53 @@ const userbalance = async(req,res) => {
 
         const {token} = req.cookies;
 
-        jwt.verify(token, process.env.JWT_TOKEN, {}, (err, user) => {
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const bal_id = req.body.balId;
             const bal_ance = req.body.isblc.balance.toString();
 
-            invoices.findByIdAndUpdate(bal_id,{bal : bal_ance})
-                    .then((result) => {
-                      
+            invoices.findById({
+                            _id : bal_id
+                         })
+                    .then((results) => {
+                        
+                        var bal = Math.floor(bal_ance);
+                        var pp = Math.floor(results.paid);
+                        var pa_id = Math.floor(pp + bal);
+                        console.log(pa_id);
+
+                        var amnt = Math.floor(results.totalamount);
+                        
+                        var refer = Math.floor(pp + bal);
+                        console.log(refer);
+
+                        if(refer < amnt || refer === amnt){
+                            var statuses = '';
+                            if(refer < amnt){
+                                statuses = 'Partially Paid'
+                            }
+                            if(refer === amnt){
+                                 statuses = 'Fully Paid'
+                            }
+
+                invoices.findByIdAndUpdate(bal_id,{paid : pa_id, status : statuses})
+                        .then((result) => {
                             return res.json({
                                 success : 'success'
                             })
-                       
+                            console.log('Paid')                    
+                         })
+                        .catch((error) => {
+                            return res.json({
+                                error : error
+                            })
+                         })
+
+                        }else{
+                            return res.json({
+                                error : 'Invalid Amount!!'
+                            })
+                        }
+
                     })
                     .catch((error) => {
                         return res.json({
@@ -1707,11 +1757,139 @@ const userbalance = async(req,res) => {
                         })
                     })
 
+
         })
 
     }catch(errors){
         return res.json({
             error : errors
+        })
+    }
+}
+
+const userlogout = async(req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {expiresIn : new Date(0)}, (err, user) => {
+
+            var IDs = user.userdata._id;
+            var tme = req.body.thee_time;
+            var dte = req.body.thee_date;
+
+            Users.findByIdAndUpdate(IDs, {time : tme, date : dte})
+                 .then((result) => {
+                    res.clearCookie('token');
+                    console.log(user)
+                    return res.json({
+                       user : user,
+                       success: 'success'
+                    })
+                  })
+                 .catch(err => {
+                    return res.json({
+                        error : err
+                    })
+                  })
+
+        })
+
+    }catch(error){
+        console.log(error)
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const todaysale = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+            console.log(req.body.thee_date)
+            invoices.find({
+                     $and : [
+                        { staffId : staffID },
+                        { date : req.body.thee_date }
+                            ]})
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const monthsale = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+            console.log(req.body.month)
+            invoices.find({
+                     $and : [
+                        { staffId : staffID },
+                        { month : req.body.month }
+                            ]})
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const yearsale = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const staffID = user.userdata._id;
+            console.log(req.body.year)
+            invoices.find({
+                     $and : [
+                        { staffId : staffID },
+                        { year : req.body.year}
+                            ]})
+                    .then((result) => {
+
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
         })
     }
 }
@@ -1755,5 +1933,9 @@ module.exports = {
     POSreport,
     chequereport,
     userCreditors,
-    userbalance
+    userbalance,
+    userlogout,
+    todaysale,
+    monthsale,
+    yearsale
 }

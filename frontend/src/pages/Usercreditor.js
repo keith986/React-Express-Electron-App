@@ -31,7 +31,7 @@ const Creditors = () => {
          .catch(err => {
           toast.error(err)
          })
-  }, [])
+  }, [invoice])
 
   const handleClick = (event) => {
     setIsModal(true)
@@ -127,8 +127,8 @@ const Creditors = () => {
     <td>{inv.customername}</td>
     <td>{inv.customerphone}/{inv.customeremail}</td>
     <td>{inv.totalamount}</td>
-    <td>{bal}</td>
     <td>{inv.paid}</td>
+    <td>{bal}</td>
     <td>{inv.staffname}</td>
     <td>
       <i className='bi bi-credit-card-2-back-fill' id={inv._id} style={{cursor : 'pointer', color: 'green', fontSize : '25px'}} onClick={handleClick}></i>

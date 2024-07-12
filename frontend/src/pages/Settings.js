@@ -10,8 +10,36 @@ const Settings = () => {
   const {user} = useContext(UserContext)
   const navigate = useNavigate()
 
+  //time and date
+  var dates = new Date();
+  var month =  dates.getMonth() + 1;
+  var dat = dates.getDate();
+  var year = dates.getFullYear();
+
+  var min = dates.getMinutes();
+  var hrs = dates.getHours();
+  var sec = dates.getSeconds();
+  var session = 'am';
+
+  if(hrs >= 12){
+      hrs = hrs - 12;
+      session = 'pm';
+  }
+
+  if(min < 10){
+      min  = '0' + min;
+  }
+
+  if(sec < 10){
+      sec = '0' + sec;
+  }
+
+  var thee_date = dat + ' / ' + month + ' / ' + year;
+  var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session;
+
   const handleLogout = async () => {
-    axios.post('/adminlogout')
+    var ids = user._id;
+    axios.post('/adminlogout', {ids,thee_date, thee_time})
          .then((result) => {
            if(result.data.success){
             navigate('/login')
@@ -55,7 +83,7 @@ const Settings = () => {
         <div className='col'>
         <h2>Authentication detail</h2>
         <p>user: {!!user && user.accounttype}</p>
-        <p>Last Login : 12th May 2024 , 9:00 pm</p>
+        <p>Last Login : {!!user && user.date} , {!!user && user.time} </p>
         </div>
       </div>
       <button className='logout' onClick={handleLogout}>Logout</button>

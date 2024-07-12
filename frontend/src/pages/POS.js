@@ -172,7 +172,7 @@ const POS = () => {
         var thee_date = dat + ' / ' + month + ' / ' + year;
         var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session;
 
-    axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount, thee_time, thee_date})
+    axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount, thee_time, thee_date, month, year})
          .then((result) => {
            if(result.data.success){
             toast.success('Invoice Successfully Generated!');

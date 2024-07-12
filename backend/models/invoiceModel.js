@@ -41,10 +41,6 @@ const InvoiceSchema = new Schema ({
     paid : {
         type : String
     },
-    bal : {
-        type: String,
-        default : 0
-    },
     status : {
         type : String
     },
@@ -53,7 +49,13 @@ const InvoiceSchema = new Schema ({
     },
     time : {
         type : String
-    }
+    },
+    month: {
+        type : String
+    },
+    year : {
+        type : String
+    },
 }, {timestamps: true})
 
 const invoices = mongoose.model('invoices', InvoiceSchema);

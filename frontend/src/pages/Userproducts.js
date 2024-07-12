@@ -22,7 +22,7 @@ const Products = () => {
          .catch((error) => {
           toast.error(error)
          })
-  }, [isProd])
+  }, [])
 
     return (
       <div className={`container-fluid`}>

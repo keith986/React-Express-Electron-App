@@ -1481,7 +1481,7 @@ const getinvoice = async (req, res) => {
                             error: errors
                           })
                           })
-        })
+        }) 
 
     }catch(err){
         return res.json({
@@ -1894,6 +1894,421 @@ const yearsale = async (req, res) => {
     }
 }
 
+const todaySales = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata._id;
+            console.log(req.body.thee_date)
+            invoices.find({
+                     $and : [
+                        { adminId : adminID },
+                        { date : req.body.thee_date }
+                            ]})
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const todayInvoices = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata._id;
+
+            invoices.find({
+              $and : [
+                        {adminId : adminID},
+                        {date : req.body.thee_date}
+                     ]
+                     })
+                    .then((result) => {
+                        return res.json(result)
+                    })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
+const totalinvoices = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            
+            var adminID = user.userdata._id;
+
+             invoices.find({
+                adminId: adminID
+                          })
+                     .then((result) => {
+                        return res.json(result)
+                          })
+                     .catch((errors) => {
+                        return res.json({
+                            error: errors
+                          })
+                          })
+        }) 
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+}
+
+const currentmonth = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata._id;
+
+            invoices.find({
+                     $and : [
+                        { adminId : adminID },
+                        { month : req.body.month }
+                            ]})
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const lastthreemonth = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata._id;
+
+            const greater_than = req.body.month - 3;
+            console.log(greater_than)
+
+            invoices.find({
+                    $and : [
+                        { adminId : adminID },
+                        { 
+                        month : {
+                            $gte : greater_than,
+                            $lte : req.body.month
+                                } 
+                        }
+                          ]
+                        })
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const lastsixmonth = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata._id;
+
+            const greater_than = req.body.month - 6;
+            console.log(greater_than)
+
+            invoices.find({
+                    $and : [
+                        { adminId : adminID },
+                        { 
+                        month : {
+                            $gte : greater_than,
+                            $lte : req.body.month
+                                } 
+                        }
+                          ]
+                        })
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const lastyearsales = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata._id;
+
+            const last_year = req.body.year - 1;
+            
+
+            invoices.find({
+                    $and : [
+                        { adminId : adminID },
+                        { year : last_year }
+                          ]
+                        })
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const currentyearsales = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata._id;
+
+            invoices.find({
+                    $and : [
+                        { adminId : adminID },
+                        { year : req.body.year }
+                          ]
+                        })
+                    .then((result) => {
+                        return res.json(result)
+                     })
+                    .catch((err) => {
+                        return res.json({
+                            error : err
+                        })
+                    })
+        })
+
+    }catch(err){
+        return res.json({
+            error: err
+        })
+    }
+}
+
+const allreceipts = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const receiptID = req.body.isreceiptId;
+
+            invoices.findByIdAndDelete(receiptID)
+                    .then((result) => {
+                        return res.json({
+                            success: 'success'
+                        })
+                     })
+                    .catch((error) => {
+                        return res.json({
+                            error : error
+                     })
+                     })
+
+        })
+
+    }catch(error){
+        return res.json({
+            error : error
+        })
+    }
+}
+
+const allcashreport = async (req, res) => {
+    try {
+ 
+     const {token} = req.cookies;
+ 
+     jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+         const adminID = user.userdata._id;
+         
+         invoices.find({
+                  adminId : adminID,
+                  method: 'cash'
+                     })
+                 .then((result) => {
+        
+                         return res.json(result)
+ 
+                 })
+                 .catch((eror) => { 
+                     return res.json({
+                         error : eror
+                     })
+                 })
+ 
+     })
+ 
+    }catch(error){
+     return res.json({
+         error : error
+     })
+    }
+ }
+ 
+ const alltransferReport = async(req, res) => {
+     try {
+ 
+         const {token} = req.cookies;
+ 
+         jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+             const adminID = user.userdata._id;
+ 
+             invoices.find({
+                       adminId : adminID,
+                       method: 'transfer'
+                        })
+                     .then((result) => {
+                         return res.json(result)
+                     })
+                     .catch((error) => {
+                         return res.json({
+                             error : error
+                         })
+                     })
+ 
+         })
+ 
+     }catch(err){
+         return res.json({
+             error : err
+         })
+     }
+ }
+ 
+ const allchequereport = async(req, res) => {
+     try {
+ 
+         const {token} = req.cookies;
+ 
+         jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+             const adminID = user.userdata._id;
+ 
+             invoices.find({
+                       adminId : adminID,
+                       method: 'cheque'
+                        })
+                     .then((result) => {
+                         return res.json(result)
+                     })
+                     .catch((error) => {
+                         return res.json({
+                             error : error
+                         })
+                     })
+ 
+         })
+ 
+     }catch(err){
+         return res.json({
+             error : err
+         })
+     }
+ }
+ 
+ const allPOSreport = async(req, res) => {
+     try {
+ 
+         const {token} = req.cookies;
+ 
+         jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
+             const adminID = user.userdata._id;
+ 
+             invoices.find({
+                       adminId : adminID,
+                       method: 'POS'
+                        })
+                     .then((result) => {
+                         return res.json(result)
+                     })
+                     .catch((error) => {
+                         return res.json({
+                             error : error
+                         })
+                     })
+ 
+         })
+ 
+     }catch(err){
+         return res.json({
+             error : err
+         })
+     }
+ }
+
 module.exports = {
     signup,
     preview,
@@ -1937,5 +2352,18 @@ module.exports = {
     userlogout,
     todaysale,
     monthsale,
-    yearsale
+    yearsale,
+    todaySales,
+    todayInvoices,
+    totalinvoices,
+    currentmonth,
+    lastthreemonth,
+    lastsixmonth,
+    lastyearsales,
+    currentyearsales,
+    allreceipts,
+    allcashreport,
+    alltransferReport,
+    allPOSreport,
+    allchequereport
 }

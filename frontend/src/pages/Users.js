@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import '../App.css'
 import toast from 'react-hot-toast'
+import $ from 'jquery'
 
 const Users = () => {
     const [isModalOpen, setIsOpenModal] = useState(false)
@@ -17,7 +18,6 @@ const Users = () => {
     const [usersDatas, setUsersDatas] = useState(null)
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
-    const [deleting, setDeleting] = useState(null)
     const [filterDatas, setFilterData] = useState(null)  
 
   const handleOpener = () =>{
@@ -30,9 +30,18 @@ const Users = () => {
   }
 
   const handleDelete = (event) => {
-    setDeleting(event.target.id)
-    const parent =document.getElementById(event.target.id);
-    parent.style.display = 'none';
+axios.post('/deleteuser', {deleting : event.target.id})
+     .then((result) => {
+      if(result.data.error){
+        toast.error(result.data.error)
+      }
+      if(result.data.success){
+       toast.success(result.data.success)
+       $('#user-'+event.target.id).hide()   
+      }
+
+      })
+     .catch(err => toast.error(err.message))
   }
 
   const handleChange = (event) => {
@@ -69,23 +78,6 @@ const Users = () => {
    })
    .catch(err => toast.error(err.message))
  }
-
- useEffect(() => {
-  axios.post('/deleteuser', {deleting})
-       .then((result) => {
-
-         if(result.data.error){
-           toast.error(result.data.error)
-         }
-
-         if(result.data.success){
-          toast.success(result.data.success)
-       
-         }
-
-         })
-       .catch(err => toast.error(err.message))
-}, [deleting])
 
   useEffect(() => {
        axios.get('/storeData')
@@ -242,7 +234,7 @@ const Users = () => {
                 {!!usersDatas && usersDatas.map((user) => {
                   return (
                           
-                          <tr className='tr-row' id={user._id}>
+                          <tr className='tr-row' id={'user-' + user._id}>
                             <td>{user.fullname}</td>
                             <td>{user.username}</td>
                             <td>{user.useremail}</td>

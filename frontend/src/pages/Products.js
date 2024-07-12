@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import '../App.css'
 import { toast } from 'react-hot-toast';
 import axios from 'axios'
+import $ from 'jquery'
 
 const Products = () => {
     const [isModalOpen, setIsOpenModal] = useState(false)
@@ -21,7 +22,6 @@ const Products = () => {
     const [isProd, setIsProd] = useState(null)
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
-    const [deleting, setDeleting] = useState(null)
     const [filterDatas, setFilterDatas] = useState(null) 
     const [storedata, setStoreData] = useState(null)
     const [supplier, setSupplier] = useState(null)
@@ -51,7 +51,21 @@ const Products = () => {
     }
   
     const handleDelete = (event) => {
-      setDeleting(event.target.id)
+    
+      axios.post('/deleteproduct', {deleting : event.target.id})
+           .then((result) => {
+
+             if(result.data.error){
+              $('#prod-'+event.target.id).hide()
+               toast.error(result.data.error)
+             }
+
+             if(result.data.success){
+              toast.success(result.data.success)      
+             }
+
+             })
+           .catch(err => toast.error(err.message))
     }
   
     function handleClose(){
@@ -92,22 +106,6 @@ const Products = () => {
            })
     }, [isProd])
   
-    useEffect(() => {
-      axios.post('/deleteproduct', {deleting})
-           .then((result) => {
-
-             if(result.data.error){
-               toast.error(result.data.error)
-             }
-
-             if(result.data.success){
-              toast.success(result.data.success)
-           
-             }
-
-             })
-           .catch(err => toast.error(err.message))
-    }, [deleting])
 
     const submitEditChange = async (e) => {
       e.preventDefault();
@@ -318,7 +316,7 @@ const Products = () => {
                 </tr>
                 {!!isProd && isProd.map((prod) => {
                   return   (
-                                <tr className='tr-row' id={prod._id}>
+                                <tr className='tr-row' id={'prod-'+prod._id}>
                                   <td>{prod.batchno}</td>
                                   <td>{prod.name}</td>
                                   <td>{prod.categories}</td>

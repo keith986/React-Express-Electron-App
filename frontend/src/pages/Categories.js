@@ -2,12 +2,12 @@ import React, {useState, useEffect} from 'react'
 import '../App.css'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import $ from 'jquery'
 
 const Categories = () => {
     const [isModalOpen, setIsOpenModal] = useState(false)
     const [categorys, setCategory] = useState({categoryname : ''})
     const [categoryData, setCategoryData] = useState(null)
-    const [deleting, setDeleting] = useState(null)
     const [filterDatas, setFilterData] = useState(null)
 
     const handleOpener = () =>{
@@ -23,9 +23,19 @@ const Categories = () => {
     }
 
     const handleDelete = (event) => {
-       setDeleting(event.target.id)
-      // const parent = document.getElementById(event.target.id)
-      // parent.style.display = 'none'
+      axios.post('/deletecategory', {deleting : event.target.id})
+      .then((result) => {
+         if(result.data.success){
+           toast.success(result.data.success)
+           $('#category-'+event.target.id).hide()
+         }
+         if(result.data.error){
+           toast.error(result.data.error)
+         }
+      })
+      .catch((error) => {
+         toast.error(error)
+      })
     }
 
     const handlefilter = (event) => {
@@ -63,23 +73,6 @@ const Categories = () => {
             toast.error(error)
           })
   }, [categoryData])  
-
-  useEffect(()=> {
-
-    axios.post('/deletecategory', {deleting})
-         .then((result) => {
-            if(result.data.success){
-              toast.success(result.data.success)
-            }
-            if(result.data.error){
-              toast.error(result.data.error)
-            }
-         })
-         .catch((error) => {
-            toast.error(error)
-         })
-
-  }, [deleting])
 
     return (
       <div className={`container-fluid`}>

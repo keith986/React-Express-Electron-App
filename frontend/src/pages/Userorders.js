@@ -165,7 +165,7 @@ const Orders = () => {
                 <th>PAID</th>
                 <th>PAYMENT</th>
                 <th>STATUS</th>
-                <th>STAFF</th>
+                <th>ATTENDANT</th>
                 <th>DOWNLOAD</th>
               </tr>
               {!!invoice && invoice.map((inv) => {

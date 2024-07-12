@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import '../App.css'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import $ from 'jquery'
 
 const Suppliers = () => {
     const [isModalOpen, setIsOpenModal] = useState(false)
@@ -16,7 +17,6 @@ const Suppliers = () => {
     const [supplierdata, setSupplierData] = useState(null)
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
-    const [deleting, setDeleting] = useState(null)
     const [filterDatas, setFilterData] = useState(null) 
     const [storedata, setStoreData] = useState(null) 
 
@@ -30,9 +30,20 @@ const Suppliers = () => {
   } 
 
   const handleDelete = (event) => {
-    setDeleting(event.target.id)
-    const parent =document.getElementById(event.target.id);
-    parent.style.display = 'none';
+    axios.post('/deletesupplier', {deleting : event.target.id})
+    .then((result) => {
+      
+       if(result.data.success){
+          toast.success(result.data.success)
+          $('#supplier-' + event.target.id).hide()
+       }
+
+       if(result.data.error){
+          toast.error(result.data.error)
+       }
+
+    })
+    .catch((error) => toast.error(error))
   }
 
   function handleClose(){
@@ -77,20 +88,6 @@ const Suppliers = () => {
           })
   }, [supplierdata])
 
-  useEffect(() => {
-     axios.post('/deletesupplier', {deleting})
-          .then((result) => {
-             if(result.data.success){
-                toast.success(result.data.success)
-             }
-
-             if(result.data.error){
-                toast.error(result.data.error)
-             }
-
-          })
-          .catch((error) => toast.error(error))
-  }, [deleting])
 
   const submitEditChange = async (e) => {
     e.preventDefault();
@@ -226,7 +223,7 @@ const Suppliers = () => {
               {!!supplierdata && supplierdata.map((sup) => {
                   
                   return (
-                          <tr className='tr-row' id={sup._id}>
+                          <tr className='tr-row' id={'supplier-' + sup._id}>
                           <td>{sup.name}</td>
                           <td>{sup.company}</td>
                           <td>{sup.createdAt}</td>

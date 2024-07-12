@@ -11,14 +11,28 @@ const [iscash, setIsCash] = useState(null)
 const [istransfer, setIsTransfer] = useState(null)
 const [isPOS, setIsPOS] = useState(null)
 const [ischeque, setIsCheque] = useState(null)
+const [filterData, setFilterData] = useState(null)
+const [filterDatas, setFilterDatas] = useState(null)
+
+const handlefilter = (event) => {
+  const resp = filterData.filter(f => f.method.includes(event.target.value))
+  setIsReport(resp)
+}
+
+const handlefilters = (event) => {
+  const resp = filterDatas.filter(f => f.invoiceno.includes(event.target.value))
+  setIsReport(resp)
+}
 
 useEffect(() => {
   axios.get('/userreports')
      .then((result) => {
-       setIsReport(result.data)
+       setIsReport(result.data);
+       setFilterData(result.data);
+       setFilterDatas(result.data);
      })
      .catch((error) => { 
-      toast.error(error)
+       toast.error(error);
      })
 }, [])
 
@@ -49,7 +63,6 @@ useEffect(() => {
         toast.error(err)
        })
 }, [])
-
 
 useEffect(() => {
   var sum = 0;
@@ -142,16 +155,16 @@ useEffect(() => {
       </div>
 
       <div className='row'>
-      <span>FROM: <input type='date' className='date-input'/></span>
-        <span>TO: <input type='date' className='date-input'/></span>
-        <select className='status-input'>
-            <option>All Payment</option>
-            <option>Cash Payment</option>
-            <option>Transfer Payment</option>
-            <option>Cheque Payment</option>
-            <option>POS Payment</option>
+      <input type='search' className='search' placeholder='Search By Order Id' onChange={handlefilters} style={{maxWidth: '400px', margin: '5px'}}/>
+
+        <select className='status-input' onChange={handlefilter}>
+            <option value=''>All Payment</option>
+            <option value='cash'>Cash Payment</option>
+            <option value='transfer'>Transfer Payment</option>
+            <option value='cheque'>Cheque Payment</option>
+            <option value='POS'>POS Payment</option>
         </select>
-        <button type='button' className='search-btn'><i className='bi bi-search'></i> Search</button>
+    
       </div>
 
       <div className='row'>

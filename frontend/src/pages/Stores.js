@@ -3,6 +3,7 @@ import '../App.css'
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import $ from 'jquery'
 
 const Stores = () => {
   
@@ -18,8 +19,7 @@ const Stores = () => {
   const [isModalOpen, setIsOpenModal] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [storeid, setStoreId] = useState(null)
-  const [deleting, setDeleting] = useState(null)
-  const [filterData, setFilterData] = useState({})  
+  const [filterData, setFilterData] = useState(null)  
 
   const handleOpener = () =>{
     setIsOpenModal(true)
@@ -31,9 +31,18 @@ const Stores = () => {
   }
 
   const handleDelete = (event) => {
-    setDeleting(event.target.id)
-    const parent = document.getElementById(event.target.id);
-    parent.style.display = 'none';
+axios.post('/deletestore', {deleting : event.target.id})
+     .then((result) => {
+      if(result.data.error){
+        toast.error(result.data.error)
+      }
+      if(result.data.success){
+       toast.success(result.data.success)
+       $('#store-'+event.target.id).hide()   
+      }
+
+      })
+     .catch(err => toast.error(err.message))
   }
 
   function handleClose(){
@@ -102,23 +111,6 @@ const Stores = () => {
             })
             .catch(err => console.log(err))
   }, [])
-
-  useEffect(() => {
-       axios.post('/deletestore', {deleting})
-            .then((result) => {
-
-              if(result.data.error){
-                toast.error(result.data.error)
-              }
-
-              if(result.data.success){
-               toast.success(result.data.success)
-            
-              }
-
-              })
-            .catch(err => toast.error(err.message))
-  }, [deleting])
 
   return (
     <div className={`container-fluid`}>
@@ -218,7 +210,7 @@ const Stores = () => {
 
                  {!!usedata && usedata.map((data) => {
                     return (
-                               <tr className='tr-row' id={data._id}>
+                               <tr className='tr-row' id={'store-' + data._id}>
                                   <td>{data.storename}</td>
                                   <td>{data.location}</td>
                                   <td>{data.manager}</td>

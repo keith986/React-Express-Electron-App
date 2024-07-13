@@ -90,5 +90,6 @@ use_route.get('/allcashreport', useController.allcashreport)
 use_route.get('/alltransferreport', useController.alltransferReport)
 use_route.get('/allPOSreport', useController.allPOSreport)
 use_route.get('/allchequereport', useController.allchequereport)
+use_route.post('/admindetail', useController.adminDetail)
 
 module.exports = use_route;

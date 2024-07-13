@@ -34,12 +34,12 @@ const Suppliers = () => {
     .then((result) => {
       
        if(result.data.success){
-          toast.success(result.data.success)
-          $('#supplier-' + event.target.id).hide()
+          toast.success(result.data.success);
+          $('#supplier-' + event.target.id).hide();
        }
 
        if(result.data.error){
-          toast.error(result.data.error)
+          toast.error(result.data.error);
        }
 
     })
@@ -142,9 +142,14 @@ const Suppliers = () => {
             <input type='text' className='location-input' name='location' onChange={handleChange}/>
             <span className='name'>Warehouse</span>
             <select className='status-input' name='warehouse' onChange={handleChange}>
+            <option>Choose...</option>
               {!!storedata && storedata.map((str) => {
+                var stname = str.storename;
+                if(str.status === 'Closed'){
+                   return !stname;
+                }
                 return (
-                    <option value={`${str.storename}`}>{str.storename}</option>
+                    <option value={`${str.storename}`}>{stname}</option>
                        )
                 })
               }
@@ -221,7 +226,8 @@ const Suppliers = () => {
                 <th>Actions</th>
               </tr>
               {!!supplierdata && supplierdata.map((sup) => {
-                  
+                
+
                   return (
                           <tr className='tr-row' id={'supplier-' + sup._id}>
                           <td>{sup.name}</td>

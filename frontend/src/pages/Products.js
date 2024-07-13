@@ -108,7 +108,7 @@ const Products = () => {
            .catch((error) => {
             toast.error(error)
            })
-    }, [])
+    }, [isProd])
   
 
     const submitEditChange = async (e) => {

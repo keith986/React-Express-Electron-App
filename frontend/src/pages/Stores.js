@@ -110,7 +110,7 @@ axios.post('/deletestore', {deleting : event.target.id})
               setFilterData(result.data)
             })
             .catch(err => console.log(err))
-  }, [])
+  }, [usedata])
 
   return (
     <div className={`container-fluid`}>

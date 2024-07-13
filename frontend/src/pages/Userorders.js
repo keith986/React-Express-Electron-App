@@ -3,6 +3,7 @@ import '../App.css'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import jsPDF from 'jspdf';
+import QRCode from 'qrcode.react'
 
 const Orders = () => {
 
@@ -10,6 +11,7 @@ const Orders = () => {
   const [isModal, setIsModal] = useState(false)
   const [isreceipt, setIsReceipt] = useState(null)
   const [filterData, setFilterData] = useState(null)
+  const [adminprof, setAdminProf] = useState(null)
 
   const handlefilter = (event) => {
     const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
@@ -26,6 +28,15 @@ const Orders = () => {
          .catch((error) => {
           toast.error(error)
           })
+    
+    axios.post('/admindetail')
+         .then((result) => {
+          console.log(result)
+          setAdminProf(result.data)
+         })
+         .catch((err) => {
+          toast.error(err.message)
+         })
 
   }
 
@@ -77,18 +88,20 @@ const Orders = () => {
             
             <div className='modal-body' id='receipt'>
                 <h2>POStore</h2>
-                <p>sample address</p>
-                <p>Tel : 07*********</p>
-                <p>Email : *****@***</p>
+                <h4>{!!adminprof && adminprof.map((res) => res.companyname)}</h4>
+        
+                <p>{!!adminprof && adminprof.map((res) => res.companyphone)}</p>
+                <p>{!!adminprof && adminprof.map((res) => res.companyemail)}</p>
+                <p>{!!adminprof && adminprof.map((res) => res.companylocation)}</p>
                 <br/>
                 <h2>SALES INVOICE</h2>
-                <p>CASHIER : {!!isreceipt && isreceipt.map((inv) => {return inv.staffname})} </p>
+                <p>Cashier : {!!isreceipt && isreceipt.map((inv) => {return inv.staffname})} </p>
                 <p>Invoice No. : {!!isreceipt && isreceipt.map((inv) => {return inv.invoiceno})} </p>
-                <p>DATE : {!!isreceipt && isreceipt.map((inv) => {return inv.date})}</p>
-                <p>TIME : {!!isreceipt && isreceipt.map((inv) => {return inv.time})}</p>
+                <p>Date : {!!isreceipt && isreceipt.map((inv) => {return inv.date})}</p>
+                <p>Time : {!!isreceipt && isreceipt.map((inv) => {return inv.time})}</p>
                 <br/>
-                <div style={{width: '50%'}}>
-                  <table className='table' id='receipt-tbl'>
+                <div style={{ alignItems: 'center', alignSelf: 'center'}}>
+              <table className='table' id='receipt-tbl' style={{width: '200px'}}>
                     <tr>
                       <th>ITEM</th>
                       <th>QTY</th>
@@ -133,6 +146,8 @@ const Orders = () => {
                  <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '10px'}}/>
                  <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '2px', marginBottom: '10px'}}/>
                  <p><strong>&copy; Copyright POStore</strong></p>
+                 
+             <QRCode value={'© Copyright POStore ' + new Date().getFullYear() + ". Download Receipt from our App." }/>
             </div>
             
             <div className='modal-footer' id='modal-footer'>

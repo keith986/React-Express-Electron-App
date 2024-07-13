@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import '../App.css'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import jsPDF from 'jspdf'
 import $ from 'jquery'
+import QRCode from 'qrcode.react'
+import { UserContext } from './../context/userContext';
+
 
 const Orders = () => {
   const [invoice, setInvoice] = useState(null)
   const [filterData, setFilterData] = useState(null)
   const [isModal, setIsModal] = useState(false)
   const [isreceipt, setIsReceipt] = useState(null)
+
+  const {user} = useContext(UserContext)  
 
   const handlefilter = (event) => {
     const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
@@ -30,12 +35,12 @@ const Orders = () => {
          })
   }, [])
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     setIsModal(true)
 
-    axios.post('/receipts', {receiptId : e.target.id})
+    await axios.post('/receipts', {receiptId : e.target.id})
          .then((result) => {
-           setIsReceipt(result.data)
+           setIsReceipt(result.data);
           })
          .catch((error) => {
           toast.error(error)
@@ -71,11 +76,11 @@ const Orders = () => {
     docPDF.html(elemHtml,{
       callback:function(docPDF){
           docPDF.save('receipt.pdf');
-      },
-  x: 15,
-  y: 15,
-  width: 170,
-  windowWidth: 650
+       },
+        x: 15,
+        y: 15,
+        width: 170,
+        windowWidth: 650
   })
   }
 
@@ -86,7 +91,7 @@ const Orders = () => {
 
 <div className='row'>
 
-  <div className={`modal ${isModal ? "open" : ""}`} id='open'>
+  <div className={`modal ${isModal ? "open" : ""}`} id='open' >
     <div className='modal-dialog'>
     
       <div className='modal-content'>
@@ -95,20 +100,22 @@ const Orders = () => {
           <i className='bi bi-receipt'></i>
         </div>
         
-        <div className='modal-body' id='receipt'>
+        <div className='modal-body' id='receipt' >
             <h2>POStore</h2>
-            <p>sample address</p>
-            <p>Tel : 07*********</p>
-            <p>Email : *****@***</p>
+            <h4>{!!user && user.companyname}</h4>
+
+            <p>{!!user && user.companyphone}</p>
+            <p>{!!user && user.companyemail}</p>
+            <p>{!!user && user.companylocation}</p>
             <br/>
             <h2>SALES INVOICE</h2>
-            <p>CASHIER : {!!isreceipt && isreceipt.map((inv) => {return inv.staffname})} </p>
+            <p>Cashier : {!!isreceipt && isreceipt.map((inv) => {return inv.staffname})} </p>
             <p>Invoice No. : {!!isreceipt && isreceipt.map((inv) => {return inv.invoiceno})} </p>
-            <p>DATE : {!!isreceipt && isreceipt.map((inv) => {return inv.date})}</p>
-            <p>TIME : {!!isreceipt && isreceipt.map((inv) => {return inv.time})}</p>
+            <p>Date : {!!isreceipt && isreceipt.map((inv) => {return inv.date})}</p>
+            <p>Time : {!!isreceipt && isreceipt.map((inv) => {return inv.time})}</p>
             <br/>
-            <div style={{width: '50%'}}>
-              <table className='table' id='receipt-tbl'>
+            <div style={{ alignItems: 'center', alignSelf: 'center'}}>
+              <table className='table' id='receipt-tbl' style={{width: '200px'}}>
                 <tr>
                   <th>ITEM</th>
                   <th>QTY</th>
@@ -153,6 +160,8 @@ const Orders = () => {
              <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '10px'}}/>
              <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '2px', marginBottom: '10px'}}/>
              <p><strong>&copy; Copyright POStore</strong></p>
+             
+             <QRCode value={'© Copyright POStore ' + new Date().getFullYear() + ". Download Receipt from our App." }/>
         </div>
         
         <div className='modal-footer' id='modal-footer'>

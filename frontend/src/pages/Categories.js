@@ -72,7 +72,7 @@ const Categories = () => {
           .catch((error) => {
             toast.error(error)
           })
-  }, [])  
+  }, [categoryData])  
 
     return (
       <div className={`container-fluid`}>

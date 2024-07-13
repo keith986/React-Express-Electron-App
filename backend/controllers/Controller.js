@@ -1524,9 +1524,8 @@ const receipts = async (req, res) => {
         const {token} = req.cookies;
 
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            const staffID = user.userdata._id;
             const receiptID = req.body.receiptId;
-
+            
             invoices.find({_id : receiptID})
                     .then((result) => {
                         return res.json(result)
@@ -1536,7 +1535,7 @@ const receipts = async (req, res) => {
                             error : error
                      })
                      })
-
+            
         })
 
     }catch(error){
@@ -2337,6 +2336,32 @@ const allcashreport = async (req, res) => {
      }
  }
 
+ const adminDetail = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID = user.userdata.adminId;
+
+            Users.find({_id : adminID})
+                 .then((result) => {
+                    return res.json(result)
+                 })
+                 .catch(err => {
+                    return res.json({
+                        error : err
+                    })
+                 })
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+ }
+
 module.exports = {
     signup,
     preview,
@@ -2393,5 +2418,6 @@ module.exports = {
     allcashreport,
     alltransferReport,
     allPOSreport,
-    allchequereport
+    allchequereport,
+    adminDetail
 }

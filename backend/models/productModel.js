@@ -46,9 +46,14 @@ const productSchema = new Schema({
         type : String,
         require : true
     },
-    expdate : {
-        type : String,
-        require : true
+    edate : {
+        type: String
+    },
+    emonth : {
+        type : String
+    },
+    eyear : {
+        type : String
     }
 },{timestamps: true})
 

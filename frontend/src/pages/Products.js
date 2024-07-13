@@ -17,7 +17,10 @@ const Products = () => {
       warehouse: '',
       supplier: '',
       mandate: '',
-      expdate : ''
+      expdate : '',
+      date: '',
+      month : '',
+      year : '' 
     })
     const [isProd, setIsProd] = useState(null)
     const [isEditOpen, setIsEditOpen] = useState(false)
@@ -56,8 +59,8 @@ const Products = () => {
            .then((result) => {
 
              if(result.data.error){
-              $('#prod-'+event.target.id).hide()
-               toast.error(result.data.error)
+              $('#prod-'+event.target.id).hide();
+               toast.error(result.data.error);
              }
 
              if(result.data.success){
@@ -82,6 +85,7 @@ const Products = () => {
     }
 
     function submitChange (e) {
+
       e.preventDefault();
       axios.post('/addproduct', {products})
            .then((result) => {
@@ -104,7 +108,7 @@ const Products = () => {
            .catch((error) => {
             toast.error(error)
            })
-    }, [isProd])
+    }, [])
   
 
     const submitEditChange = async (e) => {
@@ -214,7 +218,11 @@ const Products = () => {
               <span className='name'>MANUFACTURED DATE</span>
               <input type='date' className='date-input' name='mandate' onChange={handleChange}/>
               <span className='name'>EXPIRY DATE</span>
-              <input type='date' className='date-input' name='expdate' onChange={handleChange}/>
+              <div className="digits">
+                 <input type="number" maxLength="2" name="date" id="edit-input" onChange={handleChange} placeholder='date'/>
+                 <input type="number" maxLength="2" name="month" id="edit-input" onChange={handleChange} placeholder='month'/>
+                 <input type="number" maxLength="4" name="year" id="edit-input" onChange={handleChange} placeholder='year'/>
+              </div>
               </div>
               <div className='modal-footer'>
               <span>.</span>
@@ -281,7 +289,11 @@ const Products = () => {
               <span className='name'>MANUFACTURED DATE</span>
               <input type='date' className='date-input' name='mandate' onChange={handleChange}/>
               <span className='name'>EXPIRY DATE</span>
-              <input type='date' className='date-input' name='expdate' onChange={handleChange}/>
+              <div className="digits">
+                 <input type="number" maxLength="2" name="date" id="edit-input" onChange={handleChange} placeholder={!!previewer && previewer.edate}/>
+                 <input type="number" maxLength="2" name="month" id="edit-input" onChange={handleChange} placeholder={!!previewer && previewer.emonth}/>
+                 <input type="number" maxLength="4" name="year" id="edit-input" onChange={handleChange} placeholder={!!previewer && previewer.eyear}/>
+              </div>
               </div>
               <div className='modal-footer'>
               <span>.</span>
@@ -315,12 +327,16 @@ const Products = () => {
                   <th>ACTIONS</th>
                 </tr>
                 {!!isProd && isProd.map((prod) => {
+                  var ed = prod.edate;
+                  var em = prod.emonth;
+                  var ey = prod.eyear;
+
                   return   (
                                 <tr className='tr-row' id={'prod-'+prod._id}>
                                   <td>{prod.batchno}</td>
                                   <td>{prod.name}</td>
                                   <td>{prod.categories}</td>
-                                  <td>{prod.expdate}</td>
+                                  <td>{ey + '-' + em + '-' + ed}</td>
                                   <td>Kes. {prod.sellingprice}</td>
                                   <td>{prod.quantity}</td>
                                   <td>{prod.warehouse}</td>

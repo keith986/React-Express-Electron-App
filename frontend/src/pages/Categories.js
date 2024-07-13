@@ -26,8 +26,8 @@ const Categories = () => {
       axios.post('/deletecategory', {deleting : event.target.id})
       .then((result) => {
          if(result.data.success){
-           toast.success(result.data.success)
-           $('#category-'+event.target.id).hide()
+           toast.success(result.data.success);
+           $('#category-'+event.target.id).hide();
          }
          if(result.data.error){
            toast.error(result.data.error)
@@ -72,7 +72,7 @@ const Categories = () => {
           .catch((error) => {
             toast.error(error)
           })
-  }, [categoryData])  
+  }, [])  
 
     return (
       <div className={`container-fluid`}>

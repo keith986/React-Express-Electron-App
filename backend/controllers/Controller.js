@@ -916,15 +916,27 @@ const addproduct = async (req, res) => {
             })
         }
 
-        if(val.mandate === ''){
+        if(req.body.mandate === ''){
             return res.json({
                 error : 'Manufactury date is required'
             })
         }
 
-        if(val.expdate === ''){
+        if(val.date === ''){
             return res.json({
                 error : 'Expiry Date is required'
+            })
+        }
+
+        if(val.month === ''){
+            return res.json({
+                error : 'Expiry Month is required'
+            })
+        }
+
+        if(val.year === ''){
+            return res.json({
+                error : 'Expiry Year is required'
             })
         }
 
@@ -943,7 +955,9 @@ const addproduct = async (req, res) => {
                 warehouse: req.body.products.warehouse.toString(),
                 supplier : req.body.products.supplier.toString(),
                 mandate : req.body.products.mandate.toString(),
-                expdate : req.body.products.expdate.toString()
+                edate : req.body.products.date.toString(),
+                emonth : req.body.products.month.toString(),
+                eyear : req.body.products.year.toString()
             })
 
             pro_duct.save()
@@ -1030,15 +1044,27 @@ const editproduct = async (req, res) => {
             })
         }
 
-        if(val.mandate === ''){
+        if(req.body.mandate === ''){
             return res.json({
                 error : 'Manufactury date is required'
             })
         }
 
-        if(val.expdate === ''){
+        if(val.date === ''){
             return res.json({
                 error : 'Expiry Date is required'
+            })
+        }
+
+        if(val.month === ''){
+            return res.json({
+                error : 'Expiry Month is required'
+            })
+        }
+
+        if(val.year === ''){
+            return res.json({
+                error : 'Expiry Year is required'
             })
         }
 
@@ -1057,7 +1083,9 @@ const editproduct = async (req, res) => {
                 warehouse: req.body.products.warehouse.toString(),
                 supplier : req.body.products.supplier.toString(),
                 mandate : req.body.products.mandate.toString(),
-                expdate : req.body.products.expdate.toString()
+                edate : req.body.products.date.toString(),
+                emonth : req.body.products.month.toString(),
+                eyear : req.body.products.year.toString()
                                        })
                     .then((result) => {
                         return res.json({

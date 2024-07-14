@@ -32,6 +32,7 @@ import Activation from "./pages/Activation/Activation";
 import axios from "axios";
 import {Toaster} from 'react-hot-toast';
 import { UserContextProvider } from "./context/userContext";
+import Scanner from "./pages/Scanner";
 
 //connecting to backend
 axios.defaults.baseURL = 'http://localhost:5000';
@@ -84,6 +85,7 @@ function App() {
 				<Route path='/expires' element={<Expiry />}/>
 				<Route path='/settings' element={<Settings />}/>
 				<Route path='/usersettings' element={<Usersettings />}/>
+				<Route path='/scanner' element={<Scanner/>}/>
 			</Routes>
 	</UserContextProvider>
 		</BrowserRouter>

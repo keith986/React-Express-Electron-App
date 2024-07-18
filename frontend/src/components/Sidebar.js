@@ -54,10 +54,6 @@ const Sidebar = () => {
         <i className='bi bi-bag-fill'></i>
           <h3>Products</h3>
         </a>
-        <a href='/scanner' className='nav-option option7'>
-        <i className='bi bi-upc-scan'></i>
-          <h3>Barcode scanner</h3>
-        </a>
         <a href='/orders' className='nav-option option7'>
         <i className='bi bi-list-task'></i>
           <h3>Orders</h3>

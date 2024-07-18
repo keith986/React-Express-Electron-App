@@ -6,13 +6,14 @@ import jsPDF from 'jspdf'
 import $ from 'jquery'
 import QRCode from 'qrcode.react'
 import { UserContext } from './../context/userContext';
-
+import Barcode from 'react-barcode';
 
 const Orders = () => {
   const [invoice, setInvoice] = useState(null)
   const [filterData, setFilterData] = useState(null)
   const [isModal, setIsModal] = useState(false)
   const [isreceipt, setIsReceipt] = useState(null)
+  const [rptId, setrptId] = useState(null)
 
   const {user} = useContext(UserContext)  
 
@@ -37,7 +38,7 @@ const Orders = () => {
 
   const handleClick = async (e) => {
     setIsModal(true)
-
+    setrptId(e.target.id)
     await axios.post('/receipts', {receiptId : e.target.id})
          .then((result) => {
            setIsReceipt(result.data);
@@ -101,6 +102,7 @@ const Orders = () => {
         </div>
         
         <div className='modal-body' id='receipt' >
+        <Barcode value={!!rptId && rptId} code="CODE128" height="100px"/>
             <h2>POStore</h2>
             <h4>{!!user && user.companyname}</h4>
 
@@ -160,8 +162,8 @@ const Orders = () => {
              <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '10px'}}/>
              <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '2px', marginBottom: '10px'}}/>
              <p><strong>&copy; Copyright POStore</strong></p>
-             
              <QRCode value={'© Copyright POStore ' + new Date().getFullYear() + ". Download Receipt from our App." }/>
+             
         </div>
         
         <div className='modal-footer' id='modal-footer'>
@@ -170,8 +172,8 @@ const Orders = () => {
         <button type='button' className='send' onClick={handleDownload}>Download</button>
         </div>
 
-      </div>
-
+      </div> 
+  
     </div>
   </div>
 

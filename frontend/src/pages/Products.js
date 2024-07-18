@@ -30,6 +30,9 @@ const Products = () => {
     const [supplier, setSupplier] = useState(null)
     const [category, setCategory] = useState(false)
     const [previewer, setPreviewer] = useState(null)
+    const [srcUrl, setSrcUrl] = useState(null)
+    const [modalImage, setModalImage] = useState(null)
+    const [imageModal, setImageModal] = useState(false)
 
     const handleChange = (e) => {
       setProducts({...products, [e.target.name] : [e.target.value]})
@@ -87,7 +90,7 @@ const Products = () => {
     function submitChange (e) {
 
       e.preventDefault();
-      axios.post('/addproduct', {products})
+      axios.post('/addproduct', {products, srcUrl})
            .then((result) => {
              if(result.data.error){
                 toast.error(result.data.error)
@@ -114,7 +117,7 @@ const Products = () => {
     const submitEditChange = async (e) => {
       e.preventDefault();
  
-      await axios.post('/editproduct', {products, storeid})
+      await axios.post('/editproduct', {products, storeid, srcUrl})
                  .then((result) => {
  
                    if(result.data.error){
@@ -156,12 +159,38 @@ const Products = () => {
          })
    }, [category])
 
+ const handleImage = () => {
+   $('#image').trigger('click');
+ }
+
+ const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  let fileReader = new FileReader();
+  fileReader.readAsDataURL(file);
+  fileReader.onload = function (){
+     setTimeout(()=>{
+      setSrcUrl(fileReader.result)
+     },500)
+  }
+ }
+
+ const popImage = (e) => {
+   setImageModal(true)
+   setModalImage(e.target.src)
+ }
+
+ const handleProductModalClose = () => {
+  setImageModal(false)
+ }
+
     return (
       <div className={`container-fluid`}>
          <div className={`${isModalOpen ? "background" : ""}`}></div>  
          <div className={`${isEditOpen ? "background" : ""}`}></div>
+         <div className={`${imageModal ? "background" : ""}`}></div>
+
       <h2>Stock Inventory</h2>
-     <div className='row'>
+      <div className='row'>
         <button type='button' className='modalopener' onClick={handleOpener}>New Stock</button>
        
         <div className={`modal ${isModalOpen ? "open" : ""}`}>
@@ -173,18 +202,39 @@ const Products = () => {
                 <i className='bi bi-bag-fill'></i>
               </div>
               <div className='modal-body'>
-              <span className='name'>Batch No.</span>
-              <input type='text' className='name-input' name='batchno' placeholder='enter the batchno of the product'  onChange={handleChange}/>
-              <span className='name'>Product Name</span>
-              <input type='text' className='name-input' name='name' onChange={handleChange}/>
-              <span className='name'>Product description</span>
+             
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%"}}>
+              <span className='name'>Upload Product's Image : <i className='bi bi-image-fill' style={{fontSize: "30px"}} onClick={handleImage}></i></span>
+              <input type='file' accept="images/*" className='name-input' name='image' id='image' onChange={handleImageChange} style={{display: 'none'}}/>
+              <img src={srcUrl} alt='product_image' id="dis-play"/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
+              <span className='name'>Product Name :</span>
+              <input type='text' className='name-input' name='name' onChange={handleChange} placeholder='Product name'/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
+              <span className='name'>Product description : </span>
               <input type='text' className='manager-input' placeholder='e.g Men shoes' name='description' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Cost Price</span>
               <input type='number' className='location-input' placeholder='1000' name='costprice' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Selling Price</span>
               <input type='tel' className='phone-input' placeholder='1500' name='sellingprice' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Quantity</span>
               <input type='number' className='phone-input' name='quantity' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Categories</span>
               <select className='status-input' name='categories' onChange={handleChange}>
                 <option>Choose...</option>
@@ -195,6 +245,9 @@ const Products = () => {
                 })
               }
               </select>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Supplier</span>
               <select className='status-input' name='supplier' onChange={handleChange}>
               <option>Choose...</option>
@@ -205,18 +258,33 @@ const Products = () => {
                 })
               }
               </select>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Warehouse</span>
               <select className='status-input' name='warehouse' onChange={handleChange}>
               <option>Choose...</option>
               {!!storedata && storedata.map((strl) => {
+
+                var str_nm = strl.storename;
+
+                if(strl.status === 'Closed'){
+                  return !str_nm
+                }
                 return (
-                    <option value={`${strl.storename}`}>{strl.storename}</option>
+                    <option value={`${str_nm}`}>{str_nm}</option>
                        )
                 })
               }
               </select>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>MANUFACTURED DATE</span>
               <input type='date' className='date-input' name='mandate' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>EXPIRY DATE</span>
               <div className="digits">
                  <input type="number" maxLength="2" name="date" id="edit-input" onChange={handleChange} placeholder='date'/>
@@ -224,12 +292,13 @@ const Products = () => {
                  <input type="number" maxLength="4" name="year" id="edit-input" onChange={handleChange} placeholder='year'/>
               </div>
               </div>
+
+              </div>
               <div className='modal-footer'>
               <span>.</span>
               <button type='button' className='back' onClick={handleClose}>Back</button>
               <button type='submit' className='send'>Add Product</button>
               </div>
-  
             </div>
             </form>
           </div>
@@ -244,18 +313,39 @@ const Products = () => {
                 <i className='bi bi-bag-fill'></i>
               </div>
               <div className='modal-body'>
-              <span className='name'>Batch No.</span>
-              <input type='text' className='name-input' name='batchno' placeholder={!!previewer && previewer.batchno} onChange={handleChange}/>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%"}}>
+              <span className='name'>Change Product's Image : <i className='bi bi-image-fill' style={{fontSize: "30px"}} onClick={handleImage}></i></span>
+              <input type='file' accept="images/*" className='name-input' name='image' id='image' onChange={handleImageChange} style={{display: 'none'}}/>
+              <img src={srcUrl} alt='product_image' id="dis-play"/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%" , marginTop : "5px"}}>
               <span className='name'>Product Name</span>
               <input type='text' className='name-input' name='name' placeholder={!!previewer && previewer.name} onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Product description</span>
               <input type='text' className='manager-input' placeholder={!!previewer && previewer.description} name='description' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Cost Price</span>
               <input type='number' className='location-input' placeholder={!!previewer && previewer.costprice} name='costprice' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Selling Price</span>
               <input type='tel' className='phone-input' placeholder={!!previewer && previewer.sellingprice} name='sellingprice' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Quantity</span>
               <input type='number' className='phone-input' name='quantity' placeholder={!!previewer && previewer.quantity} onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Categories</span>
               <select className='status-input' name='categories' onChange={handleChange}>
                 <option>Choose...</option>
@@ -266,6 +356,9 @@ const Products = () => {
                 })
               }
               </select>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Supplier</span>
               <select className='status-input' name='supplier' onChange={handleChange}>
               <option>Choose...</option>
@@ -276,24 +369,40 @@ const Products = () => {
                 })
               }
               </select>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Warehouse</span>
               <select className='status-input' name='warehouse' onChange={handleChange}>
               <option>Choose...</option>
               {!!storedata && storedata.map((str) => {
+                const st_name = str.storename;
+                if(st_name === 'Closed')
+                {
+                  return st_name;
+                }
                 return (
-                    <option value={`${str.storename}`}>{str.storename}</option>
+                    <option value={`${st_name}`}>{st_name}</option>
                        )
                 })
               }
               </select>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>MANUFACTURED DATE</span>
               <input type='date' className='date-input' name='mandate' onChange={handleChange}/>
+              </div>
+
+              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>EXPIRY DATE</span>
               <div className="digits">
                  <input type="number" maxLength="2" name="date" id="edit-input" onChange={handleChange} placeholder={!!previewer && previewer.edate}/>
                  <input type="number" maxLength="2" name="month" id="edit-input" onChange={handleChange} placeholder={!!previewer && previewer.emonth}/>
                  <input type="number" maxLength="4" name="year" id="edit-input" onChange={handleChange} placeholder={!!previewer && previewer.eyear}/>
               </div>
+              </div>
+
               </div>
               <div className='modal-footer'>
               <span>.</span>
@@ -306,18 +415,32 @@ const Products = () => {
           </div>
         </div>
 
-     </div>
+        <div className={`modal ${imageModal ? "open" : ""}`}>
+        <div className='modal-content'>
+          <div className='modal-dialog'>
+            <div className='modal-header'>
+              <h2>Product Image</h2>
+              <i className='bi bi-x-lg' onClick={handleProductModalClose} style={{cursor : "pointer"}}></i>
+            </div>
+            <div className='modal-body'>
+                 <img src={modalImage} alt='product_image' width="300px" height="300px" style={{borderRadius: "50%"}}/>
+            </div>
+          </div>
+         </div>
+        </div>
+
+      </div>
       <div className='row'>
       <div className='col-divide'>
          <p>Search : </p>
         <input type='search' className='search' placeholder='Search By Name...' onChange={handlefilter}/>
       </div>
       </div>
-        <div className='row'>
+      <div className='row'>
         <div className='col'>
               <table className='table' id='tablexl'>
                 <tr>
-                  <th>BARCODE</th>
+                  <th>IMAGE</th>
                   <th>PRODUCT</th>
                   <th>CATEGORIES</th>
                   <th>EXPIRY DATE</th>
@@ -333,7 +456,7 @@ const Products = () => {
 
                   return   (
                                 <tr className='tr-row' id={'prod-'+prod._id}>
-                                  <td>{prod.batchno}</td>
+                                  <td><img src={prod.prd_img} alt='product_image' width="50px" height="50px"  style={{cursor: "pointer", borderRadius: "50%"}} onClick={popImage}/></td>
                                   <td>{prod.name}</td>
                                   <td>{prod.categories}</td>
                                   <td>{ey + '-' + em + '-' + ed}</td>
@@ -350,8 +473,8 @@ const Products = () => {
                 }
               </table>
         </div>
-    </div>
-</div>
+      </div>
+      </div>
     )
 }
 

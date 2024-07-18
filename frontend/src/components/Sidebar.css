@@ -66,13 +66,13 @@
 }
 
 .nav-option:hover, .nav-option:hover > i.bi{
-    background-color: #fff;
+    background-color: #e9d8ff;;
     color: #000;
     cursor: pointer;
 }
 
 .nav-option:active , .nav-option:active > i.bi{
-    background-color: #fff;
+    background-color: #e9d8ff;;
     color: #000;
     cursor: pointer;
 }

@@ -54,6 +54,9 @@ const productSchema = new Schema({
     },
     eyear : {
         type : String
+    },
+    prd_img : {
+        type : String
     }
 },{timestamps: true})
 

@@ -131,7 +131,7 @@ const login = async (req, res) => {
         const usernames = user_name.toString();
         const userpass = userlogins.password;
         const user_password = userpass.toString();
-
+      
         const userdata = await Users.findOne({username: usernames});
        
         if(!userdata){
@@ -139,7 +139,9 @@ const login = async (req, res) => {
                 error: "Username not found!"
             })  
         }else{
+            console.log(req.body)
         const password_match = await comparePassword(user_password, userdata.password);
+        console.log(userdata)
         if(password_match){
             if(userdata.accounttype === 'Admin'){
 
@@ -154,8 +156,7 @@ const login = async (req, res) => {
                
             })
               
-            }
-           
+            }      
 
             if(userdata.accounttype === 'staff'){
 
@@ -436,7 +437,7 @@ const adduser = async(req,res) => {
                 fullname : value.fullname.toString(),
                 useremail : value.email.toString(),
                 username : value.username.toString(),
-                accounttype: value.password.toString(),
+                accounttype: value.role.toString(),
                 warehouse: value.warehouse.toString(),
                 role: value.role.toString(),
                 companyname : '',
@@ -860,11 +861,10 @@ const addproduct = async (req, res) => {
         const {token} = req.cookies;
 
         const val = req.body.products;
-        console.log(val)
-
-        if(val.batchno === ''){
-            return res.json({
-                error : 'Batch Number is required'
+        
+        if(req.body.srcUrl === '' || req.body.srcUrl === null){
+            res.json({
+                error : "Product's Image Required."
             })
         }
 
@@ -945,6 +945,7 @@ const addproduct = async (req, res) => {
 
             const pro_duct = Products({
                 adminId : adminId,
+                prd_img : req.body.srcUrl,
                 name : req.body.products.name.toString(),
                 batchno : req.body.products.batchno.toString(),
                 description : req.body.products.description.toString(),
@@ -990,9 +991,9 @@ const editproduct = async (req, res) => {
 
         const val = req.body.products;
 
-        if(val.batchno === ''){
-            return res.json({
-                error : 'Batch Number is required'
+        if(req.body.srcUrl === '' || req.body.srcUrl === null){
+            res.json({
+                error : "Product's Image Required."
             })
         }
 
@@ -1073,6 +1074,7 @@ const editproduct = async (req, res) => {
             const prodId = req.body.storeid;
 
             Products.findByIdAndUpdate(prodId, {
+                prd_img : req.body.srcUrl,
                 name : req.body.products.name.toString(),
                 batchno : req.body.products.batchno.toString(),
                 description : req.body.products.description.toString(),

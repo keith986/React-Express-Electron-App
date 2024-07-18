@@ -587,7 +587,7 @@ font-size: 20px;
 }
 
 #open  {
-  top: 2%;
+  top: 0;
   bottom : 0;
 }
 
@@ -611,11 +611,19 @@ animation-duration: 200ms;
 
 .cartscan {
 position: absolute;
-background-color: gray;
+background-color: #000;
 top: 9%;
 bottom: 0;
 right: 0;
-width: 300px;
+width: 250px;
+}
+
+#dis-play {
+	width : 100px;
+	height: 100px;
+	border-radius: 50%;
+	border: 1px solid #000;
+	box-shadow: 0px 0px 1px 1px #000;
 }
 
 /*query*/

@@ -4,6 +4,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode.react'
+import Barcode from 'react-barcode';
 
 const Orders = () => {
 
@@ -12,6 +13,7 @@ const Orders = () => {
   const [isreceipt, setIsReceipt] = useState(null)
   const [filterData, setFilterData] = useState(null)
   const [adminprof, setAdminProf] = useState(null)
+  const [rptId, setrptId] = useState(null)
 
   const handlefilter = (event) => {
     const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
@@ -20,7 +22,7 @@ const Orders = () => {
 
   const handleClick = (e) => {
     setIsModal(true)
-
+    setrptId(e.target.id)
     axios.post('/receipts', {receiptId : e.target.id})
          .then((result) => {
            setIsReceipt(result.data)
@@ -87,6 +89,7 @@ const Orders = () => {
             </div>
             
             <div className='modal-body' id='receipt'>
+            <Barcode value={!!rptId && rptId} code="CODE128" height="100px"/>
                 <h2>POStore</h2>
                 <h4>{!!adminprof && adminprof.map((res) => res.companyname)}</h4>
         
@@ -146,7 +149,6 @@ const Orders = () => {
                  <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '10px'}}/>
                  <hr style={{width: '50%', background: 'black', padding: '1px', border: 'none', marginTop: '2px', marginBottom: '10px'}}/>
                  <p><strong>&copy; Copyright POStore</strong></p>
-                 
              <QRCode value={'© Copyright POStore ' + new Date().getFullYear() + ". Download Receipt from our App." }/>
             </div>
             
@@ -159,7 +161,7 @@ const Orders = () => {
           </div>
   
         </div>
-      </div>
+    </div>
 
     <div className='col-divide'>
        <p>Search : </p>

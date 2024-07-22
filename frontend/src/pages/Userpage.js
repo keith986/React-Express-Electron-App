@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import '../App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import axios from 'axios'
+import toast from 'react-hot-toast'
 import $ from 'jquery'
+
 const Dashboard = () => {
    const [istoday, setIsToday] = useState(null)
    const [ismonth, setIsMonth] = useState(null)
@@ -46,7 +47,7 @@ const Dashboard = () => {
    $('.today').each(function(){
     sum += parseFloat($(this).text());  
      });
-    $('#todayp').html(sum + '.00');
+    $('#todayp').html(sum);
  }, [istoday])
 
  useEffect(() => {
@@ -69,7 +70,7 @@ const Dashboard = () => {
   $('.month').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#monthp').html(sum + '.00');
+   $('#monthp').html(sum);
 }, [ismonth])
 
 useEffect(() => {
@@ -92,7 +93,7 @@ useEffect(() => {
   $('.year').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#yearp').html(sum + '.00');
+   $('#yearp').html(sum);
 }, [isyear])
 
 useEffect(() => {
@@ -163,7 +164,7 @@ useEffect(() => {
      <input type='search' className='search' placeholder='Search By Order Id' onChange={handlefilter}/>
      </div>
         <h2 className='row-header'>Daily Transactions</h2>
-        <table className='table'>
+        <table className='table' style={{background: "transparent", border: "none"}}>
         <tr>
             <th>OrderId</th>
             <th>Customer</th>

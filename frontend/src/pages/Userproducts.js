@@ -65,7 +65,7 @@ const Products = () => {
       </div>
         <div className='row'>
         <div className='col'>
-              <table className='table' id='tablexl'>
+              <table className='table' id='tablexl' style={{background: "transparent", border: "none"}}>
                 <tr>
                   <th>IMAGE</th>
                   <th>PRODUCT</th>
@@ -89,7 +89,7 @@ const Products = () => {
                 }
               </table>
         </div>
-    </div>
+        </div>
 </div>
     )
 }

@@ -37,7 +37,7 @@ const UserCategories = () => {
       </div>
         <div className='row'>
         <div className='col'>
-              <table className='table'>
+              <table className='table' style={{background: "transparent", border: "none"}}>
                 <tr>  
                   <th>Category Name</th>
                   <th>Created At</th>

@@ -126,6 +126,8 @@ const signup = async(req, res) => {
 const login = async (req, res) => {
     try{
         
+        const {token} = req.cookies;
+
         const userlogins = req.body.login;
         const user_name = userlogins.username;
         const usernames = user_name.toString();
@@ -139,9 +141,7 @@ const login = async (req, res) => {
                 error: "Username not found!"
             })  
         }else{
-            console.log(req.body)
         const password_match = await comparePassword(user_password, userdata.password);
-        console.log(userdata)
         if(password_match){
             if(userdata.accounttype === 'Admin'){
 
@@ -159,7 +159,6 @@ const login = async (req, res) => {
             }      
 
             if(userdata.accounttype === 'staff'){
-
                 jwt.sign({userdata}, process.env.JWT_SECRET, {}, (err, token) => {
                     if(err) throw err;
                     console.log(token)
@@ -171,15 +170,12 @@ const login = async (req, res) => {
                    
                 })
             }
-
-
         }else{
             return res.json({
                 error: "Incorrect Password"
             })
         }
-
-    }
+        }
 
     }catch(error){
         console.log(error.message)
@@ -1367,7 +1363,6 @@ const invoice = async (req, res) => {
 
         const {token} = req.cookies;  
         
-
         if(req.body.isInvoice.payment === ''){
             return res.json({
                 error : 'Payment Method is required'
@@ -1432,36 +1427,87 @@ const invoice = async (req, res) => {
                                              })
                                         .then((answer) => {
 
-                                            for(const prod of answer){
-                                                const prodname = prod.name;
-                                                const prodqty = prod.quantity;
-                                                const prodId = prod._id;
+                                            /*---
+                                        for(const prod of answer){
+                                           const prodname = prod.name;
+                                            const prodqty = prod.quantity;
+                                            const prodId = prod._id;
                                                 
-                                                var decode = req.body.info;
+                                            var decode = req.body.info;
 
-                                                for (const prop of decode){
+                                            for(const prop of decode){
+                                                    //const product_id = prop.Id;
                                                     const product_name = prop.Item;
                                                     const product_quantity = prop.Quantity;
-                                                console.log(product_quantity, product_name)
+                                                    console.log(prodId)
 
-                                                var remainder = 0;
+                                                    var remainder = 0;
 
-                                                if(product_name === prodname){
-                                                    remainder = prodqty - product_quantity;
-                                                }else{
-                                                    remainder = prodqty;
-                                                }
+                                                        if(prodname === product_name){
+                                                         remainder = prodqty - product_quantity;
+                                                         console.log('true')
+                                                         Products.findOneAndUpdate({name : product_name},{$set : {quantity : remainder}})
+                                                                 .then((updat) => {
+                                                             console.log('found and updated successfully')
+                                                                  })
+                                                                 .catch((erss) => {
+                                                             console.log(erss)
+                                                                  })
 
-                                                Products.findByIdAndUpdate({_id : prodId},{$set : {quantity : remainder}})
-                                                        .then((updat) => {
-                                                            console.log(updat)
-                                                        })
-                                                        .catch((erss) => {
-                                                            console.log(erss)
-                                                        })
+                                                        }else{
+                                                         remainder = prodqty;
+                                                         console.log('false')
+                                                         Products.findOneAndUpdate({name : product_name},{$set : {quantity : remainder}})
+                                                                 .then((updat) => {
+                                                             console.log('not found but updated successfully!')
+                                                                  })
+                                                                 .catch((erss) => {
+                                                             console.log(erss)
+                                                                  })
+                                                        }                                          
+                                                        console.log(remainder, product_name)
 
                                             }
                                         }
+                                            ---*/  
+                                        
+                                            var decode = req.body.info;
+                                            decode.forEach(dec => {
+                                                const product_id = dec.Id;
+                                                const product_name = dec.Item;
+                                                const product_quantity = dec.Quantity;
+
+                                                answer.forEach(ans => {
+                                                    const prodname = ans.name;
+                                                    const prodqty = ans.quantity;
+                                                    const prodId = ans._id;
+
+                                                    console.log(product_name, product_quantity)
+                                                    if(prodname === product_name){
+                                                        var remainder = prodqty - product_quantity;
+                                                        console.log('true')
+                                                        Products.findOneAndUpdate({name : product_name},{$set : {quantity : remainder}})
+                                                                .then((updat) => {
+                                                            console.log('found and updated successfully')
+                                                                 })
+                                                                .catch((erss) => {
+                                                            console.log(erss)
+                                                                 })
+
+                                                       }else{
+                                                        
+                                                        console.log('false')
+                                                        Products.findOneAndUpdate({name : product_name},{$set : {quantity : prodqty}})
+                                                                .then((updat) => {
+                                                            console.log('not found but updated successfully!')
+                                                                 })
+                                                                .catch((erss) => {
+                                                            console.log(erss)
+                                                                 })
+                                                       }         
+
+                                                })  
+                                            })
 
                                         })
                                         .then((ers) => {
@@ -1649,36 +1695,6 @@ const chequereport = async(req, res) => {
             invoices.find({
                       staffId : staffID,
                       method: 'cheque'
-                       })
-                    .then((result) => {
-                        return res.json(result)
-                    })
-                    .catch((error) => {
-                        return res.json({
-                            error : error
-                        })
-                    })
-
-        })
-
-    }catch(err){
-        return res.json({
-            error : err
-        })
-    }
-}
-
-const POSreport = async(req, res) => {
-    try {
-
-        const {token} = req.cookies;
-
-        jwt.verify(token , process.env.JWT_SECRET, {}, (err, user) => {
-            const staffID = user.userdata._id;
-
-            invoices.find({
-                      staffId : staffID,
-                      method: 'POS'
                        })
                     .then((result) => {
                         return res.json(result)
@@ -2400,7 +2416,6 @@ module.exports = {
     userreports,
     cashreport,
     transferReport,
-    POSreport,
     chequereport,
     userCreditors,
     userbalance,

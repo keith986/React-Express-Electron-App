@@ -1,11 +1,25 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from './../../context/userContext';
 
 const Login = () => {
 
+   const {user} = useContext(UserContext);
    const navigate = useNavigate();
+   
+   if(!!user && user.accounttype === 'Admin'){
+        navigate('/adminpage')
+   }
+
+   if(!!user && user.accounttype === 'staff'){
+      navigate('/userpage')
+   }
+
+   if(!!user && !user){
+      navigate('/login') 
+   }
 
    const [login, setLogin] = useState({
       username: '',

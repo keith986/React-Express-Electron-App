@@ -97,12 +97,12 @@ const Creditors = () => {
       <div className='col-divide'>
        <p>Search : </p>
       <input type='search' className='search' placeholder='Search By INVOICE NO.' onChange={handlefilter}/>
-    </div>
+      </div>
       </div>
 
       <div className='row'>
         <div className='col'>
-            <table className='table' id='tablexll'>
+            <table className='table' id='tablexll' style={{background: "transparent", border: "none"}}>
                 <tr>
                     <th>INVOICE NO.</th>
                     <th>CUSTOMER NAME</th>

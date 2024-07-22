@@ -101,7 +101,7 @@ const Orders = () => {
           <i className='bi bi-receipt'></i>
         </div>
         
-        <div className='modal-body' id='receipt' >
+        <div className='receipt-modal-body' id='receipt' >
         <Barcode value={!!rptId && rptId} code="CODE128" height="100px"/>
             <h2>POStore</h2>
             <h4>{!!user && user.companyname}</h4>

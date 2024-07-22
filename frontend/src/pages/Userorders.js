@@ -4,7 +4,6 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode.react'
-import Barcode from 'react-barcode';
 
 const Orders = () => {
 
@@ -13,7 +12,7 @@ const Orders = () => {
   const [isreceipt, setIsReceipt] = useState(null)
   const [filterData, setFilterData] = useState(null)
   const [adminprof, setAdminProf] = useState(null)
-  const [rptId, setrptId] = useState(null)
+  
 
   const handlefilter = (event) => {
     const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
@@ -22,7 +21,6 @@ const Orders = () => {
 
   const handleClick = (e) => {
     setIsModal(true)
-    setrptId(e.target.id)
     axios.post('/receipts', {receiptId : e.target.id})
          .then((result) => {
            setIsReceipt(result.data)
@@ -65,7 +63,7 @@ const Orders = () => {
           docPDF.save('receipt.pdf');
       },
   x: 15,
-  y: 15,
+  y : 15,
   width: 170,
   windowWidth: 650
   })
@@ -80,16 +78,14 @@ const Orders = () => {
     <div className='row'>
     
     <div className={`modal ${isModal ? "open" : ""}`} id='open'>
-        <div className='modal-dialog'>
-        
-          <div className='modal-content'>
+
             <div className='modal-header'>
+            <button type='button'  onClick={handleClose} style={{background : "gray" , width : "10%", borderRadius : "10px", outline : "none", padding : "5px"}}>Back</button>
               <h3>Receipt</h3>
-              <i className='bi bi-receipt'></i>
+              <button type='button'  onClick={handleDownload} style={{background : "green" , width : "20%", borderRadius : "10px", outline : "none", padding : "5px"}}>Download</button>   
             </div>
             
-            <div className='modal-body' id='receipt'>
-            <Barcode value={!!rptId && rptId} code="CODE128" height="100px"/>
+            <div className='receipt-modal-body' id='receipt' style={{fontSize: "10px"}}>
                 <h2>POStore</h2>
                 <h4>{!!adminprof && adminprof.map((res) => res.companyname)}</h4>
         
@@ -104,7 +100,7 @@ const Orders = () => {
                 <p>Time : {!!isreceipt && isreceipt.map((inv) => {return inv.time})}</p>
                 <br/>
                 <div style={{ alignItems: 'center', alignSelf: 'center'}}>
-              <table className='table' id='receipt-tbl' style={{width: '200px'}}>
+              <table className='table' id='receipt-tbl' style={{background: "transparent", border: "none", maxWidth : "150px", fontSize: "10px"}}>
                     <tr>
                       <th>ITEM</th>
                       <th>QTY</th>
@@ -116,10 +112,10 @@ const Orders = () => {
                       var itms = inv_item.map((itm) => {
                         
                         return (
-                          <tr>
-                           <td>{itm.Item}</td>
-                           <td>{itm.Quantity}</td>
-                           <td>Ksh.{itm.Total}</td>
+                          <tr> 
+                           <td style={{fontSize : "10px"}}>{itm.Item}</td>
+                           <td style={{fontSize : "10px"}}>{itm.Quantity}</td>
+                           <td style={{fontSize : "10px"}}>Ksh.{itm.Total}</td>
                           </tr>
                               );
 
@@ -151,16 +147,7 @@ const Orders = () => {
                  <p><strong>&copy; Copyright POStore</strong></p>
              <QRCode value={'© Copyright POStore ' + new Date().getFullYear() + ". Download Receipt from our App." }/>
             </div>
-            
-            <div className='modal-footer' id='modal-footer'>
-            <span>.</span>
-            <button type='button' className='back' onClick={handleClose}>Back</button>
-            <button type='button' className='send' onClick={handleDownload}>Download</button>
-            </div>
 
-          </div>
-  
-        </div>
     </div>
 
     <div className='col-divide'>
@@ -171,7 +158,7 @@ const Orders = () => {
 
       <div className='row'>
       <div className='col'>
-            <table className='table' id='tablext'>
+            <table className='table' id='tablext' style={{background: "transparent", border: "none"}}>
               <tr>
                 <th>ORDER ID</th>
                 <th>CUSTOMER</th>

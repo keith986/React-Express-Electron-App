@@ -9,7 +9,6 @@ const Report = () => {
 const [isreport, setIsReport] = useState(null)
 const [iscash, setIsCash] = useState(null)
 const [istransfer, setIsTransfer] = useState(null)
-const [isPOS, setIsPOS] = useState(null)
 const [ischeque, setIsCheque] = useState(null)
 const [filterData, setFilterData] = useState(null)
 const [filterDatas, setFilterDatas] = useState(null)
@@ -73,24 +72,6 @@ useEffect(() => {
 }, [istransfer])
 
 useEffect(() => {
-  axios.get('/POSreport')
-       .then((result) => {
-         setIsPOS(result.data)
-        })
-       .catch((err) => {
-        toast.error(err)
-        })
-}, [])
-
-useEffect(() => {
-  var sum = 0;
-  $('.poss').each(function(){
-   sum += parseFloat($(this).text());  
-    });
-   $('#posp').html(sum + '.00');
-}, [isPOS])
-
-useEffect(() => {
   axios.get('/chequereport')
        .then((result) => {
          setIsCheque(result.data)
@@ -132,16 +113,7 @@ useEffect(() => {
               })}
            KES <span className='changes' id='transferp'></span>
         </div>
-        <div className='col-md-4 POSpay'>
-            <i className='bi bi-credit-card-2-front-fill'></i>
-            <h3>POS Payment</h3>
-            {!!isPOS && isPOS.map((cas) => {
-                return (
-                    <span className='poss' style={{display: 'none'}}>{cas.paid}</span>         
-                       );
-              })}
-           KES <span className='changes' id='posp'></span>
-        </div>
+      
         <div className='col-md-4 chequepay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
             <h3>Cheque Payment</h3>
@@ -162,7 +134,6 @@ useEffect(() => {
             <option value='cash'>Cash Payment</option>
             <option value='transfer'>Transfer Payment</option>
             <option value='cheque'>Cheque Payment</option>
-            <option value='POS'>POS Payment</option>
         </select>
     
       </div>
@@ -170,7 +141,7 @@ useEffect(() => {
       <div className='row'>
         <div className='col'>
             
-            <table className='table' id='tablexlg'>
+            <table className='table' id='tablexlg' style={{background: "transparent", border: "none"}}>
                 <tr>
                     <th>ORDERID</th>
                     <th>CUSTOMER</th>

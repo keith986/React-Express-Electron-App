@@ -190,18 +190,19 @@ const POS = () => {
     <div className='container-fluid'>
     <h2>CART</h2>
    <form onSubmit={submitChange}>
+   <div className='cartright'>
       <div className='row'>
-        <h5 className='name'>Customer Name <i>*Optional [Required for credit Sales]*</i></h5>
-        <h5 className='name'>Customer Email <i>*Optional [Required for credit Sales]*</i></h5>
+        <h5 className='name'>Customer Name <i>*Optional*</i></h5>
+        <h5 className='name'>Customer Email <i>*Optional*</i></h5>
       </div>
       <div className='row'>
         <input type='text' className='names-input' name='customername' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
         <input type='text' className='names-input' name='customeremail' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
       </div>
         <div className='row'>
-        <h5 className='name'>Customer Phone <i>*Optional [Required for credit Sales]*</i></h5>
-        <h5>select product</h5>
-        </div>
+        <h5 className='name'>Customer Phone <i>*Optional*</i></h5>
+        <h5 style={{marginTop : '10px'}}>Select Product</h5>
+      </div>
         <div className='row'>
         <input type='number' className='names-input' name='customerphone' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
         <select className='names-input' id='selectvalue'>
@@ -214,14 +215,15 @@ const POS = () => {
               }
         </select>
       </div>
-      <div className='row'>
-        <button type='button' className='names-input' id='add-cart' onClick={handleClick}>Add Cart</button>
-      </div>
-     
+        <div className='row'>
+        <i className='bi bi-plus-circle' id="add-to-cart" title="add product" onClick={handleClick} style={{fontSize : "30px", cursor: "pointer"}}></i>
+      </div>  
       <div className='row'>
       <div className='col'>
-        <table className='table' id='cart-table'>
+        <table className='table' id='cart-table' style={{background: "transparent", border: "none"}}>
             <tr>
+                <th>Id</th>
+                <th>Image</th>
                 <th>Item</th>
                 <th>Quantity</th>
                 <th>Price</th>
@@ -238,12 +240,14 @@ const POS = () => {
                     
                   return (
                           <tr className='tr-row' id={itm._id}>
+                          <td style={{fontSize : "5px"}}>{itm._id}</td>
+                          <td><img src={itm.prd_img} alt='product_image' width="50px" height="50px"  style={{borderRadius: "50%"}}/></td>      
                               <td>{itm.name}</td>
                               <td className='itm-qty' id={itm._id} contentEditable={true} onInput={quantityChange}>1</td>
                               <td id={`selling-${itm._id}`}>{itm.sellingprice}</td>
                               <td id={`ttl-${itm._id}`} className='ttl'>{itm.sellingprice}</td>
                               <td>
-                                <i className='bi bi-trash-fill' id={data._id} style={{color: 'red', cursor : 'pointer'}} onClick={handleDelete}></i>
+                                <i className='bi bi-trash-fill' title='delete' id={data._id} style={{color: 'red', cursor : 'pointer'}} onClick={handleDelete}></i>
                               </td>
                           </tr>
                          );
@@ -258,9 +262,10 @@ const POS = () => {
         <button className='deleteall' onClick={handleDeleteMany}><i className='bi bi-trash-fill'></i> DELETE ALL</button>
         </div>
       </div>
+    </div>
+    <div className='cash-out'>
       <div className='row' id='jump'>
-        <h4>Grand Total</h4>
-        <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly/>
+       KES. <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly style={{border: "none", outline : "none", background : "transparent", fontSize : "30px"}}/>
       </div>
       <div className='row' id='jump'>
         <h4>Discount (%)</h4>
@@ -270,7 +275,6 @@ const POS = () => {
         <h4>Payment Method *</h4>
         <select className='names-input' name='payment' onChange={handleChange}>
             <option >Choose</option>
-            <option value='POS'>POS payment</option>
             <option value='transfer'>Transfer payment</option>
             <option value='cash'>Cash payment</option>
             <option value='cheque'>Cheque payment</option>
@@ -285,8 +289,9 @@ const POS = () => {
         <input type='number' className='names-input' id='amount' name='paid' placeholder='0.00' onChange={handleChange} required/>
       </div>
       <div className='row' id='jum-down'>
-        <button type='submit' className='generate'>GENERATE INVOICE</button>
+        <button type='submit' className='generate' style={{position: "absolute", bottom : "5%", width : "90%", borderRadius : "5px", background : "green"}}>PAY OUT</button>
       </div>
+    </div>
       </form>
     </div>
   )

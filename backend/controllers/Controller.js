@@ -1423,53 +1423,9 @@ const invoice = async (req, res) => {
 
                                 
                                 Products.find({
-                                    adminId: adminID
+                                          adminId: adminID
                                              })
                                         .then((answer) => {
-
-                                            /*---
-                                        for(const prod of answer){
-                                           const prodname = prod.name;
-                                            const prodqty = prod.quantity;
-                                            const prodId = prod._id;
-                                                
-                                            var decode = req.body.info;
-
-                                            for(const prop of decode){
-                                                    //const product_id = prop.Id;
-                                                    const product_name = prop.Item;
-                                                    const product_quantity = prop.Quantity;
-                                                    console.log(prodId)
-
-                                                    var remainder = 0;
-
-                                                        if(prodname === product_name){
-                                                         remainder = prodqty - product_quantity;
-                                                         console.log('true')
-                                                         Products.findOneAndUpdate({name : product_name},{$set : {quantity : remainder}})
-                                                                 .then((updat) => {
-                                                             console.log('found and updated successfully')
-                                                                  })
-                                                                 .catch((erss) => {
-                                                             console.log(erss)
-                                                                  })
-
-                                                        }else{
-                                                         remainder = prodqty;
-                                                         console.log('false')
-                                                         Products.findOneAndUpdate({name : product_name},{$set : {quantity : remainder}})
-                                                                 .then((updat) => {
-                                                             console.log('not found but updated successfully!')
-                                                                  })
-                                                                 .catch((erss) => {
-                                                             console.log(erss)
-                                                                  })
-                                                        }                                          
-                                                        console.log(remainder, product_name)
-
-                                            }
-                                        }
-                                            ---*/  
                                         
                                             var decode = req.body.info;
                                             decode.forEach(dec => {
@@ -1481,13 +1437,14 @@ const invoice = async (req, res) => {
                                                     const product_name = dec.Item;
                                                     const product_quantity = dec.Quantity;
 
-                                                    console.log(product_name, product_quantity)
+                                                    
                                                     if(prodname === product_name){
                                                         var remainder = prodqty - product_quantity;
-                                                        console.log('true')
+                                                       
                                                         Products.findOneAndUpdate({name : product_name},{$set : {quantity : remainder}})
                                                                 .then((updat) => {
                                                             console.log('found and updated successfully')
+                    
                                                                  })
                                                                 .catch((erss) => {
                                                             console.log(erss)
@@ -1502,12 +1459,10 @@ const invoice = async (req, res) => {
                                         .then((ers) => {
                                             console.log(ers)
                                         })
-                                  
-
-
-                         return res.json({
-                                success : resultes
-                            })
+               
+                                        return res.json({
+                                            success : resultes
+                                        })
                     })
                     .catch((errors) => {
                         console.log(errors) 

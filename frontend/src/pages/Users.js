@@ -13,7 +13,7 @@ const Users = () => {
       password : '',
       role : '',
       warehouse: ''
-    })
+    })  
     const [storedata, setStoreData] = useState(null)
     const [usersDatas, setUsersDatas] = useState(null)
     const [isEditOpen, setIsEditOpen] = useState(false)
@@ -99,7 +99,6 @@ axios.post('/deleteuser', {deleting : event.target.id})
             })
             .catch(err => toast.error(err))
   }, [usersDatas])
-
 
   const submitUser = async (e) => {
     e.preventDefault();
@@ -229,6 +228,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
                 <th>Email</th>
                 <th>Role</th>
                 <th>Store</th>
+                <th>Logged out @</th>
                 <th>Actions</th>
               </tr>
                 {!!usersDatas && usersDatas.map((user) => {
@@ -240,6 +240,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
                             <td>{user.useremail}</td>
                             <td>{user.role}</td>
                             <td>{user.warehouse}</td>
+                            <td>{user.date}, {user.time}</td>
                             <td>
                             <i className='bi bi-pencil-fill tr-icon' id={user._id} onClick={handleEditOpener}></i>
                             <i className='bi bi-trash-fill tr-icon' id={user._id} onClick={handleDelete}></i>

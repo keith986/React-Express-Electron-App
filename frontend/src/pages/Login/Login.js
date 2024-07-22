@@ -55,7 +55,7 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={submitChange}>
+   <form onSubmit={submitChange}>
     <div className="container">
     <h1>Login Back!</h1>
     <i className='bi bi-person-circle'></i>
@@ -83,7 +83,7 @@ const Login = () => {
     <div className='row'>
         <button type='submit' className='generate'>Login</button>
     </div>
-</div>
+    </div>
    </form>
   )
 }

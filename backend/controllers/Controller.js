@@ -126,8 +126,6 @@ const signup = async(req, res) => {
 const login = async (req, res) => {
     try{
         
-        const {token} = req.cookies;
-
         const userlogins = req.body.login;
         const user_name = userlogins.username;
         const usernames = user_name.toString();
@@ -1229,21 +1227,35 @@ const adminlogout = async (req, res) => {
 
 const addcart = async (req, res) => {
     try {
-
+        const prodID = req.body.isselected;
+        console.log(prodID)
         const {token} = req.cookies;
+        
+        if(prodID === ''){
+            return res.json({
+                error : "No product selected!"
+            })
+        }
+
+        const prod_row = await rows.find({productId : prodID});
+
+        if(prod_row.length > 0){
+            return res.json({
+                        error : "Product already added to cart. Edit the quantity!"
+                           })
+        }
 
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            const prodID = req.body.isselected;
             const staffID  = user.userdata._id;
-            console.log(prodID)
-
+               
             Products.find({
                     _id : prodID
                      })
                     .then((result) => {
                         const rows_data = rows({
                             staffId : staffID,
-                            item : result
+                            item : result,
+                            productId : prodID
                         })
 
                         rows_data.save()

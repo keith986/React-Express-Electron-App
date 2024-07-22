@@ -10,10 +10,10 @@ const RowSchema = new Schema({
         type: Array,
         require
     },
-    quantity : {
-        type :  String,
-        default: 0
-    }
+    productId : {
+       type : String,
+       require
+    },
 },{timestamps: true})
 
 const rows = mongoose.model('rows', RowSchema)

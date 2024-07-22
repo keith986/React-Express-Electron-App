@@ -30,16 +30,20 @@ const POS = () => {
 
   const handleClick = () => {
     const isselected = document.getElementById('selectvalue').value;
+  
     axios.post('/addcart', {isselected})
-    .then((result) => {
-     if(result.data.success){
-      toast.success('Added to cart')
-     }
-     })
-    .catch((error) => {
-        toast.error(error)
-     }) 
-    
+         .then((result) => {
+             if(result.data.success){
+                toast.success('Added to cart')
+               }
+            if(result.data.error){
+              toast.error(result.data.error)
+            }
+          })
+         .catch((error) => {
+               toast.error(error)
+          }) 
+  
   }
 
   useEffect( () => {
@@ -184,13 +188,13 @@ const POS = () => {
          .catch(error => {
           toast.error(error)
          })
-    }
+  }
 
   return (
     <div className='container-fluid'>
     <h2>CART</h2>
-   <form onSubmit={submitChange}>
-   <div className='cartright'>
+    <form onSubmit={submitChange}>
+    <div className='cartright'>
       <div className='row'>
         <h5 className='name'>Customer Name <i>*Optional*</i></h5>
         <h5 className='name'>Customer Email <i>*Optional*</i></h5>
@@ -206,7 +210,7 @@ const POS = () => {
         <div className='row'>
         <input type='number' className='names-input' name='customerphone' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
         <select className='names-input' id='selectvalue'>
-            <option>Choose..</option>
+           
             {!!isProd && isProd.map((stri) => {
                 return (
                     <option value={`${stri._id}`}>{stri.name} [{stri.categories}]</option>
@@ -230,12 +234,10 @@ const POS = () => {
                 <th>Total</th>
                 <th>Action</th>
             </tr>
-            <tr className='tr-row' id='mytable'>
-            </tr>
+            
                 {!!iscart && iscart.map((data) => {
+                  var items = data.item;
                   
-                 var items = data.item;
-
                   var detail = items.map((itm) => {
                     
                   return (
@@ -292,9 +294,10 @@ const POS = () => {
         <button type='submit' className='generate' style={{position: "absolute", bottom : "5%", width : "90%", borderRadius : "5px", background : "green"}}>PAY OUT</button>
       </div>
     </div>
-      </form>
+    </form>
     </div>
-  )
+  );
+
 }
 
 export default POS

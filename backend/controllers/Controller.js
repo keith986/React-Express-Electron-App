@@ -1473,14 +1473,13 @@ const invoice = async (req, res) => {
                                         
                                             var decode = req.body.info;
                                             decode.forEach(dec => {
-                                                const product_id = dec.Id;
-                                                const product_name = dec.Item;
-                                                const product_quantity = dec.Quantity;
 
                                                 answer.forEach(ans => {
                                                     const prodname = ans.name;
                                                     const prodqty = ans.quantity;
-                                                    const prodId = ans._id;
+                                                   
+                                                    const product_name = dec.Item;
+                                                    const product_quantity = dec.Quantity;
 
                                                     console.log(product_name, product_quantity)
                                                     if(prodname === product_name){
@@ -1494,17 +1493,7 @@ const invoice = async (req, res) => {
                                                             console.log(erss)
                                                                  })
 
-                                                       }else{
-                                                        
-                                                        console.log('false')
-                                                        Products.findOneAndUpdate({name : product_name},{$set : {quantity : prodqty}})
-                                                                .then((updat) => {
-                                                            console.log('not found but updated successfully!')
-                                                                 })
-                                                                .catch((erss) => {
-                                                            console.log(erss)
-                                                                 })
-                                                       }         
+                                                       }       
 
                                                 })  
                                             })

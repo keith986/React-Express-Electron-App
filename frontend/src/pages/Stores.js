@@ -105,7 +105,6 @@ axios.post('/deletestore', {deleting : event.target.id})
   useEffect(()=>{
        axios.get('/storeData')
             .then((result) => {
-              console.log(result)
               setUseData(result.data)
               setFilterData(result.data)
             })

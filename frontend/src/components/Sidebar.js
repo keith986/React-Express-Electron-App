@@ -1,8 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Sidebar.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { UserContext } from '../context/userContext'
 import { useNavigate } from 'react-router-dom';
+import $ from 'jquery'
+import { io } from "socket.io-client";
 
 const Sidebar = () => {
 
@@ -15,6 +17,20 @@ const Sidebar = () => {
 
     const [navbarCollapse, setNavCollapse] = useState(false);
 
+    const handleClick = () => {
+      $('.notification-content').animate({
+        width : "toggle"
+      })
+    }
+
+    useEffect(() => {
+      io('http://localhost:4000', {
+        auth : {
+          token : !!user && user._id
+        }
+      })
+    },[user])
+ 
   return (
     <div className={`container`}>
       <nav className='nav'>
@@ -22,6 +38,12 @@ const Sidebar = () => {
       <h2>POStore</h2>
       <i className='bi bi-justify' onClick={e => setNavCollapse(!navbarCollapse)}></i>
       </div>
+      
+      <span>
+      <i className='bi bi-bell-fill' style={{fontSize : '30px', cursor : 'pointer'}} onClick={handleClick}></i>
+      <span id='notification-count'>0</span>
+      </span>
+
       <div className='user-profile'>
       {!!user && (<h3>Hi {user.username}</h3>)}
       <span>{!!user && user.accounttype}</span>
@@ -75,6 +97,11 @@ const Sidebar = () => {
           <h3>Settings</h3>
         </a>
       </div>
+      </div>
+
+      <div className='notification-content'>
+        <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red'}}></i>
+        <button id='mark-read'>Mark All as Read</button>
       </div>
 
     </div>

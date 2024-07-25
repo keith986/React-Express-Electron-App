@@ -151,6 +151,7 @@ body{
 	bottom: 0;
 	width: 100%;
 	left: 0;
+	height: 100vh;
 	backdrop-filter: blur(20px);
 	--webkit-filter: blur(20px);
 }
@@ -586,8 +587,6 @@ font-size: 20px;
 	min-height: 100vh;
 }
 
-
-
 #edit-input{
 font-size: 2rem;
 width: 100px;
@@ -660,8 +659,21 @@ width: 250px;
 
 #open {
 	top : 0;
-	bottom : 50%;
+	bottom : 0;
+	z-index: 600;
+}
 
+#advance {
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #000;
+	 background: #000;
+	 color : #fff;
+	 cursor : pointer;
+}
+
+#on {
+	display: none;
 }
 
 /*query*/

@@ -3,7 +3,7 @@
     background-color: black;
     color: #fff;
     display: flex;
-    justify-content: space-between;
+   justify-content: space-between;
     padding : 10px 20px;
     font-family: Tahoma;
 }
@@ -28,7 +28,7 @@
 .user-profile{
     align-items: center;
     gap: 20px;
-    text-align: center;
+    text-align: end;
 }
 
 /* sidebar */
@@ -52,13 +52,25 @@
 }
 
 .sidebar-container{
-    background-color: black;
+    background-color: #000;
     color: #fff;
     height: calc(100vh - 70px);
     width: 220px;
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
+}
+
+.notification-content{
+    background-color: #254336;
+    color: #fff;
+    height: calc(100vh - 70px);
+    width: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    right: 0;
+    display: none;
 }
 
 .sidebar-container::-webkit-scrollbar{
@@ -75,6 +87,32 @@
     background-color: #e9d8ff;;
     color: #000;
     cursor: pointer;
+}
+
+#notification-count {
+    min-width : 20px;
+    min-height: 20px;
+    padding : 2px;
+    background-color: #000;
+    border: 1px solid #fff;
+    border-radius: 50px;
+    position: absolute;
+    right : 45.8%;
+    top : 1%;
+    color : #fff;
+    text-align: center;
+}
+
+#mark-read {
+    position: absolute;
+    bottom : 0;
+    width: 100%;
+    left: 0;
+    padding: 5px;
+    background-color: black;
+    border: none;
+    outline: none;
+    color : #fff;
 }
 
 /*@media query*/

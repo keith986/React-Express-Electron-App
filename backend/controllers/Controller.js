@@ -7,6 +7,7 @@ const Categories = require('../models/categoryModel')
 const Products = require('../models/productModel')
 const rows = require('../models/rowModel')
 const invoices = require('../models/invoiceModel')
+const Setting = require('../models/settingsModel')
 
 const preview = async(req, res) => {
     try{
@@ -1966,9 +1967,7 @@ const totalinvoices = async (req, res) => {
             
             var adminID = user.userdata._id;
 
-             invoices.find({
-                adminId: adminID
-                          })
+             invoices.find({adminId: adminID}).sort({createdAt : -1})
                      .then((result) => {
                         return res.json(result)
                           })
@@ -2200,10 +2199,8 @@ const allcashreport = async (req, res) => {
                   adminId : adminID,
                   method: 'cash'
                      })
-                 .then((result) => {
-        
+                 .then((result) => {      
                          return res.json(result)
- 
                  })
                  .catch((eror) => { 
                      return res.json({
@@ -2336,7 +2333,103 @@ const allcashreport = async (req, res) => {
     }
  }
 
-module.exports = {
+ const advanceSettings = async (req, res) => {
+    try {
+       
+        const {token} = req.cookies;
+     
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminId = user.userdata._id;
+
+            //update settings if exist
+            const exi_st = Setting.findOne({adminId : adminId})
+                                  .then((resultss) => {
+                                    if(resultss !== null){
+                                        Setting.findOneAndUpdate({adminId : adminId}, {
+                                            adminId : adminId,
+                                            minimumqty : req.body.advanceChange.minimumqty.toString(),
+                                            minimumqty : req.body.advanceChange.minimumqty.toString(),
+                                            targetamt : req.body.advanceChange.targetamt.toString(),
+                                            date : req.body.advanceChange.date.toString(),
+                                            month : req.body.advanceChange.month.toString(),
+                                            year : req.body.advanceChange.year.toString(),
+                                            toggle: req.body.istoggled, 
+                                                     })
+                                                   .then((resu) => {
+                                                        return res.json({
+                                                                success : 'Successfully updated settings'
+                                                                       })  
+                                                     })
+                                                   .catch((errr) => {
+                                                       return res.json({
+                                                                   error : errr
+                                                    })
+                                                    })
+                                    }else{
+                                        const set_ings = Setting({
+                                            adminId : adminId,
+                                            minimumqty : req.body.advanceChange.minimumqty.toString(),
+                                            minimumqty : req.body.advanceChange.minimumqty.toString(),
+                                            targetamt : req.body.advanceChange.targetamt.toString(),
+                                            date : req.body.advanceChange.date.toString(),
+                                            month : req.body.advanceChange.month.toString(),
+                                            year : req.body.advanceChange.year.toString(),
+                                            toggle : req.body.istoggled,
+                                                                      })
+                            
+                                              set_ings.save()
+                                                      .then((result) => {
+                                                    
+                                                    return res.json({
+                                                        success : 'Settings has been changed!'
+                                                    })
+                                                       })
+                                                      .catch((err) => {
+                                                    console.log(err)
+                                                    return res.json({
+                                                        error : err.message
+                                                    })
+                                                       })
+                                    }
+                                  })
+
+        })
+
+    }catch(err){
+        return res.json({
+            error : err
+        })
+    }
+ }
+
+ const setTings = async (req, res) => {
+    try {         
+        
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID  = user.userdata._id;
+
+            Setting.find({adminId : adminID})
+                   .then((result) => {
+                         return res.json(result)
+                    })
+                   .catch((errs) => {
+                         return res.json({
+                        error : errs
+                                        })
+                    })
+
+        })
+
+        }catch(err){
+           return res.json({
+            error : err
+           })
+        }
+ }
+
+ module.exports = {
     signup,
     preview,
     login,
@@ -2392,5 +2485,7 @@ module.exports = {
     alltransferReport,
     allPOSreport,
     allchequereport,
-    adminDetail
-}
+    adminDetail,
+    advanceSettings,
+    setTings
+ } 

@@ -228,7 +228,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
                 <th>Email</th>
                 <th>Role</th>
                 <th>Store</th>
-                <th>Logged out @</th>
+                <th>Last Logged out</th>
                 <th>Actions</th>
               </tr>
                 {!!usersDatas && usersDatas.map((user) => {

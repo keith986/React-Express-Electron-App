@@ -1,9 +1,14 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import $ from 'jquery'
+import { io } from "socket.io-client";
+import { UserContext } from '../context/userContext'
+
 
 const POS = () => {
+  const {user} = useContext(UserContext);
+
   const [isProd, setIsProd] = useState(null)
   const [iscart, setIsCart] = useState(null)
   const [isDiscount, setIsDiscount] = useState(null)
@@ -14,6 +19,7 @@ const POS = () => {
     payment : '',
     paid : ''
   })
+  const [socket, setSocket] = useState(null)
 
   useEffect(() => {
     axios.get('/getproducts')
@@ -125,8 +131,17 @@ const POS = () => {
     setIsInvoice({...isInvoice, [e.target.name] : [e.target.value]})
   }
 
+  useEffect(() => {
+
+    setSocket(io('http://localhost:4000', {
+      auth : {
+        token : !!user && user._id
+      }
+    }))
+
+  },[user])
+
   const submitChange = async (e) => {
-    
     e.preventDefault();
 
     var grandtotal = $('#grand-total').val();
@@ -180,6 +195,7 @@ const POS = () => {
          .then((result) => {
            if(result.data.success){
             toast.success('Invoice Successfully Generated!');
+            socket.emit("newnotification", {data : 'new invoice'})
            }
            if(result.data.error){
             toast.error(result.data.error)
@@ -189,6 +205,7 @@ const POS = () => {
           toast.error(error)
          })
   }
+
 
   return (
     <div className='container-fluid'>

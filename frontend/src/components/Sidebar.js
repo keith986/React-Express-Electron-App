@@ -16,6 +16,7 @@ const Sidebar = () => {
   }
 
     const [navbarCollapse, setNavCollapse] = useState(false);
+    const [socket, setSocket] = useState(null)
 
     const handleClick = () => {
       $('.notification-content').animate({
@@ -24,12 +25,16 @@ const Sidebar = () => {
     }
 
     useEffect(() => {
-      io('http://localhost:4000', {
+      setSocket(io('http://localhost:4000', {
         auth : {
           token : !!user && user._id
         }
-      })
+      }))
     },[user])
+
+  useEffect(() => {
+    socket.emit('newnot')
+  },[socket])
  
   return (
     <div className={`container`}>

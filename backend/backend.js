@@ -30,7 +30,10 @@ io.on('connection', async (socket) => {
    
      console.log('connected user' + socket.handshake.auth.token);
      var userId = socket.handshake.auth.token;  
-
+     
+     socket.on('newnotification', async (data) => {
+            console.log(data);
+     })
 
     socket.on('disconnect', async () => {
         console.log('disconnected user' + socket.handshake.auth.token)

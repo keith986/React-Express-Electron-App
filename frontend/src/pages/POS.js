@@ -195,7 +195,7 @@ const POS = () => {
          .then((result) => {
            if(result.data.success){
             toast.success('Invoice Successfully Generated!');
-            socket.emit("newnotification", {data : 'new invoice'})
+            socket.emit("newnotification", {msg : 'new invoice', adminId : !!user && user.adminId})
            }
            if(result.data.error){
             toast.error(result.data.error)

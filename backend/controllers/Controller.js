@@ -2169,7 +2169,8 @@ const allreceipts = async (req, res) => {
             invoices.findByIdAndDelete(receiptID)
                     .then((result) => {
                         return res.json({
-                            success: 'success'
+                            success: 'success',
+                            adminid : user.userdata.adminId
                         })
                      })
                     .catch((error) => {

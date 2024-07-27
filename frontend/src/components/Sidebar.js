@@ -32,9 +32,7 @@ const Sidebar = () => {
       }))
     },[user])
 
-  useEffect(() => {
-    socket.emit('newnot')
-  },[socket])
+  
  
   return (
     <div className={`container`}>

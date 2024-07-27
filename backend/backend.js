@@ -32,7 +32,7 @@ io.on('connection', async (socket) => {
      var userId = socket.handshake.auth.token;  
      
      socket.on('newnotification', async (data) => {
-            console.log(data);
+        socket.emit('NewInvoice', {data: 'New Invoice', adminId : data.adminId})
      })
 
     socket.on('disconnect', async () => {

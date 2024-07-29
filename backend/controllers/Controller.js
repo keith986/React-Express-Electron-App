@@ -1382,6 +1382,12 @@ const invoice = async (req, res) => {
             })
         }
 
+        if(!req.body.info.length){
+            return res.json({
+                error : 'No item was selected!'
+            })  
+        }
+
         var random = 1000000;
 
         var mathran = Math.floor(Math.random() * random);

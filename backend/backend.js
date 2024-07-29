@@ -32,11 +32,12 @@ io.on('connection', async (socket) => {
      var userId = socket.handshake.auth.token;  
      
      socket.on('newnotification', async (data) => {
-        socket.emit('NewInvoice', {data: 'New Invoice', adminId : data.adminId})
+        console.log(data)
+        io.emit('NewInvoice', {msg: 'Generated Invoice', adminId : data.adminId, invoiceno : data.result.invoiceno, paid : data.result.paid, staffname : data.result.staffname});
      })
 
     socket.on('disconnect', async () => {
-        console.log('disconnected user' + socket.handshake.auth.token)
+        console.log('disconnected user' + socket.handshake.auth.token);
     })
  
 })

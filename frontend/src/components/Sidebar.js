@@ -11,28 +11,55 @@ const Sidebar = () => {
   const {user} = useContext(UserContext);
   const navigate = useNavigate();
 
-  if(!!user && user.accounttype !== 'Admin'){
+    if(!!user && user.accounttype !== 'Admin'){
     navigate('/login')
-  }
+    }
 
     const [navbarCollapse, setNavCollapse] = useState(false);
-    const [socket, setSocket] = useState(null)
 
     const handleClick = () => {
       $('.notification-content').animate({
         width : "toggle"
       })
     }
-
+     
     useEffect(() => {
-      setSocket(io('http://localhost:4000', {
+      const socket = io('http://localhost:4000', {
         auth : {
           token : !!user && user._id
         }
-      }))
-    },[user])
+      });
+  
+      socket.on('NewInvoice', (datas) => {
+        if(!!user && user._id === datas.adminId){
+          let msgs = `
+          <div class='msg-data'>
+                  <p className='msg-data'>
+                   ${datas.staffname}, ${datas.msg}  
+                  </p>
+                  <p className='msg-data'>
+                   invoice No. :: ${datas.invoiceno} 
+                  </p>
+                  <p className='msg-data'>
+                   paid :: ${datas.paid} 
+                  </p>
+          </div>
+                 `;
+          $('#notes').prepend(msgs);
 
- 
+        }
+      })
+
+      return () => socket.off("NewInvoice");
+    },[user]);
+
+  setInterval(()=>{
+      var len = $('.msg-data').length;
+      document.getElementById('notification-count').innerHTML = len;
+      
+  }, 500)
+
+
   return (
     <div className={`container`}>
       <nav className='nav'>
@@ -103,6 +130,7 @@ const Sidebar = () => {
 
       <div className='notification-content'>
         <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red'}}></i>
+        <div className='note-content' id='notes'></div>
         <button id='mark-read'>Mark All as Read</button>
       </div>
 

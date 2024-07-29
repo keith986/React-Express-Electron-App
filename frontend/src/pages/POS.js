@@ -193,9 +193,9 @@ const POS = () => {
 
     axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount, thee_time, thee_date, month, year})
          .then((result) => {
-           if(result.data.success){
+           if(result.data.success){  
+            socket.emit("newnotification", {msg : 'new invoice', adminId : !!user && user.adminId, result : result.data.success});
             toast.success('Invoice Successfully Generated!');
-            socket.emit("newnotification", {msg : 'new invoice', adminId : !!user && user.adminId})
            }
            if(result.data.error){
             toast.error(result.data.error)

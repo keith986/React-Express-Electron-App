@@ -8,6 +8,7 @@ const Products = require('../models/productModel')
 const rows = require('../models/rowModel')
 const invoices = require('../models/invoiceModel')
 const Setting = require('../models/settingsModel')
+const notifications = require('../models/notificationsModel')
 
 const preview = async(req, res) => {
     try{
@@ -1482,6 +1483,7 @@ const invoice = async (req, res) => {
                                         return res.json({
                                             success : resultes
                                         })
+
                     })
                     .catch((errors) => {
                         console.log(errors) 
@@ -2436,6 +2438,58 @@ const allcashreport = async (req, res) => {
         }
  }
 
+ const notify = async (req, res) => {
+    try {
+        
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID  = user.userdata._id;
+
+      notifications.find({adminId : adminID}).sort({createdAt : -1})
+                   .then((result) => {
+                         return res.json(result)
+                    })
+                   .catch((errs) => {
+                         return res.json({
+                        error : errs.message
+                                        })
+                    })
+
+        })  
+
+    }catch(err){
+        console.log(err.message)
+    }
+ }
+
+ const markRead = async (req, res) => {
+    try {
+        
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminID  = user.userdata._id;
+
+      notifications.findOneAndUpdate({adminId : adminID},{read : 'yes'})
+                   .then((result) => {
+                         return res.json({
+                            success : 'All Marked as Read'
+                         })
+                    })
+                   .catch((errs) => {
+                         return res.json({
+                        error : errs.message
+                                        })
+                    })
+
+        })  
+
+    }catch(err){
+        console.log(err.message)
+    }
+ }
+
  module.exports = {
     signup,
     preview,
@@ -2494,5 +2548,7 @@ const allcashreport = async (req, res) => {
     allchequereport,
     adminDetail,
     advanceSettings,
-    setTings
+    setTings,
+    notify,
+    markRead
  } 

@@ -5,6 +5,10 @@ import { UserContext } from '../context/userContext'
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery'
 import { io } from "socket.io-client";
+import addNotification from 'react-push-notification';
+import { Notifications } from 'react-push-notification';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const Sidebar = () => {
 
@@ -16,6 +20,7 @@ const Sidebar = () => {
     }
 
     const [navbarCollapse, setNavCollapse] = useState(false);
+    const [notify , setNotify] = useState('')
 
     const handleClick = () => {
       $('.notification-content').animate({
@@ -47,18 +52,61 @@ const Sidebar = () => {
                  `;
           $('#notes').prepend(msgs);
 
+          addNotification({
+            title: "Success",
+            subtitle: "New Invoice",
+            message: "Check out your inbox",
+            theme: "light",
+            closeButton: "X",
+            backgroundTop: "green",
+            backgroundBottom: "light",
+          });
         }
       })
 
       return () => socket.off("NewInvoice");
+
     },[user]);
 
-  setInterval(()=>{
+   setInterval(() => {
       var len = $('.msg-data').length;
-      document.getElementById('notification-count').innerHTML = len;
-      
-  }, 500)
+      document.getElementById('notification-count').innerHTML = len;   
+   }, 500);
 
+  useEffect(() => {
+    axios.post('/notify')
+         .then((result) => {
+          if(result.data.error){
+            toast.error(result.data.error)
+          }
+
+          setNotify(result.data);
+
+         })
+         .catch((err) => {
+          toast.error(err.message)
+         })
+  }, [user])
+
+  const handleRead = async (req, res) => {
+    try {
+      
+      axios.post('markasread')
+           .then((result) => {
+            if(result.data.error){
+              toast.error(result.data.error)
+            }
+
+            if(result.data.success){
+              toast.success(result.data.success)
+            }
+
+           })
+
+    }catch(err) {
+        toast.error(err.message)
+    }
+  }
 
   return (
     <div className={`container`}>
@@ -78,7 +126,7 @@ const Sidebar = () => {
       <span>{!!user && user.accounttype}</span>
       </div>
       </nav>
-
+      <Notifications />
       <div className='sidebar-content'>
       <div className={`sidebar-container ${navbarCollapse ? "navbarCollaps" : " "}`}>
         <a href='/adminpage' className='nav-option option1'>
@@ -130,8 +178,29 @@ const Sidebar = () => {
 
       <div className='notification-content'>
         <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red'}}></i>
-        <div className='note-content' id='notes'></div>
-        <button id='mark-read'>Mark All as Read</button>
+        <div className='note-content' id='notes'>
+          {!!notify && notify.map((not) => {
+           
+         //   if(not.read === 'no'){
+              
+          //  }
+
+            return (
+              <div className='msg-data'>
+                  <p>
+                   {not.staffname}, Generated Invoce
+                  </p>
+                  <p>
+                   invoice No. :: {not.invoiceno} 
+                  </p>
+                  <p>
+                   paid :: KES. {not.paid} 
+                  </p>
+              </div>
+            );
+          })}
+        </div>
+        <button id='mark-read' onClick={handleRead}>Mark All as Read</button>
       </div>
 
     </div>

@@ -1,10 +1,11 @@
-const express = require('express')
-const dbconn = require('../backend/configs/config')
-var cors = require('cors')
+const express = require('express');
+const dbconn = require('../backend/configs/config');
+var cors = require('cors');
 const {Server} = require('socket.io');
-const dotenv = require('dotenv')
-dotenv.config()
-require('colors')
+const dotenv = require('dotenv');
+dotenv.config();
+require('colors');
+const notifications = require('../backend/models/notificationsModel');
 
 dbconn(); 
 
@@ -28,13 +29,28 @@ const io = new Server({
 
 io.on('connection', async (socket) => {
    
-     console.log('connected user' + socket.handshake.auth.token);
-     var userId = socket.handshake.auth.token;  
+    // console.log('connected user' + socket.handshake.auth.token);
+   //  var userId = socket.handshake.auth.token;  
      
      socket.on('newnotification', async (data) => {
-        console.log(data)
-        io.emit('NewInvoice', {msg: 'Generated Invoice', adminId : data.adminId, invoiceno : data.result.invoiceno, paid : data.result.paid, staffname : data.result.staffname});
-     })
+        
+        const noti_fications = notifications({
+            adminId : data.adminId,
+            invoiceno : data.result.invoiceno, 
+            paid : data.result.paid, 
+            staffname : data.result.staffname,
+            read : 'no'
+        })
+
+        noti_fications.save()
+                      .then((results) => {
+                        io.emit('NewInvoice', {msg: 'Generated Invoice', adminId : data.adminId, invoiceno : data.result.invoiceno, paid : data.result.paid, staffname : data.result.staffname});
+                       })
+                      .catch((err) => {
+                        console.log(err.message)
+                      })
+        
+    })
 
     socket.on('disconnect', async () => {
         console.log('disconnected user' + socket.handshake.auth.token);

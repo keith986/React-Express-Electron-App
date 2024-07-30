@@ -92,5 +92,7 @@ use_route.get('/allchequereport', useController.allchequereport)
 use_route.post('/admindetail', useController.adminDetail)
 use_route.post('/advancesettings', useController.advanceSettings)
 use_route.post('/setTings', useController.setTings)
+use_route.post('/notify', useController.notify)
+use_route.post('/markasread', useController.markRead)
 
 module.exports = use_route;

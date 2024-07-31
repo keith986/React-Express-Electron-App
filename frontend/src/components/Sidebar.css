@@ -113,6 +113,7 @@
     border: none;
     outline: none;
     color : #fff;
+    cursor : pointer;
 }
 
 /*@media query*/

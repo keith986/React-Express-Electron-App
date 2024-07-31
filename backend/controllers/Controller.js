@@ -1434,12 +1434,12 @@ const invoice = async (req, res) => {
                         rows.deleteMany({staffId : staffID})
                             .then((result) => {
                                console.log('deleted')
-                            })
+                             })
                             .catch(error => {
                                 return res.json({
                                     error : error
                                 })
-                            })
+                             })
 
                                 
                                 Products.find({
@@ -1476,7 +1476,7 @@ const invoice = async (req, res) => {
                                             })
 
                                         })
-                                        .then((ers) => {
+                                        .catch((ers) => {
                                             console.log(ers)
                                         })
                

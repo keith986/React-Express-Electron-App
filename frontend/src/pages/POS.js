@@ -283,13 +283,14 @@ const POS = () => {
     <div className='product-list'>
       <h2>Select Product</h2>
       <input type='search' style={{width: '100%', padding : '7px', borderRadius : '50px', margin: '5px'}} placeholder='Search for product'/>
-      
+      <div className='list-dropdown'>
       {!!isProd && isProd.map((stri) => {
                 return (
                     <button type='button'  value={`${stri._id}`} style={{width: '100%', padding : '20px', margin : '2px', background : 'gray', color : '#fff', border: 'none', boxShadow : '0px 0px 2px 1px black', cursor: 'pointer'}}>{stri.name} [{stri.categories}]  {stri.sellingprice}</button>
                        )
                 })
       }
+      </div>
     </div>
     <div className='cash-out'>
       <div className='row' id='jump'>

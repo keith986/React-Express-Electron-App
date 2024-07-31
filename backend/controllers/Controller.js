@@ -2471,7 +2471,7 @@ const allcashreport = async (req, res) => {
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const adminID  = user.userdata._id;
 
-      notifications.findOneAndUpdate({adminId : adminID},{read : 'yes'})
+      notifications.updateMany({adminId : adminID},{read : 'yes'})
                    .then((result) => {
                          return res.json({
                             success : 'All Marked as Read'

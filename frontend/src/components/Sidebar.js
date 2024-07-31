@@ -180,13 +180,17 @@ const Sidebar = () => {
         <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red'}}></i>
         <div className='note-content' id='notes'>
           {!!notify && notify.map((not) => {
-           
-         //   if(not.read === 'no'){
-              
-          //  }
+            var clas = '';
+            if(not.read === 'yes'){
+               clas = 'msg-read';
+            }
+
+            if(not.read === 'no'){
+              clas = 'msg-data';
+            }
 
             return (
-              <div className='msg-data'>
+              <div className={clas}>
                   <p>
                    {not.staffname}, Generated Invoce
                   </p>

@@ -988,7 +988,7 @@ const editproduct = async (req, res) => {
         const val = req.body.products;
 
         if(req.body.srcUrl === '' || req.body.srcUrl === null){
-            res.json({
+           return res.json({
                 error : "Product's Image Required."
             })
         }

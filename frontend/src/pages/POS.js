@@ -209,7 +209,7 @@ const POS = () => {
 
   return (
     <div className='container-fluid'>
-    <h2>CART</h2>
+    
     <form onSubmit={submitChange}>
     <div className='cartright'>
       <div className='row'>
@@ -243,7 +243,6 @@ const POS = () => {
       <div className='col'>
         <table className='table' id='cart-table' style={{background: "transparent", border: "none"}}>
             <tr>
-                <th>Id</th>
                 <th>Image</th>
                 <th>Item</th>
                 <th>Quantity</th>
@@ -259,7 +258,6 @@ const POS = () => {
                     
                   return (
                           <tr className='tr-row' id={itm._id}>
-                          <td style={{fontSize : "5px"}}>{itm._id}</td>
                           <td><img src={itm.prd_img} alt='product_image' width="50px" height="50px"  style={{borderRadius: "50%"}}/></td>      
                               <td>{itm.name}</td>
                               <td className='itm-qty' id={itm._id} contentEditable={true} onInput={quantityChange}>1</td>
@@ -281,6 +279,17 @@ const POS = () => {
         <button className='deleteall' onClick={handleDeleteMany}><i className='bi bi-trash-fill'></i> DELETE ALL</button>
         </div>
       </div>
+    </div>
+    <div className='product-list'>
+      <h2>Select Product</h2>
+      <input type='search' style={{width: '100%', padding : '7px', borderRadius : '50px', margin: '5px'}} placeholder='Search for product'/>
+      
+      {!!isProd && isProd.map((stri) => {
+                return (
+                    <button type='button'  value={`${stri._id}`} style={{width: '100%', padding : '20px', margin : '2px', background : 'gray', color : '#fff', border: 'none', boxShadow : '0px 0px 2px 1px black', cursor: 'pointer'}}>{stri.name} [{stri.categories}]  {stri.sellingprice}</button>
+                       )
+                })
+      }
     </div>
     <div className='cash-out'>
       <div className='row' id='jump'>
@@ -308,7 +317,7 @@ const POS = () => {
         <input type='number' className='names-input' id='amount' name='paid' placeholder='0.00' onChange={handleChange} required/>
       </div>
       <div className='row' id='jum-down'>
-        <button type='submit' className='generate' style={{position: "absolute", bottom : "5%", width : "90%", borderRadius : "5px", background : "green"}}>PAY OUT</button>
+        <button type='submit' className='generate' style={{position: "absolute", bottom : "5%", width : "90%", borderRadius : "5px", background : "green", padding : '20px', fontSize : "20px"}}>PAY OUT</button>
       </div>
     </div>
     </form>

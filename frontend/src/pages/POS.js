@@ -20,6 +20,7 @@ const POS = () => {
     paid : ''
   })
   const [socket, setSocket] = useState(null)
+  const [filterDatas, setFilterDatas] = useState(null)
 
   useEffect(() => {
     axios.get('/getproducts')
@@ -28,15 +29,21 @@ const POS = () => {
              toast.error(result.data.error)
            }
             setIsProd(result.data)
+            setFilterDatas(result.data)
          })
          .catch((error) => {
           toast.error(error)
          })
-  }, [isProd])
+  }, [])
 
-  const handleClick = () => {
-    const isselected = document.getElementById('selectvalue').value;
-  
+  const handlefilter = (event) => {
+    const resp = filterDatas.filter(s => s.name.includes(event.target.value))
+    setIsProd(resp)
+ }
+
+  const handleClick2 = (e) => {
+    const isselected = e.target.value; 
+    
     axios.post('/addcart', {isselected})
          .then((result) => {
              if(result.data.success){
@@ -222,23 +229,10 @@ const POS = () => {
       </div>
         <div className='row'>
         <h5 className='name'>Customer Phone <i>*Optional*</i></h5>
-        <h5 style={{marginTop : '10px'}}>Select Product</h5>
       </div>
         <div className='row'>
-        <input type='number' className='names-input' name='customerphone' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
-        <select className='names-input' id='selectvalue'>
-           
-            {!!isProd && isProd.map((stri) => {
-                return (
-                    <option value={`${stri._id}`}>{stri.name} [{stri.categories}]</option>
-                       )
-                })
-              }
-        </select>
-      </div>
-        <div className='row'>
-        <i className='bi bi-plus-circle' id="add-to-cart" title="add product" onClick={handleClick} style={{fontSize : "30px", cursor: "pointer"}}></i>
-      </div>  
+        <input type='number' className='names-input' name='customerphone' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/> 
+      </div>       
       <div className='row'>
       <div className='col'>
         <table className='table' id='cart-table' style={{background: "transparent", border: "none"}}>
@@ -282,11 +276,11 @@ const POS = () => {
     </div>
     <div className='product-list'>
       <h2>Select Product</h2>
-      <input type='search' style={{width: '100%', padding : '7px', borderRadius : '50px', margin: '5px'}} placeholder='Search for product'/>
+      <input type='search' style={{width: '100%', padding : '7px', borderRadius : '50px', margin: '5px'}} placeholder='Search for product by name' onChange={handlefilter}/>
       <div className='list-dropdown'>
       {!!isProd && isProd.map((stri) => {
                 return (
-                    <button type='button'  value={`${stri._id}`} style={{width: '100%', padding : '20px', margin : '2px', background : 'gray', color : '#fff', border: 'none', boxShadow : '0px 0px 2px 1px black', cursor: 'pointer'}}>{stri.name} [{stri.categories}]  {stri.sellingprice}</button>
+                    <button type='button'  value={`${stri._id}`} onClick={handleClick2} style={{width: '100%', padding : '20px', margin : '2px', background : 'gray', color : '#fff', border: 'none', boxShadow : '0px 0px 2px 1px black', cursor: 'pointer'}}>{stri.name} [{stri.categories}]  {stri.sellingprice}</button>
                        )
                 })
       }
@@ -294,7 +288,7 @@ const POS = () => {
     </div>
     <div className='cash-out'>
       <div className='row' id='jump'>
-       KES. <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly style={{border: "none", outline : "none", background : "transparent", fontSize : "30px"}}/>
+       KES. <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly style={{border: "none", outline : "none", background : "transparent", fontSize : "30px", width: '100%'}}/>
       </div>
       <div className='row' id='jump'>
         <h4>Discount (%)</h4>

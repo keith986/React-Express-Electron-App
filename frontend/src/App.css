@@ -708,6 +708,12 @@ width: 250px;
     max-height: 80vh;
 }
 
+#list-dropdown{
+	height : 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
 /*query*/
 @media  screen and  (min-width: 768px) {
 	.container-fluid{

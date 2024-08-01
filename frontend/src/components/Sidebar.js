@@ -90,7 +90,7 @@ const Sidebar = () => {
 
   const handleRead = async (req, res) => {
     try {
-      
+
       axios.post('markasread')
            .then((result) => {
             if(result.data.error){
@@ -98,15 +98,20 @@ const Sidebar = () => {
             }
 
             if(result.data.success){
-              toast.success(result.data.success)
+              toast.success(result.data.success);
             }
 
+           })
+           .catch((err) => {
+            toast.error(err.message)
            })
 
     }catch(err) {
         toast.error(err.message)
     }
   }
+
+
 
   return (
     <div className={`container`}>
@@ -177,7 +182,8 @@ const Sidebar = () => {
       </div>
 
       <div className='notification-content'>
-        <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red'}}></i>
+        <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red', cursor: 'pointer', zIndex: '6000', backgroundColor : '#e9d8ff'}} onClick={handleClick}></i>
+        
         <div className='note-content' id='notes'>
           {!!notify && notify.map((not) => {
             var clas = '';
@@ -190,7 +196,7 @@ const Sidebar = () => {
             }
 
             return (
-              <div className={clas}>
+              <div className={clas} id='edit-read'>
                   <p>
                    {not.staffname}, Generated Invoce
                   </p>

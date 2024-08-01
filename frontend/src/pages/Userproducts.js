@@ -73,14 +73,17 @@ const Products = () => {
                   <th>EXPIRY DATE</th>
                   <th>PRICE</th>
                   <th>IN STOCK</th>
-                </tr>
+               </tr>
                 {!!isProd && isProd.map((prod) => {
+                  var ed = prod.edate;
+                  var em = prod.emonth;
+                  var ey = prod.eyear;
                   return   (
                                 <tr className='tr-row' id={prod._id}>
                                 <td><img src={prod.prd_img} alt='product_image' width="50px" height="50px"  style={{cursor: "pointer", borderRadius: "50%"}} onClick={popImage}/></td>     
                                   <td>{prod.name}</td>
                                   <td>{prod.categories}</td>
-                                  <td>{prod.expdate}</td>
+                                  <td>{ey + '-' + em + '-' + ed}</td>
                                   <td>Kes. {prod.sellingprice}</td>
                                   <td>{prod.quantity}</td>
                                 </tr>

@@ -71,7 +71,7 @@ const Dashboard = () => {
       $('.today').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#todayp').html(sum + '.00');
+       $('#todayp').html(sum.toLocaleString("en-IN"));
     }, [istoday])
 
    useEffect(() => {
@@ -82,21 +82,21 @@ const Dashboard = () => {
            .catch((error) => {
             toast.error(error)
            })
-   }, [isexpired])
+   }, [])
 
    useEffect(() => {
        var co_unt = $('.exp').length
        $('#expired').html(co_unt);
-    }, [isexpired])
+    }, [])
 
    useEffect(() => {
     axios.get('/getsuppliers')
-    .then((result) => {
-      setIsSuppliers(result.data.length)
-    })
-    .catch((err) => {
-      toast.error(err)
-    })
+         .then((result) => {
+            setIsSuppliers(result.data.length)
+          })
+         .catch((err) => {
+           toast.error(err)
+          })
    }, [issuppliers])
 
    useEffect(() => {
@@ -128,7 +128,7 @@ const Dashboard = () => {
       $('.mon').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#month').html(sum + '.00');
+       $('#month').html(sum.toLocaleString("en-IN"));
     }, [currentMonth])
 
     useEffect(() => {
@@ -149,7 +149,7 @@ const Dashboard = () => {
       $('.threemon').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#threemonth').html(sum + '.00');
+       $('#threemonth').html(sum.toLocaleString("en-IN"));
     }, [threeMonth])
 
     useEffect(() => {
@@ -170,7 +170,7 @@ const Dashboard = () => {
       $('.sixmon').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#sixmonth').html(sum + '.00');
+       $('#sixmonth').html(sum.toLocaleString("en-IN"));
     }, [sixMonth])
 
     useEffect(() => {
@@ -202,7 +202,7 @@ useEffect(() => {
    $('.lastyear').each(function(){
     sum += parseFloat($(this).text());  
      });
-    $('#lastyear').html(sum + '.00');
+    $('#lastyear').html(sum.toLocaleString("en-IN"));
  }, [lastYear])
 
  useEffect(() => {
@@ -223,7 +223,7 @@ useEffect(() => {
    $('.currentyear').each(function(){
     sum += parseFloat($(this).text());  
      });
-    $('#currentyear').html(sum + '.00');
+    $('#currentyear').html(sum.toLocaleString("en-IN"));
  }, [currentYear])
 
  useEffect(()=>{

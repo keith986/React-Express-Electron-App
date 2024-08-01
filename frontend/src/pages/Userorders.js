@@ -177,8 +177,8 @@ const Orders = () => {
                 return (
                   <tr className='tr-row'>
                     <td>{inv.invoiceno}</td>
-                    <td>{inv.customername}</td>
-                    <td>{inv.customerphone}/{inv.customeremail}</td>
+                    <td style={{fontSize: '12px'}}>{inv.customername}</td>
+                    <td style={{fontSize: '12px'}}>{inv.customerphone}/{inv.customeremail}</td>
                     <td>{inv.grandtotal}</td>
                     <td>{inv.discount}</td>
                     <td>{inv.totalamount}</td>

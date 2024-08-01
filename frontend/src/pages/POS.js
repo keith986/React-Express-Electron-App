@@ -213,7 +213,6 @@ const POS = () => {
          })
   }
 
-
   return (
     <div className='container-fluid'>
     

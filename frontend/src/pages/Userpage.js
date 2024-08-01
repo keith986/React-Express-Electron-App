@@ -45,9 +45,10 @@ const Dashboard = () => {
   useEffect(() => {
    var sum = 0;
    $('.today').each(function(){
-    sum += parseFloat($(this).text());  
+    sum += parseFloat($(this).text()); 
+   
      });
-    $('#todayp').html(sum);
+    $('#todayp').html(sum.toLocaleString("en-IN"));
  }, [istoday])
 
  useEffect(() => {
@@ -70,7 +71,7 @@ const Dashboard = () => {
   $('.month').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#monthp').html(sum);
+   $('#monthp').html(sum.toLocaleString("en-IN"));
 }, [ismonth])
 
 useEffect(() => {
@@ -93,7 +94,7 @@ useEffect(() => {
   $('.year').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#yearp').html(sum);
+   $('#yearp').html(sum.toLocaleString("en-IN"));
 }, [isyear])
 
 useEffect(() => {

@@ -111,8 +111,6 @@ const Sidebar = () => {
     }
   }
 
-
-
   return (
     <div className={`container`}>
       <nav className='nav'>
@@ -198,7 +196,7 @@ const Sidebar = () => {
             return (
               <div className={clas} id='edit-read'>
                   <p>
-                   {not.staffname}, Generated Invoce
+                   {not.staffname}, Generated Invoice
                   </p>
                   <p>
                    invoice No. :: {not.invoiceno} 

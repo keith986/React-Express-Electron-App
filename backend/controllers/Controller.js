@@ -1885,14 +1885,14 @@ const yearsale = async (req, res) => {
                      $and : [
                         { staffId : staffID },
                         { year : req.body.year}
-                            ]})
+                            ]
+                        })
                     .then((result) => {
-
                         return res.json(result)
                      })
                     .catch((err) => {
                         return res.json({
-                            error : err
+                            error : err.message
                         })
                     })
         })

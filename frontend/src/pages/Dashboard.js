@@ -243,29 +243,36 @@ useEffect(() => {
      <div className='row'>
         <div className='col-md-4 coin'>
             <i className='bi bi-coin'></i>
-            <h3>Today Sales</h3>
-            {!!istoday && istoday.map((toda) => {
+            {!!istoday ? istoday.map((toda) => {
                 return (
                     <span className='today' style={{display: 'none'}}>{toda.paid}</span>         
                        );
-              })}
+              })
+              : 
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            <h3>Today Sales</h3>
            KES <span className='changes' id='todayp'></span>
         </div>
         <div className='col-md-4 ban'>
             <i className='bi bi-ban-fill'></i>
-            <h3>Expired</h3>
-            {!!isexpired && isexpired.map((exp) => {
+            {!!isexpired ? isexpired.map((exp) => {
                if(exp.quantity === '0'){
                   var expr = <span className='exp' style={{display: 'none'}}>{exp.quantity}</span>;   
                }
                 return expr;
-              })}
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            <h3>Expired</h3>
            <span className='changes' id='expired'></span>
         </div>
         <div className='col-md-4 receipt'>
             <i className='bi bi-receipt-cutoff'></i>
+            {!!istodayInv ? '' : <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
             <h3>Today Invoice</h3>
-               <span className='changes'>{!!istodayInv && istodayInv}</span>
+               <span className='changes'>{!!istodayInv ? istodayInv : <span style={{margin: '5px', fontSize : '16px'}}>0</span>}</span>
         </div>
      </div>
 
@@ -273,21 +280,23 @@ useEffect(() => {
         <div className='col-md-4 ext'>
             <i className='bi bi-truck-flatbed' style={{color: "blue"}}></i>
             <h3>Suppliers</h3>
-           <span className='changes'>{!!issuppliers && issuppliers}</span>
+           <span className='changes'>{!!issuppliers ? issuppliers : <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}</span>
         </div>
         <div className='col-md-4 ext'>
             <i className='bi bi-receipt' style={{color: "red"}}></i>
             <h3>Total Invoice</h3>
-               <span className='changes'>{!!isInv && isInv.length}</span>
+               <span className='changes'>{!!isInv ? isInv.length : <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}</span>
         </div>
         <div className='col-md-4 ext'>
             <i className='bi bi-credit-card-fill' style={{color: "purple"}}></i>
-            <h3>Current Month Sales</h3>
-            {!!currentMonth && currentMonth.map((mon) => {
+            {!!currentMonth ? currentMonth.map((mon) => {
                return (
                     <span className='mon' style={{display: 'none'}}>{mon.paid}</span>         
                        );
-              })}
+              })
+              :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            <h3>Current Month Sales</h3>
            KES <span className='changes' id='month'></span>
         </div>
      </div>
@@ -295,56 +304,56 @@ useEffect(() => {
      <div className='row'>
         <div className='col-md-4 ext'>
             <i className='bi bi-piggy-bank-fill' style={{color: "blueviolet"}}></i>
-            <h3>Last 3 month sales</h3>
-            {!!threeMonth && threeMonth.map((threemon) => {
+            {!!threeMonth ? threeMonth.map((threemon) => {
                return (
                     <span className='threemon' style={{display: 'none'}}>{threemon.paid}</span>         
                        );
-              })}
+              }):<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
+            <h3>Last 3 month sales</h3>
            KES <span className='changes' id='threemonth'></span>
         </div>
         <div className='col-md-4 ext'>
             <i className='bi bi-grid-3x3-gap-fill'></i>
-            <h3>Last 6 month sales</h3>
-            {!!sixMonth && sixMonth.map((sixmon) => {
+            {!!sixMonth ? sixMonth.map((sixmon) => {
                return (
                     <span className='sixmon' style={{display: 'none'}}>{sixmon.paid}</span>         
                        );
-              })}
+              }):<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
+            <h3>Last 6 month sales</h3>
            KES <span className='changes' id='sixmonth'></span>
         </div>
         <div className='col-md-4 ext'>
             <i className='bi bi-people-fill' style={{color: "orange"}}></i>
             <h3>Users</h3>
-               <span className='changes'>{!!isusers && isusers}</span>
+               <span className='changes'>{!!isusers ? isusers :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}</span>
         </div>
      </div>
 
      <div className='row'>
         <div className='col-md-4 ext'>
             <i className='bi bi-wallet2' style={{color: "maroon"}}></i>
-            <h3>Last Year Sales</h3>
-            {!!lastYear && lastYear.map((last) => {
+            {!!lastYear ? lastYear.map((last) => {
                return (
                     <span className='lastyear' style={{display: 'none'}}>{last.paid}</span>         
                        );
-              })}
+              }) :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
+            <h3>Last Year Sales</h3>
            KES <span className='changes' id='lastyear'></span>
         </div>
         <div className='col-md-4 ext'>
             <i className='bi bi-wallet-fill' style={{color:"green"}}></i>
-            <h3>Current Year Sales</h3>
-            {!!currentYear && currentYear.map((cur) => {
+            {!!currentYear ? currentYear.map((cur) => {
                return (
                     <span className='currentyear' style={{display: 'none'}}>{cur.paid}</span>         
                        );
-              })}
+              }):<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
+            <h3>Current Year Sales</h3>
            KES <span className='changes' id='currentyear'></span>
         </div>
         <div className='col-md-4 ext'>
             <i className='bi bi-shop'></i>
             <h3>Stores</h3>
-               <span className='changes'>{!!isstore && isstore}</span>
+               <span className='changes'>{!!isstore ? isstore :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}</span>
         </div>
      </div>
 
@@ -363,7 +372,7 @@ useEffect(() => {
             <th>Attendant</th>
             <th>Status</th>
         </tr>
-            {!!isInv && isInv.map((ivn) => {
+            {!!isInv ? isInv.map((ivn) => {
                return (
                   <tr className='tr-row'>
                      <td>{ivn.invoiceno}</td>
@@ -373,7 +382,7 @@ useEffect(() => {
                      <td>{ivn.status}</td>
                   </tr>
                );
-            })}
+            }) :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
        
         </table>
         </div>

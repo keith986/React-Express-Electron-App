@@ -10,7 +10,7 @@ const Dashboard = () => {
    const [ismonth, setIsMonth] = useState(null)
    const [isyear, setIsYear] = useState(null)
    const [isTodayInv, setIsTodayInv] = useState(null)
-   const [invoice, setInvoice] = useState(null)
+   const [invoice, setInvoice] = useState([])
    const [filterData, setFilterData] = useState(null)
 
    const handlefilter = (event) => {
@@ -46,7 +46,6 @@ const Dashboard = () => {
    var sum = 0;
    $('.today').each(function(){
     sum += parseFloat($(this).text()); 
-   
      });
     $('#todayp').html(sum.toLocaleString("en-IN"));
  }, [istoday])
@@ -108,38 +107,83 @@ useEffect(() => {
         })
  }, [])
 
+ //pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 10
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = invoice.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(invoice.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlePrev = () => {
+   if(currentPage !== 1){
+     setCurrentPage(currentPage - 1)
+   }else{
+      setCurrentPage(1)
+   }
+ }
+
+ const handleNext = () => {
+   if(currentPage !== nPage){
+     setCurrentPage(currentPage + 1)
+   }else{
+      setCurrentPage(nPage)
+   }
+ }
+ 
+ function handlePage(id){
+   setCurrentPage(id)
+ }
+
   return (
     <div className='container-fluid'>
      <h2>User Dashboard</h2>
      <div className='row'>
         <div className='col-md-4 coin'>
             <i className='bi bi-coin'></i>
-            <h3>Today Sales</h3>
-            {!!istoday && istoday.map((toda) => {
+            {!!istoday 
+              ?
+             istoday.map((toda) => {
                 return (
                     <span className='today' style={{display: 'none'}}>{toda.paid}</span>         
                        );
-              })}
-           KES <span className='changes' id='todayp'></span>
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+         }
+            <h3>Today Sales</h3>
+           KES <span className='changes' id='todayp'>
+           </span>
         </div>
         <div className='col-md-4 cart'>
             <i className='bi bi-ban-fill'></i>
-            <h3>This Month sales</h3>
-            {!!ismonth && ismonth.map((mon) => {
+              {!!ismonth 
+             ?
+             ismonth.map((mon) => {
                 return (
                     <span className='month' style={{display: 'none'}}>{mon.paid}</span>         
                        );
-              })}
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            <h3>This Month sales</h3>
            KES <span className='changes' id='monthp'></span>
         </div>
         <div className='col-md-4 receipt'>
-            <i className='bi bi-receipt-cutoff'></i>
-            <h3>This Year sales</h3>
-            {!!isyear && isyear.map((yea) => {
+            <i className='bi bi-piggy-bank-fill'></i>
+             {!!isyear 
+              ? 
+              isyear.map((yea) => {
                 return (
                     <span className='year' style={{display: 'none'}}>{yea.paid}</span>         
                        );
-              })}
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            <h3>This Year sales</h3>
            KES <span className='changes' id='yearp'></span>
         </div>
      </div>
@@ -148,14 +192,13 @@ useEffect(() => {
         <div className='col-md-4 ext'>
             <i className='bi bi-receipt' style={{color: "gray"}}></i>
             <h3>Today Invoices</h3>
-           <span className='changes'>{!!isTodayInv && isTodayInv}</span>
+           <span className='changes'>{!!isTodayInv ? isTodayInv :  <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}</span>
         </div>
         <div className='col-md-4 ext'>
             <i className='bi bi-receipt' style={{color: "red"}}></i>
             <h3>Total Invoices</h3>
-               <span className='changes'>{!!invoice && invoice.length}</span>
-        </div>
-       
+               <span className='changes'>{!!invoice ? invoice.length :  <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}</span>
+        </div>     
      </div>
 
      <div className='row'>
@@ -173,21 +216,53 @@ useEffect(() => {
             <th>Attendant</th>
             <th>Status</th>
         </tr>
-            {!!invoice && invoice.map((ivn) => {
+            {           
+               !!invoice && invoice !== ''
+               ?
+                !!records && records.map((ivn) => {
+                  
                return (
-                  <tr className='tr-row'>
+                  <tr className='tr-row'>  
                      <td>{ivn.invoiceno}</td>
-                     <td>{ivn.customername}</td>
+                     <td style={{fontSize : '16px'}}>{ivn.customername}</td>
                      <td>{ivn.method}</td>
                      <td>{ivn.staffname}</td>
                      <td>{ivn.status}</td>
                   </tr>
                );
-            })}
+              
+               })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+            }
        
         </table>
         </div>
      </div>
+
+     <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
+      </div>
 
     </div>
   )

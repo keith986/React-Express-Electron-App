@@ -8,17 +8,11 @@ import QRCode from 'qrcode.react'
 import { UserContext } from './../context/userContext';
 
 const Orders = () => {
-  const [invoice, setInvoice] = useState(null)
+  const [invoice, setInvoice] = useState([])
   const [filterData, setFilterData] = useState(null)
   const [isModal, setIsModal] = useState(false)
   const [isreceipt, setIsReceipt] = useState(null)
-
   const {user} = useContext(UserContext)  
-
-  const handlefilter = (event) => {
-    const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
-    setInvoice(resp)
-  }
 
   useEffect(() => {
     axios.post('/totalinvoices')
@@ -33,6 +27,20 @@ const Orders = () => {
           toast.error(err)
          })
   }, [])
+
+//pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 10
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = invoice.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(invoice.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlefilter = (event) => {
+  const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
+  setInvoice(resp)
+}
 
   const handleClick = async (e) => {
     setIsModal(true)
@@ -80,6 +88,26 @@ const Orders = () => {
         width: 170,
         windowWidth: 650
   })
+  }
+
+  const handlePrev = () => {
+    if(currentPage !== 1){
+      return setCurrentPage(currentPage - 1)
+    }else{
+      return setCurrentPage(1)
+    }
+  }
+
+  const handleNext = () => {
+    if(currentPage !== nPage){
+       setCurrentPage(currentPage + 1)
+    }else{
+       setCurrentPage(nPage)
+    }
+  }
+  
+  function handlePage (id) {
+     setCurrentPage(id)
   }
 
   return (
@@ -184,10 +212,13 @@ const Orders = () => {
                 <th>ATTENDANT</th>
                 <th>ACTION</th>
               </tr>
-              {!!invoice && invoice.map((inv) => {
+              {
+                invoice
+              ?
+               !!records && records.map((inv, i) => {
 
                 return (
-                  <tr className='tr-row' id={`receipt-${inv._id}`}>
+                  <tr className='tr-row' id={`receipt-${inv._id}`} key={i}>
                     <td>{inv.invoiceno}</td>
                     <td>{inv.customername}</td>
                     <td>{inv.customerphone}/{inv.customeremail}</td>
@@ -204,10 +235,36 @@ const Orders = () => {
                     </td>
                   </tr>
                       );
-              })}
-            </table>
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            </table>   
+      </div>
+      </div>
 
-          </div>
+      <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
       </div>
 
 </div>

@@ -25,10 +25,10 @@ const Sidebar = () => {
     const handleClick = () => {
       $('.notification-content').animate({
         width : "toggle"
-      })
+      },'slow')
     }
      
-    useEffect(() => {
+    useEffect(  () => {
       const socket = io('http://localhost:4000', {
         auth : {
           token : !!user && user._id
@@ -73,7 +73,7 @@ const Sidebar = () => {
       document.getElementById('notification-count').innerHTML = len;   
    }, 500);
 
-  useEffect(() => {
+  useEffect( () => {
     axios.post('/notify')
          .then((result) => {
           if(result.data.error){
@@ -126,7 +126,7 @@ const Sidebar = () => {
 
       <div className='user-profile'>
       {!!user && (<h3>Hi {user.username}</h3>)}
-      <span>{!!user && user.accounttype}</span>
+      <span>{!!user ? user.accounttype : 'Loading...'}</span>
       </div>
       </nav>
       <Notifications />
@@ -183,7 +183,7 @@ const Sidebar = () => {
         <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red', cursor: 'pointer', zIndex: '6000', backgroundColor : '#e9d8ff'}} onClick={handleClick}></i>
         
         <div className='note-content' id='notes'>
-          {!!notify && notify.map((not) => {
+          {!!notify ? notify.map((not) => {
             var clas = '';
             if(not.read === 'yes'){
                clas = 'msg-read';
@@ -206,7 +206,8 @@ const Sidebar = () => {
                   </p>
               </div>
             );
-          })}
+          })
+          :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
         </div>
         <button id='mark-read' onClick={handleRead}>Mark All as Read</button>
       </div>

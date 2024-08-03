@@ -7,13 +7,12 @@ import QRCode from 'qrcode.react'
 
 const Orders = () => {
 
-  const [invoice, setInvoice] = useState(null)
+  const [invoice, setInvoice] = useState([])
   const [isModal, setIsModal] = useState(false)
   const [isreceipt, setIsReceipt] = useState(null)
   const [filterData, setFilterData] = useState(null)
   const [adminprof, setAdminProf] = useState(null)
   
-
   const handlefilter = (event) => {
     const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
     setInvoice(resp)
@@ -68,6 +67,35 @@ const Orders = () => {
   windowWidth: 650
   })
   }
+
+  //pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 10
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = invoice.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(invoice.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlePrev = () => {
+  if(currentPage !== 1){
+    return setCurrentPage(currentPage - 1)
+  }else{
+    return setCurrentPage(1)
+  }
+}
+
+const handleNext = () => {
+  if(currentPage !== nPage){
+     setCurrentPage(currentPage + 1)
+  }else{
+     setCurrentPage(nPage)
+  }
+}
+
+function handlePage (id) {
+   setCurrentPage(id)
+}
 
   return (
     <div className='container-fluid'>
@@ -172,7 +200,7 @@ const Orders = () => {
                 <th>ATTENDANT</th>
                 <th>DOWNLOAD</th>
               </tr>
-              {!!invoice && invoice.map((inv) => {
+              {!!records && records.map((inv) => {
 
                 return (
                   <tr className='tr-row'>
@@ -193,10 +221,32 @@ const Orders = () => {
                       );
               })}
             </table>
-
-          </div>
+      </div>
       </div>
 
+      <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
+      </div>
     </div>
   )
 }

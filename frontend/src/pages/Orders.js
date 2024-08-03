@@ -220,8 +220,8 @@ const handlefilter = (event) => {
                 return (
                   <tr className='tr-row' id={`receipt-${inv._id}`} key={i}>
                     <td>{inv.invoiceno}</td>
-                    <td>{inv.customername}</td>
-                    <td>{inv.customerphone}/{inv.customeremail}</td>
+                    <td style={{fontSize : '16px'}}>{inv.customername}</td>
+                    <td style={{fontSize : '16px'}}>{inv.customerphone}/{inv.customeremail}</td>
                     <td>{inv.grandtotal}</td>
                     <td>{inv.discount}</td>
                     <td>{inv.totalamount}</td>
@@ -268,7 +268,7 @@ const handlefilter = (event) => {
       </div>
 
 </div>
-  )
+  ) 
 }
 
 export default Orders

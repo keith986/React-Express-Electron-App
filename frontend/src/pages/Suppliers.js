@@ -14,10 +14,10 @@ const Suppliers = () => {
       location: '',
       warehouse: ''
     })
-    const [supplierdata, setSupplierData] = useState(null)
+    const [supplierdata, setSupplierData] = useState([])
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
-    const [filterDatas, setFilterData] = useState(null) 
+    const [filterDatas, setFilterData] = useState(null)  
     const [storedata, setStoreData] = useState(null) 
 
   const handleOpener = () =>{
@@ -88,7 +88,6 @@ const Suppliers = () => {
           })
   }, [supplierdata])
 
-
   const submitEditChange = async (e) => {
     e.preventDefault();
     await axios.post('/editsupplier', {supplier, storeid})
@@ -113,6 +112,35 @@ const Suppliers = () => {
        })
        .catch(err => console.log(err))
 }, [storedata])
+
+//pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 5
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = supplierdata.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(supplierdata.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlePrev = () => {
+  if(currentPage !== 1){
+    return setCurrentPage(currentPage - 1)
+  }else{
+    return setCurrentPage(1)
+  }
+}
+
+const handleNext = () => {
+  if(currentPage !== nPage){
+     setCurrentPage(currentPage + 1)
+  }else{
+     setCurrentPage(nPage)
+  }
+}
+
+function handlePage (id) {
+   setCurrentPage(id)
+}
 
   return (
     <div className={`container-fluid`}>
@@ -225,7 +253,7 @@ const Suppliers = () => {
                 <th>Address</th>
                 <th>Actions</th>
               </tr>
-              {!!supplierdata && supplierdata.map((sup) => {
+              {!!records && records.map((sup) => {
                 
 
                   return (
@@ -247,7 +275,30 @@ const Suppliers = () => {
               }
             </table>
 
-          </div>
+      </div>
+      </div>
+      <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
       </div>
     </div>
   )

@@ -217,7 +217,7 @@ const handlePrev = () => {
             <th>Status</th>
         </tr>
             {           
-               !!invoice && invoice !== ''
+               !!invoice &&   invoice !== ''
                ?
                 !!records && records.map((ivn) => {
                   

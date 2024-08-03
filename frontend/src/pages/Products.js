@@ -22,14 +22,14 @@ const Products = () => {
       month : '',
       year : '' 
     })
-    const [isProd, setIsProd] = useState(null)
+    const [isProd, setIsProd] = useState([])
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
-    const [filterDatas, setFilterDatas] = useState(null) 
-    const [storedata, setStoreData] = useState(null)
-    const [supplier, setSupplier] = useState(null)
-    const [category, setCategory] = useState(false)
-    const [previewer, setPreviewer] = useState(null)
+    const [filterDatas, setFilterDatas] = useState([]) 
+    const [storedata, setStoreData] = useState([])
+    const [supplier, setSupplier] = useState([])
+    const [category, setCategory] = useState([])
+    const [previewer, setPreviewer] = useState([])
     const [srcUrl, setSrcUrl] = useState(null)
     const [modalImage, setModalImage] = useState(null)
     const [imageModal, setImageModal] = useState(false)
@@ -113,7 +113,6 @@ const Products = () => {
            })
     }, [isProd])
   
-
     const submitEditChange = async (e) => {
       e.preventDefault();
  
@@ -182,6 +181,35 @@ const Products = () => {
  const handleProductModalClose = () => {
   setImageModal(false)
  }
+
+ //pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 5
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = isProd.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(isProd.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlePrev = () => {
+  if(currentPage !== 1){
+    return setCurrentPage(currentPage - 1)
+  }else{
+    return setCurrentPage(1)
+  }
+}
+
+const handleNext = () => {
+  if(currentPage !== nPage){
+     setCurrentPage(currentPage + 1)
+  }else{
+     setCurrentPage(nPage)
+  }
+}
+
+function handlePage (id) {
+   setCurrentPage(id)
+}
 
     return (
       <div className={`container-fluid`}>
@@ -449,7 +477,7 @@ const Products = () => {
                   <th>STORE</th>
                   <th>ACTIONS</th>
                 </tr>
-                {!!isProd && isProd.map((prod) => {
+                {!!records && records.map((prod) => {
                   var ed = prod.edate;
                   var em = prod.emonth;
                   var ey = prod.eyear;
@@ -473,6 +501,29 @@ const Products = () => {
                 }
               </table>
         </div>
+      </div>
+      <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
       </div>
       </div>
     )

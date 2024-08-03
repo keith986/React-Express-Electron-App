@@ -14,8 +14,8 @@ const Users = () => {
       role : '',
       warehouse: ''
     })  
-    const [storedata, setStoreData] = useState(null)
-    const [usersDatas, setUsersDatas] = useState(null)
+    const [storedata, setStoreData] = useState([])
+    const [usersDatas, setUsersDatas] = useState([])
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
     const [filterDatas, setFilterData] = useState(null)  
@@ -117,6 +117,35 @@ axios.post('/deleteuser', {deleting : event.target.id})
 
           })
   }
+
+  //pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 5
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = usersDatas.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(usersDatas.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlePrev = () => {
+  if(currentPage !== 1){
+    return setCurrentPage(currentPage - 1)
+  }else{
+    return setCurrentPage(1)
+  }
+}
+
+const handleNext = () => {
+  if(currentPage !== nPage){
+     setCurrentPage(currentPage + 1)
+  }else{
+     setCurrentPage(nPage)
+  }
+}
+
+function handlePage (id) {
+   setCurrentPage(id)
+}
 
   return (
     <div className={`container-fluid`}>
@@ -231,7 +260,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
                 <th>Last Logged out</th>
                 <th>Actions</th>
               </tr>
-                {!!usersDatas && usersDatas.map((user) => {
+                {!!records && records.map((user) => {
                   return (
                           
                           <tr className='tr-row' id={'user-' + user._id}>
@@ -253,6 +282,29 @@ axios.post('/deleteuser', {deleting : event.target.id})
             </table>
 
           </div>
+      </div>
+      <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
       </div>
     </div>
   )

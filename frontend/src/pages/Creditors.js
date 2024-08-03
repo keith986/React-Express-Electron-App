@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 
 const Creditors = () => {
 
-  const [invoice, setInvoice] = useState(null)
+  const [invoice, setInvoice] = useState([])
   const [filterData, setFilterData] = useState(null)
   const [isModal, setIsModal] = useState(false)
   const [balId, setBalId] = useState(null)
@@ -99,7 +99,7 @@ const Creditors = () => {
       <div className='col-divide'> 
        <p>Search : </p>
       <input type='search' className='search' placeholder='Search By INVOICE NO.' onChange={handleFilter}/>
-    </div>
+       </div>
       </div>
 
       <div className='row'>
@@ -116,7 +116,8 @@ const Creditors = () => {
                     <th>PAY DUE</th>
                 </tr>
              
-{!!invoice && invoice.map((deta) => {
+{!!invoice
+  ? invoice.map((deta) => {
  var bal = deta.totalamount - deta.paid;
  var inv = deta;
 
@@ -138,11 +139,14 @@ const Creditors = () => {
   </tr>
    );
 
-})}
+})
+: <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+}
               
             </table>
         </div>
       </div>
+      
     </div>
   )
 }

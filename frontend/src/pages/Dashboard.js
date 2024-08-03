@@ -11,7 +11,7 @@ const Dashboard = () => {
    const [istodayInv, setIsTodayInv] = useState(null)
    const [isexpired, setIsExpired] = useState(null)
    const [issuppliers, setIsSuppliers] = useState(null)
-   const [isInv, setIsInv] = useState(null)
+   const [isInv, setIsInv] = useState([])
    const [currentMonth, setCurrentMonth] = useState(null)
    const [threeMonth, setThreeMonth] = useState(null)
    const [sixMonth, setSixMonth] = useState(null)
@@ -110,6 +110,35 @@ const Dashboard = () => {
            })
    }, [])
 
+//pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 10;
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = isInv.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(isInv.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlePrev = () => {
+   if(currentPage !== 1){
+     return setCurrentPage(currentPage - 1)
+   }else{
+     return setCurrentPage(1)
+   }
+ }
+
+ const handleNext = () => {
+   if(currentPage !== nPage){
+      setCurrentPage(currentPage + 1)
+   }else{
+      setCurrentPage(nPage)
+   }
+ }
+ 
+ function handlePage (id) {
+    setCurrentPage(id)
+ }
+
    useEffect(() => {
       axios.post('/currentmonth', {month})
            .then((result) => {
@@ -129,9 +158,9 @@ const Dashboard = () => {
        sum += parseFloat($(this).text());  
         });
        $('#month').html(sum.toLocaleString("en-IN"));
-    }, [currentMonth])
+   }, [currentMonth])
 
-    useEffect(() => {
+   useEffect(() => {
       axios.post('/lastthreemonth', {month:month})
            .then((result) => {
             if(result.data.error){
@@ -150,9 +179,9 @@ const Dashboard = () => {
        sum += parseFloat($(this).text());  
         });
        $('#threemonth').html(sum.toLocaleString("en-IN"));
-    }, [threeMonth])
+   }, [threeMonth])
 
-    useEffect(() => {
+   useEffect(() => {
       axios.post('/lastsixmonth', {month:month})
            .then((result) => {
             if(result.data.error){
@@ -171,9 +200,9 @@ const Dashboard = () => {
        sum += parseFloat($(this).text());  
         });
        $('#sixmonth').html(sum.toLocaleString("en-IN"));
-    }, [sixMonth])
+   }, [sixMonth])
 
-    useEffect(() => {
+   useEffect(() => {
       axios.get('/users')
            .then((result) => {
              if(result.data.error){
@@ -182,9 +211,9 @@ const Dashboard = () => {
              setIsUsers(result.data.length)
            })
            .catch(err => toast.error(err))
- }, [isusers])
+   }, [isusers]) 
 
- useEffect(() => {
+   useEffect(() => {
    axios.post('/lastyearsales', {year})
         .then((result) => {
          if(result.data.error){
@@ -195,17 +224,17 @@ const Dashboard = () => {
         .catch((err) => {
          toast.error(err)
         })
-}, [year])
+   }, [year])
 
-useEffect(() => {
+   useEffect(() => {
    var sum = 0;
    $('.lastyear').each(function(){
     sum += parseFloat($(this).text());  
      });
     $('#lastyear').html(sum.toLocaleString("en-IN"));
- }, [lastYear])
+   }, [lastYear])
 
- useEffect(() => {
+   useEffect(() => {
    axios.post('/currentyearsales', {year})
         .then((result) => {
          if(result.data.error){
@@ -216,17 +245,17 @@ useEffect(() => {
         .catch((err) => {
          toast.error(err)
         })
-}, [year])
+   }, [year])
 
-useEffect(() => {
+   useEffect(() => {
    var sum = 0;
    $('.currentyear').each(function(){
     sum += parseFloat($(this).text());  
      });
     $('#currentyear').html(sum.toLocaleString("en-IN"));
- }, [currentYear])
+   }, [currentYear])
 
- useEffect(()=>{
+   useEffect(()=>{
    axios.get('/storeData')
         .then((result) => {
           if(result.data.error){
@@ -235,7 +264,7 @@ useEffect(() => {
           setIsStore(result.data.length)
         })
         .catch(err => console.log(err))
-}, [isstore])
+   }, [isstore])
 
   return (
     <div className='container-fluid'>
@@ -372,7 +401,8 @@ useEffect(() => {
             <th>Attendant</th>
             <th>Status</th>
         </tr>
-            {!!isInv ? isInv.map((ivn) => {
+            {!!records 
+            ?!!records && records.map((ivn) => {
                return (
                   <tr className='tr-row'>
                      <td>{ivn.invoiceno}</td>
@@ -387,6 +417,31 @@ useEffect(() => {
         </table>
         </div>
      </div>
+
+     <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
+      </div>
+
     </div>
   )
 }

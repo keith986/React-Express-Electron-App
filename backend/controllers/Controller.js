@@ -270,8 +270,6 @@ const storeData = async (req, res) => {
         const {token} = req.cookies;
 
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-
-            if(err) throw err;
             const userid = user.userdata._id;
 
               Store.find({userid : userid})
@@ -859,7 +857,7 @@ const addproduct = async (req, res) => {
         const val = req.body.products;
         
         if(req.body.srcUrl === '' || req.body.srcUrl === null){
-            res.json({
+            return res.json({
                 error : "Product's Image Required."
             })
         }
@@ -1981,14 +1979,14 @@ const totalinvoices = async (req, res) => {
                           })
                      .catch((errors) => {
                         return res.json({
-                            error: errors
+                            error: errors.message
                           })
                           })
         }) 
 
     }catch(err){
         return res.json({
-            error : err
+            error : err.message
         })
     }
 }

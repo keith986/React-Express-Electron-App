@@ -6,7 +6,7 @@ import $ from 'jquery'
 
 const Report = () => {
 
-const [isreport, setIsReport] = useState(null)
+const [isreport, setIsReport] = useState([])
 const [iscash, setIsCash] = useState(null)
 const [istransfer, setIsTransfer] = useState(null)
 const [ischeque, setIsCheque] = useState(null)
@@ -50,7 +50,7 @@ useEffect(() => {
   $('.pay').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#cashyp').html(sum + '.00');
+   $('#cashyp').html(sum);
 }, [iscash])
 
 useEffect(() => {
@@ -68,7 +68,7 @@ useEffect(() => {
   $('.trans').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#transferp').html(sum + '.00');
+   $('#transferp').html(sum);
 }, [istransfer])
 
 useEffect(() => {
@@ -86,42 +86,79 @@ useEffect(() => {
   $('.cheq').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#cheqp').html(sum + '.00');
+   $('#cheqp').html(sum);
 }, [ischeque])
+
+//pagination
+const [currentPage, setCurrentPage] = useState(1)
+const rowPerPage = 10
+const lastIndex = rowPerPage * currentPage
+const firstIndex = lastIndex - rowPerPage
+const records = isreport.slice(firstIndex, lastIndex)
+const nPage = Math.ceil(isreport.length / rowPerPage)
+const numbers = [...Array(nPage + 1).keys()].slice(1)
+
+const handlePrev = () => {
+  if(currentPage !== 1){
+    return setCurrentPage(currentPage - 1)
+  }else{
+    return setCurrentPage(1)
+  }
+}
+
+const handleNext = () => {
+  if(currentPage !== nPage){
+     setCurrentPage(currentPage + 1)
+  }else{
+     setCurrentPage(nPage)
+  }
+}
+
+function handlePage (id) {
+   setCurrentPage(id)
+}
 
   return (
     <div className='container-fluid'>
       <h2>Sales Reports</h2>
       <div className='row'>
-      <div className='col-md-4 cashpay'>
+        <div className='col-md-4 cashpay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
-            <h3>Cash Payment</h3>
-            {!!iscash && iscash.map((cas) => {
+            {!!iscash ? iscash.map((cas) => {
                 return (
                     <span className='pay' style={{display: 'none'}}>{cas.paid}</span>         
                        );
-              })}
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+            }
+            <h3>Cash Payment</h3>
            KES <span className='changes' id='cashyp'></span>
         </div>
         <div className='col-md-4 transferpay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
-            <h3>Transfer Payment</h3>
-            {!!istransfer && istransfer.map((cas) => {
+            {!!istransfer ? istransfer.map((cas) => {
                 return (
                     <span className='trans' style={{display: 'none'}}>{cas.paid}</span>         
                        );
-              })}
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            <h3>Transfer Payment</h3>
            KES <span className='changes' id='transferp'></span>
         </div>
-      
         <div className='col-md-4 chequepay'>
             <i className='bi bi-credit-card-2-front-fill'></i>
-            <h3>Cheque Payment</h3>
-            {!!ischeque && ischeque.map((cas) => {
+            {!!ischeque ? ischeque.map((cas) => {
                 return (
                     <span className='cheq' style={{display: 'none'}}>{cas.paid}</span>         
                        );
-              })}
+              })
+              :
+              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+              }
+            <h3>Cheque Payment</h3>
            KES <span className='changes' id='cheqp'></span>
         </div>
       </div>
@@ -153,7 +190,7 @@ useEffect(() => {
                     <th>PAYMENT</th>
                 </tr>
             
-                    {!!isreport && isreport.map((port) => {
+                    {!!records && records.map((port) => {
                      
                          return (
                            <tr className='tr-row'>
@@ -172,6 +209,30 @@ useEffect(() => {
                 
             </table>
         </div>
+      </div>
+
+      <div className='row'>
+      <nav className='page-nav'>
+        <ul className='pagination'>
+         
+          <li className='page-item'>
+            <button onClick={handlePrev}>Prev</button>
+          </li>
+
+          {!!numbers && numbers.map((n, i) => {
+            return (
+              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <button onClick={() => handlePage(n)}>{n}</button>
+                </li>
+                   );
+          })}
+
+          <li className='page-item'>
+            <button onClick={handleNext}>Next</button>
+          </li>
+
+        </ul>
+      </nav> 
       </div>
 
     </div>

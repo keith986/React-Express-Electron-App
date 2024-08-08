@@ -90,7 +90,6 @@ const Sidebar = () => {
 
   const handleRead = async (req, res) => {
     try {
-
       axios.post('markasread')
            .then((result) => {
             if(result.data.error){
@@ -99,6 +98,11 @@ const Sidebar = () => {
 
             if(result.data.success){
               toast.success(result.data.success);
+
+              var div_elem = document.getElementsByClassName('msg-data');
+              $(div_elem).addClass('msg-read');
+              $(div_elem).removeClass('msg-data');
+
             }
 
            })

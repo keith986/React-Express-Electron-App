@@ -213,7 +213,7 @@ const handlefilter = (event) => {
                 <th>ACTION</th>
               </tr>
               {
-                invoice
+                !!records
               ?
                !!records && records.map((inv, i) => {
 
@@ -230,8 +230,8 @@ const handlefilter = (event) => {
                     <td style={{background: 'gray'}}>{inv.status}</td>
                     <td>{inv.staffname}</td>
                     <td>
-                      <i className='bi bi-file-earmark-arrow-down-fill' id={inv._id} style={{cursor : 'pointer', color: 'blue', fontSize : '20px'}} onClick={handleClick}></i>
-                      <i className='bi bi-trash' id={inv._id} style={{cursor : 'pointer', color: 'red', fontSize : '20px', padding: '10px'}} onClick={handleDelete}></i>
+                      <i className='bi bi-file-earmark-arrow-down-fill' id={inv._id} title='Receipt' style={{cursor : 'pointer', color: 'brown', fontSize : '20px'}} onClick={handleClick}></i>
+                      <i className='bi bi-trash' id={inv._id} title='delete' style={{cursor : 'pointer', color: 'red', fontSize : '20px', padding: '10px'}} onClick={handleDelete}></i>
                     </td>
                   </tr>
                       );

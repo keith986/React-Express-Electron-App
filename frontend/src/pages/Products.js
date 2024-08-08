@@ -345,7 +345,7 @@ function handlePage (id) {
               <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%"}}>
               <span className='name'>Change Product's Image : <i className='bi bi-image-fill' style={{fontSize: "30px"}} onClick={handleImage}></i></span>
               <input type='file' accept="images/*" className='name-input' name='image' id='image' onChange={handleImageChange} style={{display: 'none'}}/>
-              <img src={srcUrl} alt='product_image' id="dis-play"/>
+              <img src={srcUrl ? srcUrl : previewer.prd_img} alt='product_image' id="dis-play"/>
               </div>
 
               <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%" , marginTop : "5px"}}>

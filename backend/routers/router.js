@@ -28,7 +28,7 @@ use_route.use(cors({
 //add middleware
 use_route.use(morgan('dev'))
 use_route.use(cookieParser())
-//url extend url
+//url extend
 use_route.use(express.urlencoded({limit : '50mb', extended: false}))
 use_route.use(express.json({limit : '50mb'}))
 

@@ -8,7 +8,7 @@ import $ from 'jquery'
 
 const Settings = () => {
   const [isModal, setIsModal] = useState(false)
-  const [isonoff, setIsonoff] = useState('set email notifications')
+  const [isonoff, setIsonoff] = useState([])
   const [advanceChange, setAdvanceChange] = useState({
     minimumqty : '',
     targetamt : '',
@@ -114,7 +114,8 @@ const Settings = () => {
            toast.error(erss.message)
           })
 
-  }, [isonoff])
+  }, [isonoff]);
+
 
   return (
     <div className='container-fluid'>

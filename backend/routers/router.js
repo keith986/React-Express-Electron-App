@@ -94,5 +94,6 @@ use_route.post('/advancesettings', useController.advanceSettings)
 use_route.post('/setTings', useController.setTings)
 use_route.post('/notify', useController.notify)
 use_route.post('/markasread', useController.markRead)
+use_route.post('/checkqty', useController.checkqty)
 
 module.exports = use_route;

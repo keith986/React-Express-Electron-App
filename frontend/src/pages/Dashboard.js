@@ -71,7 +71,7 @@ const Dashboard = () => {
       $('.today').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#todayp').html(sum.toLocaleString("en-IN"));
+       $('#todayp').html(sum.toLocaleString());
     }, [istoday])
 
    useEffect(() => {
@@ -157,7 +157,7 @@ const handlePrev = () => {
       $('.mon').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#month').html(sum.toLocaleString("en-IN"));
+       $('#month').html(sum.toLocaleString());
    }, [currentMonth])
 
    useEffect(() => {
@@ -178,7 +178,7 @@ const handlePrev = () => {
       $('.threemon').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#threemonth').html(sum.toLocaleString("en-IN"));
+       $('#threemonth').html(sum.toLocaleString());
    }, [threeMonth])
 
    useEffect(() => {
@@ -199,7 +199,7 @@ const handlePrev = () => {
       $('.sixmon').each(function(){
        sum += parseFloat($(this).text());  
         });
-       $('#sixmonth').html(sum.toLocaleString("en-IN"));
+       $('#sixmonth').html(sum.toLocaleString());
    }, [sixMonth])
 
    useEffect(() => {
@@ -231,7 +231,7 @@ const handlePrev = () => {
    $('.lastyear').each(function(){
     sum += parseFloat($(this).text());  
      });
-    $('#lastyear').html(sum.toLocaleString("en-IN"));
+    $('#lastyear').html(sum.toLocaleString());
    }, [lastYear])
 
    useEffect(() => {
@@ -252,7 +252,7 @@ const handlePrev = () => {
    $('.currentyear').each(function(){
     sum += parseFloat($(this).text());  
      });
-    $('#currentyear').html(sum.toLocaleString("en-IN"));
+    $('#currentyear').html(sum.toLocaleString());
    }, [currentYear])
 
    useEffect(()=>{

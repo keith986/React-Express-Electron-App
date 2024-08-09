@@ -407,7 +407,7 @@ function handlePage (id) {
                 const st_name = str.storename;
                 if(st_name === 'Closed')
                 {
-                  return st_name;
+                  return !st_name;
                 }
                 return (
                     <option value={`${st_name}`}>{st_name}</option>
@@ -482,13 +482,16 @@ function handlePage (id) {
                   var em = prod.emonth;
                   var ey = prod.eyear;
 
+                  var num = prod.sellingprice;
+                  var nu_mb = num.toLocaleString();
+
                   return   (
                                 <tr className='tr-row' id={'prod-'+prod._id}>
                                   <td><img src={prod.prd_img} alt='product_image' width="50px" height="50px"  style={{cursor: "pointer", borderRadius: "50%"}} onClick={popImage}/></td>
                                   <td>{prod.name}</td>
                                   <td>{prod.categories}</td>
                                   <td>{ey + '-' + em + '-' + ed}</td>
-                                  <td>Kes. {prod.sellingprice}</td>
+                                  <td>Kes. {nu_mb}</td>
                                   <td>{prod.quantity}</td>
                                   <td>{prod.warehouse}</td>
                                   <td>

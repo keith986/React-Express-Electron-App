@@ -21,6 +21,7 @@ const Sidebar = () => {
 
     const [navbarCollapse, setNavCollapse] = useState(false);
     const [notify , setNotify] = useState('')
+    const [ischeckin, setIsCheck] = useState([])
 
     const handleClick = () => {
       $('.notification-content').animate({
@@ -70,8 +71,9 @@ const Sidebar = () => {
 
    setInterval(() => {
       var len = $('.msg-data').length;
-      document.getElementById('notification-count').innerHTML = len;   
-   }, 500);
+      $('#notification-count').html(len);
+     // document.getElementById('notification-count').innerHTML = len;   
+   }, 1000);
 
   useEffect( () => {
     axios.post('/notify')
@@ -114,6 +116,19 @@ const Sidebar = () => {
         toast.error(err.message)
     }
   }
+
+  useEffect( () => {
+    axios.post('/checkqty')
+         .then((result) => {
+               setIsCheck(result.data)
+               if(result.data.error){
+                toast.error(result.data.error)
+               }
+         })
+         .catch((errs) => {
+             toast.error(errs.message)
+         })
+  }, [user, ischeckin])
 
   return (
     <div className={`container`}>
@@ -187,7 +202,36 @@ const Sidebar = () => {
         <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red', cursor: 'pointer', zIndex: '6000', backgroundColor : '#e9d8ff'}} onClick={handleClick}></i>
         
         <div className='note-content' id='notes'>
-          {!!notify ? notify.map((not) => {
+        {
+            !!ischeckin ?
+             !!ischeckin && ischeckin.map((checkin) => {
+                 var al_ert = '';
+               if(checkin.quantity <= 0){
+                   return (
+                  <div className='msg-data' id='ads'>
+                  <p>
+                  <img src={checkin.prd_img} alt='product_image' width="30px" height="30px"  style={{cursor: "pointer", borderRadius: "50%"}}/>  {checkin.name}  <sup style={{color : 'red'}}>Ads</sup> 
+                  </p>
+                   <p>
+                   Remained :: {checkin.quantity}
+                   </p>
+                 </div>
+                   );
+                }else{
+                  al_ert = '';
+                }
+                
+             
+
+            return al_ert;
+          })
+          : 'No Ads'
+          }
+
+          {
+            !!notify 
+            ? 
+            notify.map((not) => {
             var clas = '';
             if(not.read === 'yes'){
                clas = 'msg-read';
@@ -211,8 +255,11 @@ const Sidebar = () => {
               </div>
             );
           })
-          :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
+          :<span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
+          }
+
         </div>
+
         <button id='mark-read' onClick={handleRead}>Mark All as Read</button>
       </div>
 

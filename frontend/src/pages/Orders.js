@@ -196,7 +196,7 @@ const handlefilter = (event) => {
     </div>
 </div>
 
-      <div className='row'>
+    <div className='row'>
       <div className='col'>
             <table className='table' id='tablext'>
               <tr>
@@ -222,10 +222,10 @@ const handlefilter = (event) => {
                     <td>{inv.invoiceno}</td>
                     <td style={{fontSize : '16px'}}>{inv.customername}</td>
                     <td style={{fontSize : '16px'}}>{inv.customerphone}/{inv.customeremail}</td>
-                    <td>{inv.grandtotal}</td>
+                    <td>{inv.grandtotal.toLocaleString()}</td>
                     <td>{inv.discount}</td>
-                    <td>{inv.totalamount}</td>
-                    <td>{inv.paid}</td>
+                    <td>{inv.totalamount.toLocaleString()}</td>
+                    <td>{inv.paid.toLocaleString()}</td>
                     <td>{inv.method}</td>
                     <td style={{background: 'gray'}}>{inv.status}</td>
                     <td>{inv.staffname}</td>
@@ -241,7 +241,7 @@ const handlefilter = (event) => {
               }
             </table>   
       </div>
-      </div>
+    </div>
 
       <div className='row'>
       <nav className='page-nav'>

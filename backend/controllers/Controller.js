@@ -885,7 +885,7 @@ const addproduct = async (req, res) => {
                 error : 'Selling Price is required'
             })
         }
-
+ 
         if(val.quantity === ''){
             return res.json({
                 error : 'Qunatity is required'
@@ -1138,12 +1138,9 @@ const getproducts = async (req ,res) => {
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const adminId = user.userdata._id;
 
-            Products.find({
-                 $or : [
-                         {adminId : adminId},
-                         {adminId : user.userdata.adminId}
-                       ]
-                          })
+            Products.find(
+                         {adminId : adminId}
+                      )
                     .then((result) => {
                         return res.json(result)
                     })
@@ -1962,7 +1959,7 @@ const todayInvoices = async (req, res) => {
             error : err
         })
     }
-}
+} 
 
 const totalinvoices = async (req, res) => {
     try {
@@ -2488,6 +2485,35 @@ const allcashreport = async (req, res) => {
     }
  }
 
+ const checkqty = async (req, res) => {
+    try{
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminId = user.userdata._id;
+           
+            Products.find({
+                adminId : adminId
+            })
+            .then((result) => {
+                return res.json(result)
+            })
+            .catch((err) => {
+                return res.json({
+                    error : err.message
+                })
+            })
+
+        }) 
+
+    }catch(err){
+        return res.json({
+            error : err.message
+        })
+    }
+ }
+
  module.exports = {
     signup,
     preview,
@@ -2548,5 +2574,6 @@ const allcashreport = async (req, res) => {
     advanceSettings,
     setTings,
     notify,
-    markRead
+    markRead,
+    checkqty
  } 

@@ -121,6 +121,7 @@ const Creditors = () => {
  if(bal <= 0){
    return !inv;
  }
+ 
  return  (
   <tr className='tr-row'>
     <td>{inv.invoiceno}</td>

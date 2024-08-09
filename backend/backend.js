@@ -50,7 +50,7 @@ io.on('connection', async (socket) => {
                         console.log(err.message)
                       })
         
-    })
+     })
 
     socket.on('disconnect', async () => {
         console.log('disconnected user' + socket.handshake.auth.token);

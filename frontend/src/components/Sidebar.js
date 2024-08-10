@@ -210,7 +210,7 @@ const Sidebar = () => {
                    return (
                   <div className='msg-data' id='ads'>
                   <p>
-                  <img src={checkin.prd_img} alt='product_image' width="30px" height="30px"  style={{cursor: "pointer", borderRadius: "50%"}}/>  {checkin.name}  <sup style={{color : 'red'}}>Ads</sup> 
+                  <img src={checkin.prd_img} alt='product_image' width="30px" height="30px"  style={{cursor: "pointer", borderRadius: "50%", boxShadow : '0px 0px 1px 1px #000'}}/>  {checkin.name}  <sup style={{color : 'crimson'}}>Ads</sup> 
                   </p>
                    <p>
                    Remained :: {checkin.quantity}

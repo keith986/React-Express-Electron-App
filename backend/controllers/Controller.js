@@ -1138,9 +1138,12 @@ const getproducts = async (req ,res) => {
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const adminId = user.userdata._id;
 
-            Products.find(
-                         {adminId : adminId}
-                      )
+            Products.find({
+                        $or : [
+                            {adminId : adminId},
+                            {adminId : user.userdata.adminId}
+                        ]
+                      })
                     .then((result) => {
                         return res.json(result)
                     })

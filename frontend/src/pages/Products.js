@@ -405,7 +405,7 @@ function handlePage (id) {
               <option>Choose...</option>
               {!!storedata && storedata.map((str) => {
                 const st_name = str.storename;
-                if(st_name === 'Closed')
+                if(str.storename === 'Closed')
                 {
                   return !st_name;
                 }

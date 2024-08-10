@@ -24,7 +24,7 @@ const Products = () => {
          .catch((error) => {
           toast.error(error)
          })
-  }, [])
+  }, [isProd])
 
   const popImage = (e) => {
     setImageModal(true)
@@ -71,7 +71,7 @@ function handlePage (id) {
 
       <h2>Stock Inventory</h2>
     
-      <div className='row'>
+        <div className='row'>
 
       <div className={`modal ${imageModal ? "open" : ""}`}>
         <div className='modal-content'>
@@ -91,7 +91,7 @@ function handlePage (id) {
          <p>Search : </p>
         <input type='search' className='search' placeholder='Search By Name...' onChange={handlefilter}/>
       </div>
-      </div>
+        </div>
         <div className='row'>
         <div className='col'>
               <table className='table' id='tablexl' style={{background: "transparent", border: "none"}}>

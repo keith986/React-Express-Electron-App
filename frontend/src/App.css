@@ -704,6 +704,16 @@ width: 250px;
 	border-bottom: none;
 }
 
+#adss {
+	background-color: #159936;
+	color: #e9d8ff;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 2px;
+	margin-left: 2px;
+	border-bottom: none;
+}
+
 .msg-read{
 	width: 100%;
 	padding: 10px;

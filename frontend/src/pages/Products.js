@@ -187,7 +187,7 @@ const [currentPage, setCurrentPage] = useState(1)
 const rowPerPage = 5
 const lastIndex = rowPerPage * currentPage
 const firstIndex = lastIndex - rowPerPage
-const records = isProd.slice(firstIndex, lastIndex)
+const records = !!isProd ? isProd.slice(firstIndex, lastIndex) : ''
 const nPage = Math.ceil(isProd.length / rowPerPage)
 const numbers = [...Array(nPage + 1).keys()].slice(1)
 
@@ -405,7 +405,7 @@ function handlePage (id) {
               <option>Choose...</option>
               {!!storedata && storedata.map((str) => {
                 const st_name = str.storename;
-                if(str.storename === 'Closed')
+                if(str.status === 'Closed')
                 {
                   return !st_name;
                 }

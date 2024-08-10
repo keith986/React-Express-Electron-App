@@ -330,6 +330,11 @@ function handlePage (id) {
       <input type='search' style={{width: '100%', padding : '7px', borderRadius : '50px', margin: '5px'}} placeholder='Search for product by name' onChange={handlefilter}/>
       <div className='list-dropdown'>
       {!!isProd && isProd.map((stri) => {
+            
+            if(stri.quantity <= 0){
+                return !stri;
+            }
+               
                 return (
                     <button type='button'  value={`${stri._id}`} onClick={handleClick2} style={{width: '100%', padding : '20px', margin : '2px', background : 'gray', color : '#fff', border: 'none', boxShadow : '0px 0px 2px 1px black', cursor: 'pointer'}}>{stri.name} [{stri.categories}]  {stri.sellingprice}</button>
                        )
@@ -363,7 +368,7 @@ function handlePage (id) {
         <input type='number' className='names-input' id='amount' name='paid' placeholder='0.00' onChange={handleChange} required/>
       </div>
       <div className='row' id='jum-down'>
-        <button type='submit' className='generate' style={{position: "absolute", bottom : "5%", width : "90%", borderRadius : "5px", background : "green", padding : '20px', fontSize : "20px"}}>PAY OUT</button>
+        <button type='submit' className='generate' style={{position: "absolute", bottom : "5%", width : "90%", borderRadius : "5px", background : "green", padding : '20px', fontSize : "20px", color: '#fff'}}>PAY OUT</button>
       </div>
     </div>
     </form>

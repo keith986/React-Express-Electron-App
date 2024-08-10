@@ -36,18 +36,15 @@ const Dashboard = () => {
 
    useEffect(() => {
       axios.post('/todaySales', {thee_date})
-           .then((result) => {
-           
-            if(result.data.error){
+           .then((result) => {      
+             if(result.data.error){
                toast.error(result.data.error)
-            }
-
+             }
               setIsToday(result.data)
-
             })
            .catch((err) => {
-            toast.error(err)
-           })
+              toast.error(err.message)
+            })
    }, [thee_date])
 
    useEffect(() => {

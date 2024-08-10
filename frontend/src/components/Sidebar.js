@@ -22,6 +22,9 @@ const Sidebar = () => {
     const [navbarCollapse, setNavCollapse] = useState(false);
     const [notify , setNotify] = useState('')
     const [ischeckin, setIsCheck] = useState([])
+    const [mini , setMini] = useState([])
+    const [isInv, setInv] = useState([])
+    const [isgoal, setIsGoal] = useState('0')
 
     const handleClick = () => {
       $('.notification-content').animate({
@@ -128,27 +131,60 @@ const Sidebar = () => {
          .catch((errs) => {
              toast.error(errs.message)
          })
-  }, [user, ischeckin])
+  }, [])
+
+  useEffect(() => {
+    axios.post('/minimum')
+         .then((result) => {           
+            setMini(result.data)
+             if(result.data.error){
+               toast.error(result.data.error)
+             } 
+          })
+         .catch((err) => {
+           toast.error(err.message)
+         })
+
+  }, [])
+
+  useEffect(() => {
+    axios.post('/totalinvoices')
+         .then((result) => {
+               setInv(result.data)
+          })
+         .catch((err) => {
+            toast.error(err.message)
+         })
+  }, [])
+
+  useEffect(() => {
+    var sum = 0;
+    $('.todal').each(function(){
+     sum += parseFloat($(this).text());  
+      });
+
+     setIsGoal(sum);
+  }, [isInv])
 
   return (
-    <div className={`container`}>
+    <div className={`container`}>    
       <nav className='nav'>
       <div className='logo'>
       <h2>POStore</h2>
       <i className='bi bi-justify' onClick={e => setNavCollapse(!navbarCollapse)}></i>
-      </div>
-      
+      </div>    
       <span>
       <i className='bi bi-bell-fill' style={{fontSize : '30px', cursor : 'pointer'}} onClick={handleClick}></i>
       <span id='notification-count'>0</span>
       </span>
-
       <div className='user-profile'>
       {!!user && (<h3>Hi {user.username}</h3>)}
       <span>{!!user ? user.accounttype : 'Loading...'}</span>
       </div>
       </nav>
+      
       <Notifications />
+      
       <div className='sidebar-content'>
       <div className={`sidebar-container ${navbarCollapse ? "navbarCollaps" : " "}`}>
         <a href='/adminpage' className='nav-option option1'>
@@ -197,13 +233,99 @@ const Sidebar = () => {
         </a>
       </div>
       </div>
-
       <div className='notification-content'>
         <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red', cursor: 'pointer', zIndex: '6000', backgroundColor : '#e9d8ff'}} onClick={handleClick}></i>
         
         <div className='note-content' id='notes'>
-        {
-            !!ischeckin ?
+              {!!isInv ? isInv.map((toda) => {
+                return (
+                    <span className='total' style={{display: 'none'}}>{toda.paid}</span>         
+                       );
+              })
+              : 
+              ''
+              }
+          {
+            !!isInv && !!mini && !!isgoal
+            ?
+             !!isInv && isInv.map((cec) => {
+                 var al_ertin = '';
+                 const dat = new Date();
+                 var det = dat.getDate();
+                 var mon = dat.getMonth() + 1;
+                 var yr = dat.getFullYear();
+
+                 const greets = [
+                  'Hurray',
+                  'Yey',
+                  'Congrats',
+                  'Cheers',
+                  'Whoopee',
+                  'Yeehaw',
+                  'Bravo',
+                  'Hello Admin',
+                  'Kudos'
+                 ];
+
+                 const ran_dom = Math.floor(Math.random() * greets);
+
+               if(det === mini.date && mon === mini.month && yr === mini.year && isgoal === mini.targetamt){
+                   return (
+                    <div className='msg-data' id='adss'>
+                    <h3>{ran_dom} !!</h3>
+                    <p>You have successfully managed to raise your targeted goal amount of Ksh. <strong>{mini.targetamt}</strong></p>.
+                    <br/>
+                    <i>Regards,</i>
+                    <i>POStore Team</i>
+                    </div>
+                   );
+                }else if(det === mini.date && mon === mini.month && yr === mini.year && isgoal > mini.targetamt){
+                  return (
+                    <div className='msg-data' id='adss'>
+                    <h3>{ran_dom} !!</h3>
+                    <p>You have surpassed your targeted goal amount of Ksh. <strong>{mini.targetamt}</strong></p>.
+                    <br/>
+                    <i>Regards,</i>
+                    <i>POStore Team</i>
+                    </div>
+                   );
+                }else{
+                  al_ertin = '';
+                }
+                
+            return al_ertin;
+          })
+          : ''
+          }
+
+          {
+            !!ischeckin && !!mini
+            ?
+             !!ischeckin && ischeckin.map((chec) => {
+                 var al_ertin = '';
+               if(chec.quantity === mini.minimumqty){
+                   return (
+                  <div className='msg-data' id='ads'>
+                  <p>
+                  <img src={chec.prd_img} alt='product_image' width="30px" height="30px"  style={{cursor: "pointer", borderRadius: "50%", boxShadow : '0px 0px 1px 1px #000'}}/>  {chec.name}  <sup style={{color : 'crimson'}}>Ads</sup> 
+                  </p>
+                   <p>
+                   Remained :: {chec.quantity}
+                   </p>
+                  </div>
+                   );
+                }else{
+                  al_ertin = '';
+                }
+                
+            return al_ertin;
+          })
+          : ''
+          }
+
+          {
+            !!ischeckin 
+            ?
              !!ischeckin && ischeckin.map((checkin) => {
                  var al_ert = '';
                if(checkin.quantity <= 0){
@@ -215,17 +337,15 @@ const Sidebar = () => {
                    <p>
                    Remained :: {checkin.quantity}
                    </p>
-                 </div>
+                  </div>
                    );
                 }else{
                   al_ert = '';
                 }
                 
-             
-
             return al_ert;
           })
-          : 'No Ads'
+          : ''
           }
 
           {

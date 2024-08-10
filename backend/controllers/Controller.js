@@ -2355,7 +2355,6 @@ const allcashreport = async (req, res) => {
                                         Setting.findOneAndUpdate({adminId : adminId}, {
                                             adminId : adminId,
                                             minimumqty : req.body.advanceChange.minimumqty.toString(),
-                                            minimumqty : req.body.advanceChange.minimumqty.toString(),
                                             targetamt : req.body.advanceChange.targetamt.toString(),
                                             date : req.body.advanceChange.date.toString(),
                                             month : req.body.advanceChange.month.toString(),
@@ -2376,13 +2375,12 @@ const allcashreport = async (req, res) => {
                                         const set_ings = Setting({
                                             adminId : adminId,
                                             minimumqty : req.body.advanceChange.minimumqty.toString(),
-                                            minimumqty : req.body.advanceChange.minimumqty.toString(),
                                             targetamt : req.body.advanceChange.targetamt.toString(),
                                             date : req.body.advanceChange.date.toString(),
                                             month : req.body.advanceChange.month.toString(),
                                             year : req.body.advanceChange.year.toString(),
                                             toggle : req.body.istoggled,
-                                                                      })
+                                                                })
                             
                                               set_ings.save()
                                                       .then((result) => {
@@ -2517,6 +2515,32 @@ const allcashreport = async (req, res) => {
     }
  }
 
+ const mini_mum = async (req , res) => {
+    try {
+
+        const {token} = req.cookies;
+
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+            const adminId = user.userdata._id;
+
+            Setting.find({adminId : adminId})
+                   .then((result) => {
+                     return res.json(result) 
+                    })
+                   .catch(err => {
+                    return res.json({
+                        error : err
+                    })
+                   })
+        })
+
+    }catch(err){
+        return res.json({
+            error : err.message
+        })
+    }
+ }
+
  module.exports = {
     signup,
     preview,
@@ -2578,5 +2602,8 @@ const allcashreport = async (req, res) => {
     setTings,
     notify,
     markRead,
-    checkqty
- } 
+    checkqty,
+    mini_mum
+ }    
+
+ 

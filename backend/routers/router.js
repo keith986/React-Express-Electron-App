@@ -95,5 +95,6 @@ use_route.post('/setTings', useController.setTings)
 use_route.post('/notify', useController.notify)
 use_route.post('/markasread', useController.markRead)
 use_route.post('/checkqty', useController.checkqty)
+use_route.post('/minimum', useController.mini_mum)
 
 module.exports = use_route;

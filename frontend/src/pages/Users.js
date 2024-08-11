@@ -90,33 +90,14 @@ axios.post('/deleteuser', {deleting : event.target.id})
   useEffect(() => {
        axios.get('/users')
             .then((result) => {
+              setUsersDatas(result.data)
+              setFilterData(result.data)
               if(result.data.error){
                 toast.error(result.data.error)
               }
-              setUsersDatas(result.data)
-              setFilterData(result.data)
-              console.log(result)
             })
             .catch(err => toast.error(err))
   }, [usersDatas])
-
-  const submitUser = async (e) => {
-    e.preventDefault();
-    await axios.post('/adduser', {addUser})
-               .then((result) => {
-          
-          if(result.data.error){
-            toast.error(result.data.error)
-         }
-
-         if(result.data.success){
-          setAddUser({})
-          toast.success(result.data.success)
-          
-         }
-
-          })
-  }
 
   //pagination
 const [currentPage, setCurrentPage] = useState(1)
@@ -147,6 +128,23 @@ function handlePage (id) {
    setCurrentPage(id)
 }
 
+const submitUser = async (e) => {
+  e.preventDefault();
+  await axios.post('/adduser', {addUser})
+             .then((result) => {
+        
+        if(result.data.error){
+          toast.error(result.data.error)
+       }
+
+       if(result.data.success){
+        setAddUser({})
+        toast.success(result.data.success)
+        
+       }
+
+        })
+}
   return (
     <div className={`container-fluid`}>
     <div className={`${isModalOpen ? "background" : ""}`}></div>
@@ -179,6 +177,7 @@ function handlePage (id) {
             </select>
             <span className='name'>Warehouse</span>
             <select className='status-input' name='warehouse' onChange={handleChange}>
+            <option>Choose...</option>
               {!!storedata && storedata.map((str) => {
                 return (
                     <option value={`${str.storename}`}>{str.storename}</option>

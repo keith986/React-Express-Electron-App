@@ -34,6 +34,17 @@ const Products = () => {
     const [modalImage, setModalImage] = useState(null)
     const [imageModal, setImageModal] = useState(false)
 
+    useEffect(() => {
+      axios.get('/getproducts')
+           .then((result) => {
+              setIsProd(result.data)
+              setFilterDatas(result.data)
+           })
+           .catch((error) => {
+            toast.error(error)
+           })
+    }, [isProd])
+
     const handleChange = (e) => {
       setProducts({...products, [e.target.name] : [e.target.value]})
     }
@@ -101,17 +112,6 @@ const Products = () => {
            })
            .catch((error) => toast.error(error))
     }
-
-    useEffect(() => {
-      axios.get('/getproducts')
-           .then((result) => {
-              setIsProd(result.data)
-              setFilterDatas(result.data)
-           })
-           .catch((error) => {
-            toast.error(error)
-           })
-    }, [isProd])
   
     const submitEditChange = async (e) => {
       e.preventDefault();
@@ -187,7 +187,7 @@ const [currentPage, setCurrentPage] = useState(1)
 const rowPerPage = 5
 const lastIndex = rowPerPage * currentPage
 const firstIndex = lastIndex - rowPerPage
-const records = !!isProd ? isProd.slice(firstIndex, lastIndex) : ''
+const records = isProd.slice(firstIndex, lastIndex) 
 const nPage = Math.ceil(isProd.length / rowPerPage)
 const numbers = [...Array(nPage + 1).keys()].slice(1)
 

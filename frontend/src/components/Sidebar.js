@@ -145,7 +145,7 @@ const Sidebar = () => {
            toast.error(err.message)
          })
 
-  }, [])
+  }, [user])
 
   useEffect(() => {
     axios.post('/totalinvoices')
@@ -155,7 +155,7 @@ const Sidebar = () => {
          .catch((err) => {
             toast.error(err.message)
          })
-  }, [])
+  }, [user])
 
   useEffect(() => {
     var sum = 0;
@@ -183,7 +183,7 @@ const Sidebar = () => {
       </div>
       </nav>
       
-      <Notifications />
+      <Notifications />  
       
       <div className='sidebar-content'>
       <div className={`sidebar-container ${navbarCollapse ? "navbarCollaps" : " "}`}>
@@ -237,7 +237,7 @@ const Sidebar = () => {
         <i className='bi bi-x-lg' style={{fontSize : '25px', color : 'red', cursor: 'pointer', zIndex: '6000', backgroundColor : '#e9d8ff'}} onClick={handleClick}></i>
         
         <div className='note-content' id='notes'>
-              {!!isInv ? isInv.map((toda) => {
+              {!!isInv ? !!isInv && isInv.map((toda) => {
                 return (
                     <span className='total' style={{display: 'none'}}>{toda.paid}</span>         
                        );

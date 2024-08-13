@@ -9,9 +9,9 @@ import { UserContext } from '../context/userContext'
 const POS = () => {
   const {user} = useContext(UserContext);
 
-  const [isProd, setIsProd] = useState(null)
+  const [isProd, setIsProd] = useState([])
   const [iscart, setIsCart] = useState([])
-  const [isDiscount, setIsDiscount] = useState(null)
+  const [isDiscount, setIsDiscount] = useState([])
   const [isInvoice, setIsInvoice] = useState({
     customername : '',
     customeremail : '',
@@ -19,8 +19,8 @@ const POS = () => {
     payment : '',
     paid : ''
   })
-  const [socket, setSocket] = useState(null)
-  const [filterDatas, setFilterDatas] = useState(null)
+  const [socket, setSocket] = useState([])
+  const [filterDatas, setFilterDatas] = useState([])
 
   useEffect(() => {
     axios.get('/getproducts')
@@ -69,7 +69,7 @@ const POS = () => {
             $('.ttl').each(function(){
              sum += parseFloat($(this).text());  
               });
-             $('#grand-total').val(sum)
+             $('#grand-total').val(sum.toLocaleString())
              var grand_total = parseFloat($('#grand-total').val());
              var discount_percent = parseFloat($('#discount').val())
              var discount = parseFloat((discount_percent * grand_total) / 100);
@@ -218,7 +218,7 @@ const [currentPage, setCurrentPage] = useState(1)
 const rowPerPage = 5
 const lastIndex = rowPerPage * currentPage
 const firstIndex = lastIndex - rowPerPage
-const records = iscart.slice(firstIndex, lastIndex)
+const records = iscart && iscart.slice(firstIndex, lastIndex)
 const nPage = Math.ceil(iscart.length / rowPerPage)
 const numbers = [...Array(nPage + 1).keys()].slice(1)
 

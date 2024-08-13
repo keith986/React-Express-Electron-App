@@ -35,7 +35,7 @@ const Products = () => {
     const [imageModal, setImageModal] = useState(false)
 
     useEffect(() => {
-      axios.get('/getproducts')
+       axios.get('/getproducts')
            .then((result) => {
               setIsProd(result.data)
               setFilterDatas(result.data)
@@ -43,17 +43,17 @@ const Products = () => {
            .catch((error) => {
             toast.error(error)
            })
-    }, [isProd])
+    }, [])
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
       setProducts({...products, [e.target.name] : [e.target.value]})
     }
 
-    const handleOpener = () =>{
+    const handleOpener = async () =>{
       setIsOpenModal(true)
     }
 
-    const handleEditOpener = (event) => {
+    const handleEditOpener = async (event) => {
       setIsEditOpen(true)
       setStoreId(event.target.id);
 
@@ -67,7 +67,7 @@ const Products = () => {
 
     }
   
-    const handleDelete = (event) => {
+    const handleDelete = async (event) => {
     
       axios.post('/deleteproduct', {deleting : event.target.id})
            .then((result) => {
@@ -93,7 +93,7 @@ const Products = () => {
        setIsEditOpen(false)
     }
 
-    const handlefilter = (event) => {
+    const handlefilter = async (event) => {
       const respo = filterDatas.filter(s => s.name.includes(event.target.value))
       setIsProd(respo)
     }
@@ -136,7 +136,7 @@ const Products = () => {
            setStoreData(result.data)
          })
          .catch(err => toast.error(err))
-   }, [storedata])
+   }, [])
 
    useEffect(()=> {
     axios.get('/getsuppliers')
@@ -146,7 +146,7 @@ const Products = () => {
          .catch((error) => {
           toast.error(error)
          })
-   }, [supplier])
+   }, [])
 
    useEffect( () => {
     axios.get('/getcategories')
@@ -156,13 +156,13 @@ const Products = () => {
          .catch((error) => {
           toast.error(error)
          })
-   }, [category])
+   }, [])
 
- const handleImage = () => {
+ const handleImage = async () => {
    $('#image').trigger('click');
  }
 
- const handleImageChange = (e) => {
+ const handleImageChange = async (e) => {
   const file = e.target.files[0];
   let fileReader = new FileReader();
   fileReader.readAsDataURL(file);
@@ -173,12 +173,12 @@ const Products = () => {
   }
  }
 
- const popImage = (e) => {
+ const popImage = async (e) => {
    setImageModal(true)
    setModalImage(e.target.src)
  }
 
- const handleProductModalClose = () => {
+ const handleProductModalClose = async () => {
   setImageModal(false)
  }
 
@@ -187,11 +187,11 @@ const [currentPage, setCurrentPage] = useState(1)
 const rowPerPage = 5
 const lastIndex = rowPerPage * currentPage
 const firstIndex = lastIndex - rowPerPage
-const records = isProd.slice(firstIndex, lastIndex) 
+const records = !!isProd && isProd.slice(firstIndex, lastIndex) 
 const nPage = Math.ceil(isProd.length / rowPerPage)
 const numbers = [...Array(nPage + 1).keys()].slice(1)
 
-const handlePrev = () => {
+const handlePrev = async () => {
   if(currentPage !== 1){
     return setCurrentPage(currentPage - 1)
   }else{
@@ -199,7 +199,7 @@ const handlePrev = () => {
   }
 }
 
-const handleNext = () => {
+const handleNext = async () => {
   if(currentPage !== nPage){
      setCurrentPage(currentPage + 1)
   }else{

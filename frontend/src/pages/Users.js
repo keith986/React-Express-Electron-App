@@ -18,7 +18,7 @@ const Users = () => {
     const [usersDatas, setUsersDatas] = useState([])
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
-    const [filterDatas, setFilterData] = useState(null)  
+    const [filterDatas, setFilterData] = useState([])  
 
   const handleOpener = () =>{
     setIsOpenModal(true)
@@ -179,6 +179,9 @@ const submitUser = async (e) => {
             <select className='status-input' name='warehouse' onChange={handleChange}>
             <option>Choose...</option>
               {!!storedata && storedata.map((str) => {
+                if(str.status === 'Closed'){
+                  return !str;
+                }
                 return (
                     <option value={`${str.storename}`}>{str.storename}</option>
                        )
@@ -191,7 +194,6 @@ const submitUser = async (e) => {
             <button type='button' className='back' onClick={handleClose}>Back</button>
             <button type='submit' className='send'>Add User</button>
             </div>
-
           </div>
         </div>
         </form>

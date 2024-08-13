@@ -1135,24 +1135,22 @@ const getproducts = async (req ,res) => {
 
         const {token} = req.cookies;
 
-        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            const adminId = user.userdata._id;
-
-            Products.find({
-                        $or : [
-                            {adminId : adminId},
-                            {adminId : user.userdata.adminId}
-                        ]
-                      })
-                    .then((result) => {
-                        return res.json(result)
+        await jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+                const adminId = user.userdata._id;
+                Products.find({
+                    $or : [
+                        {adminId : adminId},
+                        {adminId : user.userdata.adminId}
+                    ]
+                  })
+                .then((result) => {
+                    return res.json(result)
+                })
+                .catch((error) => {
+                   return  res.json({
+                        error : error
                     })
-                    .catch((error) => {
-                       return  res.json({
-                            error : error
-                        })
-                    })
-
+                })
         })
 
     }catch(error){
@@ -2491,7 +2489,7 @@ const allcashreport = async (req, res) => {
 
         const {token} = req.cookies;
 
-        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+       await jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const adminId = user.userdata._id;
            
             Products.find({
@@ -2606,4 +2604,4 @@ const allcashreport = async (req, res) => {
     mini_mum
  }    
 
- 
+  

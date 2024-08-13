@@ -13,12 +13,12 @@ const Orders = () => {
   const [filterData, setFilterData] = useState(null)
   const [adminprof, setAdminProf] = useState(null)
   
-  const handlefilter = (event) => {
+  const handlefilter = async (event) => {
     const resp = filterData.filter(f => f.invoiceno.includes(event.target.value))
     setInvoice(resp)
   }
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     setIsModal(true)
     axios.post('/receipts', {receiptId : e.target.id})
          .then((result) => {
@@ -39,7 +39,7 @@ const Orders = () => {
 
   }
 
-  const handleClose = () => {
+  const handleClose = async () => {
     setIsModal(false)
   }
 
@@ -54,7 +54,7 @@ const Orders = () => {
          })
   }, [])
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const elemHtml = document.querySelector('#receipt');
     let docPDF = new jsPDF();
     docPDF.html(elemHtml,{
@@ -77,7 +77,7 @@ const records = invoice.slice(firstIndex, lastIndex)
 const nPage = Math.ceil(invoice.length / rowPerPage)
 const numbers = [...Array(nPage + 1).keys()].slice(1)
 
-const handlePrev = () => {
+const handlePrev = async () => {
   if(currentPage !== 1){
     return setCurrentPage(currentPage - 1)
   }else{
@@ -85,7 +85,7 @@ const handlePrev = () => {
   }
 }
 
-const handleNext = () => {
+const handleNext = async () => {
   if(currentPage !== nPage){
      setCurrentPage(currentPage + 1)
   }else{

@@ -7,8 +7,6 @@ const Products = () => {
 
   const [isProd, setIsProd] = useState([])
   const [filterData, setFilterData] = useState(null) 
-  const [modalImage, setModalImage] = useState(null)
-  const [imageModal, setImageModal] = useState(false)
 
   const handlefilter = (event) => {
     const resp = filterData.filter(f => f.name.includes(event.target.value))
@@ -25,15 +23,6 @@ const Products = () => {
           toast.error(error)
          })
   }, [isProd])
-
-  const popImage = (e) => {
-    setImageModal(true)
-    setModalImage(e.target.src)
-  }
- 
-  const handleProductModalClose = () => {
-   setImageModal(false)
-  }
 
   //pagination
 const [currentPage, setCurrentPage] = useState(1)
@@ -67,25 +56,10 @@ function handlePage (id) {
     return (
       <div className={`container-fluid`}>
       
-      <div className={`${imageModal ? "background" : ""}`}></div>
-
       <h2>Stock Inventory</h2>
     
         <div className='row'>
 
-      <div className={`modal ${imageModal ? "open" : ""}`}>
-        <div className='modal-content'>
-          <div className='modal-dialog'>
-            <div className='modal-header'>
-              <h2>Product Image</h2>
-              <i className='bi bi-x-lg' onClick={handleProductModalClose} style={{cursor : "pointer"}}></i>
-            </div>
-            <div className='modal-body'>
-                 <img src={modalImage} alt='product_image' width="300px" height="300px" style={{borderRadius: "50%"}}/>
-            </div>
-          </div>
-         </div>
-      </div>
 
       <div className='col-divide'>
          <p>Search : </p>
@@ -96,7 +70,6 @@ function handlePage (id) {
         <div className='col'>
               <table className='table' id='tablexl' style={{background: "transparent", border: "none"}}>
                 <tr>
-                  <th>IMAGE</th>
                   <th>PRODUCT</th>
                   <th>CATEGORIES</th>
                   <th>EXPIRY DATE</th>
@@ -109,8 +82,7 @@ function handlePage (id) {
                   var ey = prod.eyear;
                   return   (
                                 <tr className='tr-row' id={prod._id}>
-                                <td><img src={prod.prd_img} alt='product_image' width="50px" height="50px"  style={{cursor: "pointer", borderRadius: "50%"}} onClick={popImage}/></td>     
-                                  <td>{prod.name}</td>
+                                 <td>{prod.name}</td>
                                   <td>{prod.categories}</td>
                                   <td>{ey + '-' + em + '-' + ed}</td>
                                   <td>Kes. {prod.sellingprice}</td>

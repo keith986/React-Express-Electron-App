@@ -224,55 +224,35 @@ function handlePage (id) {
                var mon = dates.getMonth() + 1;
                var yer = dates.getFullYear();
 
-              var expr = '';
-              console.log(expr)
-               if(exp.edate === dat){
-                   expr += <tr className='tr-row'>
-                               <td>{exp.name}</td>
-                               <td>{exp.quantity}</td>
-                               <td>{exp.supplier}</td>
-                              <td>{ey + '-' + em + '-' + ed}</td>
-                               <td>Today</td>
-                               </tr>;   
-               }
+              var expr = exp;
+
+               if(exp.edate !== dat){
+                  return !expr; 
+                }
                
                var sevday = exp.edate - dat;
 
-               if(sevday === 7){
-                   expr += <tr className='tr-row'>
-                               <td>{exp.name}</td>
-                               <td>{exp.quantity}</td>
-                               <td>{exp.supplier}</td>
-                               <td>{ey + '-' + em + '-' + ed}</td>
-                               <td>7 days</td>
-                               </tr>;   
+               if(sevday !== 7){
+                return !expr;    
                }
 
                var ths_mon = exp.emonth - mon.toString();
 
-               if(ths_mon === 0 && ey === yer.toString()){
-                console.log('yey')  
-                   expr += <tr className='tr-row'>
-                               <td>{exp.name}</td>
-                               <td>{exp.quantity}</td>
-                               <td>{exp.supplier}</td>
-                               <td>{ey + '-' + em + '-' + ed}</td>
-                               <td>1 month</td>
-                               </tr>;     
+               if(ths_mon !== 0 && ey !== yer.toString()){
+                return !expr;   
                }
 
-               if(ths_mon === 3 && ey === yer.toString()){
-                   expr += <tr className='tr-row'>
-                               <td>{exp.name}</td>
-                               <td>{exp.quantity}</td>
-                               <td>{exp.supplier}</td>
-                               <td>{ey + '-' + em + '-' + ed}</td>
-                               <td>3 months</td>
-                               </tr>;      
+               if(ths_mon !== 3 && ey !== yer.toString()){
+                    return !expr;     
                }
-
+                         
                 return ( 
-                 expr
+                  <tr className='tr-row'>
+                               <td>{expr.name}</td>
+                               <td>{expr.quantity}</td>
+                               <td>{expr.supplier}</td>
+                               <td>{ey + '-' + em + '-' + ed}</td>
+                  </tr>
                 );
                   
               })}

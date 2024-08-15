@@ -49,7 +49,7 @@ useEffect(() => {
   $('.pay').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#cashyp').html(sum);
+   $('#cashyp').html(sum.toLocaleString());
 }, [iscash])
 
 useEffect(() => {
@@ -67,7 +67,7 @@ useEffect(() => {
   $('.trans').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#transferp').html(sum);
+   $('#transferp').html(sum.toLocaleString());
 }, [istransfer])
 
 
@@ -86,7 +86,7 @@ useEffect(() => {
   $('.cheq').each(function(){
    sum += parseFloat($(this).text());  
     });
-   $('#cheqp').html(sum);
+   $('#cheqp').html(sum.toLocaleString());
 }, [ischeque])
 
 //pagination

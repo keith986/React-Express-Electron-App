@@ -270,8 +270,9 @@ const Sidebar = () => {
                  const ran_dom = Math.floor(Math.random() * greets);
            //det === mini.date && mon === mini.month && yr === mini.year &&
             var targ = !!mini && mini.map((tag) => tag.targetamt)
+            
                if( isgoal === targ.toString()){
-                   return (
+                   al_ertin = 
                     <div className='msg-data' id='adss'>
                     <h3>{ran_dom} !!</h3>
                     <p>You have successfully managed to raise your targeted goal amount of Ksh. <strong>{mini.targetamt}</strong></p>.
@@ -279,9 +280,9 @@ const Sidebar = () => {
                     <i>Regards,</i>
                     <i>POStore Team</i>
                     </div>
-                   );
+                   ;
                 }else if(isgoal > targ.toString()){
-                  return (
+                  al_ertin =
                     <div className='msg-data' id='adss'>
                     <h3>{ran_dom} !!</h3>
                     <p>You have surpassed your targeted goal amount of Ksh. <strong>{mini.targetamt}</strong></p>.
@@ -289,7 +290,7 @@ const Sidebar = () => {
                     <i>Regards,</i>
                     <i>POStore Team</i>
                     </div>
-                   );
+                  ;
                 }else{
                   al_ertin = '';
                 }

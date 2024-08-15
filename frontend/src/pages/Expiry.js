@@ -222,14 +222,16 @@ function handlePage (id) {
                var dates = new Date();
                var dat = dates.getDate();
                var mon = dates.getMonth() + 1;
-               var yer = dates.getFullYear()
+               var yer = dates.getFullYear();
 
+              var expr = '';
+              console.log(expr)
                if(exp.edate === dat){
-                  var expr = <tr className='tr-row'>
+                   expr += <tr className='tr-row'>
                                <td>{exp.name}</td>
                                <td>{exp.quantity}</td>
                                <td>{exp.supplier}</td>
-                               <td>{ey + '-' + em + '-' + ed}</td>
+                              <td>{ey + '-' + em + '-' + ed}</td>
                                <td>Today</td>
                                </tr>;   
                }
@@ -237,7 +239,7 @@ function handlePage (id) {
                var sevday = exp.edate - dat;
 
                if(sevday === 7){
-                  var expri = <tr className='tr-row'>
+                   expr += <tr className='tr-row'>
                                <td>{exp.name}</td>
                                <td>{exp.quantity}</td>
                                <td>{exp.supplier}</td>
@@ -248,8 +250,9 @@ function handlePage (id) {
 
                var ths_mon = exp.emonth - mon.toString();
 
-               if(ths_mon === '0' && ey === yer.toString()){
-                  var expre = <tr className='tr-row'>
+               if(ths_mon === 0 && ey === yer.toString()){
+                console.log('yey')  
+                   expr += <tr className='tr-row'>
                                <td>{exp.name}</td>
                                <td>{exp.quantity}</td>
                                <td>{exp.supplier}</td>
@@ -259,7 +262,7 @@ function handlePage (id) {
                }
 
                if(ths_mon === 3 && ey === yer.toString()){
-                  var expry = <tr className='tr-row'>
+                   expr += <tr className='tr-row'>
                                <td>{exp.name}</td>
                                <td>{exp.quantity}</td>
                                <td>{exp.supplier}</td>
@@ -268,10 +271,10 @@ function handlePage (id) {
                                </tr>;      
                }
 
-
-                return (
-                  expr, expri, expre, expry
-                  );
+                return ( 
+                 expr
+                );
+                  
               })}
             </table>
         </div>

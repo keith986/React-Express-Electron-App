@@ -26,13 +26,13 @@ const Sidebar = () => {
     const [isInv, setInv] = useState([])
     const [isgoal, setIsGoal] = useState('0')
 
-    const handleClick = () => {
+  const handleClick = () => {
       $('.notification-content').animate({
         width : "toggle"
       },'slow')
-    }
+  }
      
-    useEffect(  () => {
+  useEffect(  () => {
       const socket = io('http://localhost:4000', {
         auth : {
           token : !!user && user._id
@@ -68,15 +68,15 @@ const Sidebar = () => {
         }
       })
 
-     // return () => socket.off("NewInvoice");
+      return () => socket.off("NewInvoice");
 
-    },[user]);
+  },[user]);
 
-   setInterval(() => {
+  setInterval(() => {
       var len = $('.msg-data').length;
       $('#notification-count').html(len);
      // document.getElementById('notification-count').innerHTML = len;   
-   }, 1000);
+  }, 1000);
 
   useEffect( () => {
     axios.post('/notify')
@@ -248,12 +248,12 @@ const Sidebar = () => {
           {
             !!isInv && !!mini && !!isgoal
             ?
-             !!isInv && isInv.map((cec) => {
+          !!isInv && isInv.map((cec) => {
                  var al_ertin = '';
-                 const dat = new Date();
-                 var det = dat.getDate();
-                 var mon = dat.getMonth() + 1;
-                 var yr = dat.getFullYear();
+               //  const dat = new Date();
+               //  var det = dat.getDate();
+               //  var mon = dat.getMonth() + 1;
+                // var yr = dat.getFullYear();
 
                  const greets = [
                   'Hurray',
@@ -268,8 +268,9 @@ const Sidebar = () => {
                  ];
 
                  const ran_dom = Math.floor(Math.random() * greets);
-
-               if(det === mini.date && mon === mini.month && yr === mini.year && isgoal === mini.targetamt){
+           //det === mini.date && mon === mini.month && yr === mini.year &&
+            var targ = !!mini && mini.map((tag) => tag.targetamt)
+               if( isgoal === targ.toString()){
                    return (
                     <div className='msg-data' id='adss'>
                     <h3>{ran_dom} !!</h3>
@@ -279,7 +280,7 @@ const Sidebar = () => {
                     <i>POStore Team</i>
                     </div>
                    );
-                }else if(det === mini.date && mon === mini.month && yr === mini.year && isgoal > mini.targetamt){
+                }else if(isgoal > targ.toString()){
                   return (
                     <div className='msg-data' id='adss'>
                     <h3>{ran_dom} !!</h3>
@@ -303,11 +304,15 @@ const Sidebar = () => {
             ?
              !!ischeckin && ischeckin.map((chec) => {
                  var al_ertin = '';
-               if(chec.quantity === mini.minimumqty){
+               //  console.log(!!mini && mini.map((min) => min.minimumqty))
+                var qty = !!mini && mini.map((min) => min.minimumqty)
+              //  console.log(chec.quantity)
+               if(chec.quantity === qty.toString()){
+                
                    return (
-                  <div className='msg-data' id='ads'>
+                  <div className='msg-data' id='ads-warning'>
                   <p>
-                  <img src={chec.prd_img} alt='product_image' width="30px" height="30px"  style={{cursor: "pointer", borderRadius: "50%", boxShadow : '0px 0px 1px 1px #000'}}/>  {chec.name}  <sup style={{color : 'crimson'}}>Ads</sup> 
+                    {chec.name} 
                   </p>
                    <p>
                    Remained :: {chec.quantity}
@@ -332,7 +337,7 @@ const Sidebar = () => {
                    return (
                   <div className='msg-data' id='ads'>
                   <p>
-                  <img src={checkin.prd_img} alt='product_image' width="30px" height="30px"  style={{cursor: "pointer", borderRadius: "50%", boxShadow : '0px 0px 1px 1px #000'}}/>  {checkin.name}  <sup style={{color : 'crimson'}}>Ads</sup> 
+                  {checkin.name}
                   </p>
                    <p>
                    Remained :: {checkin.quantity}

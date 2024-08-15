@@ -695,7 +695,17 @@ width: 250px;
 }
 
 #ads {
-	background-color: #003fff;
+	background-color: rgb(131, 7, 7);
+	color: #e9d8ff;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 2px;
+	margin-left: 2px;
+	border-bottom: none;
+}
+
+#ads-warning {
+	background-color: rgb(204, 115, 12);
 	color: #e9d8ff;
 	margin-top: 5px;
 	margin-bottom: 5px;

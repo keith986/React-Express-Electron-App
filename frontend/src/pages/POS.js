@@ -69,7 +69,7 @@ const POS = () => {
             $('.ttl').each(function(){
              sum += parseFloat($(this).text());  
               });
-             $('#grand-total').val(sum.toLocaleString())
+             $('#grand-total').val(sum)
              var grand_total = parseFloat($('#grand-total').val());
              var discount_percent = parseFloat($('#discount').val())
              var discount = parseFloat((discount_percent * grand_total) / 100);
@@ -265,7 +265,6 @@ function handlePage (id) {
       <div className='col'>
         <table className='table' id='cart-table' style={{background: "transparent", border: "none"}}>
             <tr>
-                <th>Image</th>
                 <th>Item</th>
                 <th>Quantity</th>
                 <th>Price</th>
@@ -280,7 +279,6 @@ function handlePage (id) {
                     
                   return (
                           <tr className='tr-row' id={itm._id}>
-                          <td><img src={itm.prd_img} alt='product_image' width="50px" height="50px"  style={{borderRadius: "50%"}}/></td>      
                               <td>{itm.name}</td>
                               <td className='itm-qty' id={itm._id} contentEditable={true} onInput={quantityChange}>1</td>
                               <td id={`selling-${itm._id}`}>{itm.sellingprice}</td>

@@ -34,7 +34,7 @@ const POS = () => {
          .catch((error) => {
           toast.error(error)
          })
-  }, [])
+  }, [iscart, isProd])
 
   const handlefilter = (event) => {
     const resp = filterDatas.filter(s => s.name.includes(event.target.value))
@@ -143,10 +143,10 @@ const POS = () => {
     setSocket(io('http://localhost:4000', {
       auth : {
         token : !!user && user._id
-      }
+      } 
     }))
 
-  },[user])
+  },[user, iscart])
 
   const submitChange = async (e) => {
     e.preventDefault();
@@ -198,10 +198,10 @@ const POS = () => {
         var thee_date = dat + ' / ' + month + ' / ' + year;
         var thee_time = hrs + ' : ' + min + ' : ' + sec +  ' ' + session;
 
-    axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount, thee_time, thee_date, month, year})
+     axios.post('/invoice', {isInvoice, isDiscount, info, grandtotal, amount, thee_time, thee_date, month, year})
          .then((result) => {
            if(result.data.success){  
-            socket.emit("newnotification", {msg : 'new invoice', adminId : !!user && user.adminId, result : result.data.success});
+            socket.emit("newNotification", {msg : 'new invoice', adminId : !!user && user.adminId, result : result.data.success});
             toast.success('Invoice Successfully Generated!');
            }
            if(result.data.error){

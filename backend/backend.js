@@ -29,10 +29,10 @@ const io = new Server({
 
 io.on('connection', async (socket) => {
    
-    // console.log('connected user' + socket.handshake.auth.token);
+    console.log('connected user' + socket.handshake.auth.token);
    //  var userId = socket.handshake.auth.token;  
      
-     socket.on('newnotification', async (data) => {
+    socket.on('newNotification', async (data) => {
         
         const noti_fications = notifications({
             adminId : data.adminId,
@@ -48,9 +48,9 @@ io.on('connection', async (socket) => {
                        })
                       .catch((err) => {
                         console.log(err.message)
-                      })
+                       })
         
-     })
+    })
 
     socket.on('disconnect', async () => {
         console.log('disconnected user' + socket.handshake.auth.token);

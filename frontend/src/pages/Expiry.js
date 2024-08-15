@@ -87,9 +87,16 @@ function handlePage (id) {
               var mont = dates.getMonth() + 1;
               var yr = dates.getFullYear();
 
-               if(exp.edate === dat && exp.emonth === mont && exp.eyear === yr){
+               if(exp.edate === dat.toString()){
+                if(exp.emonth === mont.toString()){
                   var expr = <span className='today' style={{display: 'none'}}>{exp.name}</span>;   
                }
+               }
+
+               if(exp.eyear === yr.toString()){
+                return !expr;
+               }
+
                 return expr;
               })
               :
@@ -104,14 +111,21 @@ function handlePage (id) {
               //time and date
               var dates = new Date();
               var dat = dates.getDate();
-              var mo_nt = dates.getMonth() + 1;
+              var mon = dates.getMonth() + 1;
               var yer = dates.getFullYear();
 
               var sevday = expi.edate - dat;
 
-               if(sevday === 7 && expi.emonth === mo_nt && expi.eyear === yer){
+               if(sevday === 7) {
+                if(expi.eyear === yer.toString()){
                   var expr = <span className='seven' style={{display: 'none'}}>{expi.name}</span>;   
                }
+               }
+
+               if(expi.emonth !== mon.toString()){
+                  return !expr;
+               }
+
                 return expr;
              })
               :
@@ -125,17 +139,24 @@ function handlePage (id) {
             {!!isProd ? isProd.map((expis) => {
               //time and date
               var dates = new Date();
-              var mon = dates.getMonth() + 1;
-              var d_t = dates.getDate();
-              var y_er = dates.getFullYear();
-
+              var dat = dates.getDate();
+              var mon = dates.getMonth() + 1; 
+              var yer = dates.getFullYear();
 
               var this_mon = expis.emonth - mon;
-
-               if(this_mon === 0 && expis.edate === d_t && expis.eyear === y_er){
+               if(expis.eyear === yer.toString()){
+                
+                if(this_mon === 0){
                   var expr = <span className='month' style={{display: 'none'}}>{expis.name}</span>;   
+                }
+                
                }
-                return expr;
+
+               if(expis.edate !== dat.toString()){
+                  return !expr;
+               }
+
+               return expr;
               })
               :
               <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
@@ -148,13 +169,21 @@ function handlePage (id) {
             {!!isProd ? isProd.map((expi) => {
               //time and date
               var dates = new Date();
-              var mon = dates.getMonth() + 1;
-
-              var this_mon = expi.emonth - mon;
-
-               if(this_mon === 3){
-                  var expr = <span className='threemonth' style={{display: 'none'}}>{expi.name}</span>;   
+              var dat = dates.getDate();
+              var mo_n = dates.getMonth() + 1;
+              var yer = dates.getFullYear();
+ 
+              var this_mon = expi.emonth - mo_n;
+              if(this_mon === 3){
+               if(expi.eyear === yer.toString()){    
+                  var expr = <span className='threemonth' style={{display: 'none'}}>{expi.name}</span>;                   
                }
+              }
+
+              if(expi.edate === dat.toString()){
+                return !expr;
+              }
+
                 return expr;
               })
               :
@@ -193,6 +222,7 @@ function handlePage (id) {
                var dates = new Date();
                var dat = dates.getDate();
                var mon = dates.getMonth() + 1;
+               var yer = dates.getFullYear()
 
                if(exp.edate === dat){
                   var expr = <tr className='tr-row'>
@@ -216,9 +246,9 @@ function handlePage (id) {
                                </tr>;   
                }
 
-               var ths_mon = exp.emonth - mon;
+               var ths_mon = exp.emonth - mon.toString();
 
-               if(ths_mon === 0){
+               if(ths_mon === '0' && ey === yer.toString()){
                   var expre = <tr className='tr-row'>
                                <td>{exp.name}</td>
                                <td>{exp.quantity}</td>
@@ -228,7 +258,7 @@ function handlePage (id) {
                                </tr>;     
                }
 
-               if(ths_mon === 3){
+               if(ths_mon === 3 && ey === yer.toString()){
                   var expry = <tr className='tr-row'>
                                <td>{exp.name}</td>
                                <td>{exp.quantity}</td>
@@ -237,6 +267,7 @@ function handlePage (id) {
                                <td>3 months</td>
                                </tr>;      
                }
+
 
                 return (
                   expr, expri, expre, expry

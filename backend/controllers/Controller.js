@@ -230,6 +230,7 @@ const store = async(req, res) => {
             error : 'Status is required'
         })
     }
+      
 
     const {token} = req.cookies;
 
@@ -855,12 +856,6 @@ const addproduct = async (req, res) => {
         const {token} = req.cookies;
 
         const val = req.body.products;
-        
-        if(req.body.srcUrl === '' || req.body.srcUrl === null){
-            return res.json({
-                error : "Product's Image Required."
-            })
-        }
 
         if(val.name === ''){
             return res.json({
@@ -934,12 +929,12 @@ const addproduct = async (req, res) => {
             })
         }
 
+        
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
             const adminId = user.userdata._id;
 
             const pro_duct = Products({
                 adminId : adminId,
-                prd_img : req.body.srcUrl,
                 name : req.body.products.name.toString(),
                 batchno : req.body.products.batchno.toString(),
                 description : req.body.products.description.toString(),
@@ -960,13 +955,12 @@ const addproduct = async (req, res) => {
                         return res.json({
                             success : 'Product Added Successfully!'
                         })
-                    })
+                     })
                     .catch((error) => {
-                        console.log('errorw' + error)
                         return res.json({
                             error : error
                         })
-                    })
+                     })
 
         })
 
@@ -984,12 +978,6 @@ const editproduct = async (req, res) => {
         const {token} = req.cookies;
 
         const val = req.body.products;
-
-        if(req.body.srcUrl === '' || req.body.srcUrl === null){
-           return res.json({
-                error : "Product's Image Required."
-            })
-        }
 
         if(val.name === ''){
             return res.json({
@@ -1064,11 +1052,9 @@ const editproduct = async (req, res) => {
         }
 
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            const adminId = user.userdata._id;
             const prodId = req.body.storeid;
 
             Products.findByIdAndUpdate(prodId, {
-                prd_img : req.body.srcUrl,
                 name : req.body.products.name.toString(),
                 batchno : req.body.products.batchno.toString(),
                 description : req.body.products.description.toString(),
@@ -1475,7 +1461,7 @@ const invoice = async (req, res) => {
                                         .catch((ers) => {
                                             console.log(ers)
                                         })
-               
+
                                         return res.json({
                                             success : resultes
                                         })

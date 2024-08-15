@@ -20,7 +20,7 @@ const Products = () => {
       expdate : '',
       date: '',
       month : '',
-      year : '' 
+      year : ''
     })
     const [isProd, setIsProd] = useState([])
     const [isEditOpen, setIsEditOpen] = useState(false)
@@ -30,20 +30,17 @@ const Products = () => {
     const [supplier, setSupplier] = useState([])
     const [category, setCategory] = useState([])
     const [previewer, setPreviewer] = useState([])
-    const [srcUrl, setSrcUrl] = useState(null)
-    const [modalImage, setModalImage] = useState(null)
-    const [imageModal, setImageModal] = useState(false)
 
     useEffect(() => {
-       axios.get('/getproducts')
+      axios.get('/getproducts')
            .then((result) => {
               setIsProd(result.data)
               setFilterDatas(result.data)
-           })
+            })
            .catch((error) => {
             toast.error(error)
-           })
-    }, [])
+            })
+    }, [isProd])
 
     const handleChange = async (e) => {
       setProducts({...products, [e.target.name] : [e.target.value]})
@@ -98,38 +95,6 @@ const Products = () => {
       setIsProd(respo)
     }
 
-    function submitChange (e) {
-
-      e.preventDefault();
-      axios.post('/addproduct', {products, srcUrl})
-           .then((result) => {
-             if(result.data.error){
-                toast.error(result.data.error)
-             }
-             if(result.data.success){
-                toast.success(result.data.success)
-             }
-           })
-           .catch((error) => toast.error(error))
-    }
-  
-    const submitEditChange = async (e) => {
-      e.preventDefault();
- 
-      await axios.post('/editproduct', {products, storeid, srcUrl})
-                 .then((result) => {
- 
-                   if(result.data.error){
-                     toast.error(result.data.error)
-                   }
- 
-                   if(result.data.success){
-                     toast.success(result.data.success)
-                    }
-     })
-     .catch(err => toast.error(err.message))
-   }
-
    useEffect(() => {
     axios.get('/storeData')
          .then((result) => {
@@ -157,30 +122,6 @@ const Products = () => {
           toast.error(error)
          })
    }, [])
-
- const handleImage = async () => {
-   $('#image').trigger('click');
- }
-
- const handleImageChange = async (e) => {
-  const file = e.target.files[0];
-  let fileReader = new FileReader();
-  fileReader.readAsDataURL(file);
-  fileReader.onload = function (){
-     setTimeout(()=>{
-      setSrcUrl(fileReader.result)
-     },500)
-  }
- }
-
- const popImage = async (e) => {
-   setImageModal(true)
-   setModalImage(e.target.src)
- }
-
- const handleProductModalClose = async () => {
-  setImageModal(false)
- }
 
  //pagination
 const [currentPage, setCurrentPage] = useState(1)
@@ -211,11 +152,41 @@ function handlePage (id) {
    setCurrentPage(id)
 }
 
+function submitChange (e) {
+  e.preventDefault();
+  axios.post('/addproduct', {products})
+       .then((result) => {
+         if(result.data.error){
+            toast.error(result.data.error)
+         }
+         if(result.data.success){
+            toast.success(result.data.success)
+         }
+        })
+       .catch((error) => toast.error(error))
+}
+
+const submitEditChange = async (e) => {
+  e.preventDefault();
+
+  await axios.post('/editproduct', {products, storeid})
+             .then((result) => {
+
+               if(result.data.error){
+                 toast.error(result.data.error)
+               }
+
+               if(result.data.success){
+                 toast.success(result.data.success)
+                }
+ })
+ .catch(err => toast.error(err.message))
+}
+
     return (
       <div className={`container-fluid`}>
          <div className={`${isModalOpen ? "background" : ""}`}></div>  
          <div className={`${isEditOpen ? "background" : ""}`}></div>
-         <div className={`${imageModal ? "background" : ""}`}></div>
 
       <h2>Stock Inventory</h2>
       <div className='row'>
@@ -223,19 +194,13 @@ function handlePage (id) {
        
         <div className={`modal ${isModalOpen ? "open" : ""}`}>
           <div className='modal-dialog'>
-          <form onSubmit={submitChange}>
+          <form onSubmit={submitChange} encType='multipart/formdata'>
             <div className='modal-content'>
               <div className='modal-header'>
                 <h2>Add Product</h2>
                 <i className='bi bi-bag-fill'></i>
               </div>
               <div className='modal-body'>
-             
-              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%"}}>
-              <span className='name'>Upload Product's Image : <i className='bi bi-image-fill' style={{fontSize: "30px"}} onClick={handleImage}></i></span>
-              <input type='file' accept="images/*" className='name-input' name='image' id='image' onChange={handleImageChange} style={{display: 'none'}}/>
-              <img src={srcUrl} alt='product_image' id="dis-play"/>
-              </div>
 
               <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Product Name :</span>
@@ -342,12 +307,6 @@ function handlePage (id) {
               </div>
               <div className='modal-body'>
 
-              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%"}}>
-              <span className='name'>Change Product's Image : <i className='bi bi-image-fill' style={{fontSize: "30px"}} onClick={handleImage}></i></span>
-              <input type='file' accept="images/*" className='name-input' name='image' id='image' onChange={handleImageChange} style={{display: 'none'}}/>
-              <img src={srcUrl ? srcUrl : previewer.prd_img} alt='product_image' id="dis-play"/>
-              </div>
-
               <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%" , marginTop : "5px"}}>
               <span className='name'>Product Name</span>
               <input type='text' className='name-input' name='name' placeholder={!!previewer && previewer.name} onChange={handleChange}/>
@@ -443,24 +402,10 @@ function handlePage (id) {
           </div>
         </div>
 
-        <div className={`modal ${imageModal ? "open" : ""}`}>
-        <div className='modal-content'>
-          <div className='modal-dialog'>
-            <div className='modal-header'>
-              <h2>Product Image</h2>
-              <i className='bi bi-x-lg' onClick={handleProductModalClose} style={{cursor : "pointer"}}></i>
-            </div>
-            <div className='modal-body'>
-                 <img src={modalImage} alt='product_image' width="300px" height="300px" style={{borderRadius: "50%"}}/>
-            </div>
-          </div>
-         </div>
-        </div>
-
       </div>
       <div className='row'>
       <div className='col-divide'>
-         <p>Search : </p>
+        <p>Search: </p>
         <input type='search' className='search' placeholder='Search By Name...' onChange={handlefilter}/>
       </div>
       </div>
@@ -468,7 +413,6 @@ function handlePage (id) {
         <div className='col'>
               <table className='table' id='tablexl'>
                 <tr>
-                  <th>IMAGE</th>
                   <th>PRODUCT</th>
                   <th>CATEGORIES</th>
                   <th>EXPIRY DATE</th>
@@ -487,7 +431,6 @@ function handlePage (id) {
 
                   return   (
                                 <tr className='tr-row' id={'prod-'+prod._id}>
-                                  <td><img src={prod.prd_img} alt='product_image' width="50px" height="50px"  style={{cursor: "pointer", borderRadius: "50%"}} onClick={popImage}/></td>
                                   <td>{prod.name}</td>
                                   <td>{prod.categories}</td>
                                   <td>{ey + '-' + em + '-' + ed}</td>

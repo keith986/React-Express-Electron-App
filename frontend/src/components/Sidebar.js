@@ -68,7 +68,7 @@ const Sidebar = () => {
         }
       })
 
-      return () => socket.off("NewInvoice");
+     // return () => socket.off("NewInvoice");
 
     },[user]);
 
@@ -131,7 +131,7 @@ const Sidebar = () => {
          .catch((errs) => {
              toast.error(errs.message)
          })
-  }, [])
+  }, [user])
 
   useEffect(() => {
     axios.post('/minimum')

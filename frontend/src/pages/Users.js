@@ -59,7 +59,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
   const handlefilters = (event) => {
     const resp = filterDatas.filter(s => s.fullname.includes(event.target.value))
     setUsersDatas(resp)
- }
+  }
 
   const submitEditChange = async (e) => {
     e.preventDefault();
@@ -77,7 +77,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
 
    })
    .catch(err => toast.error(err.message))
- }
+  }
 
   useEffect(() => {
        axios.get('/storeData')

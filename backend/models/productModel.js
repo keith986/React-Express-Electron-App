@@ -39,15 +39,15 @@ const productSchema = new Schema({
         require: true
     },
     batchno : {
-        type: String,
-        require: true
+        type : String,
+        require : true
     },
     mandate : {
         type : String,
         require : true
     },
     edate : {
-        type: String
+        type : String
     },
     emonth : {
         type : String
@@ -55,9 +55,6 @@ const productSchema = new Schema({
     eyear : {
         type : String
     },
-    prd_img : {
-        type : String
-    }
 },{timestamps: true})
 
 const Products = mongoose.model('Products', productSchema)

@@ -14,6 +14,7 @@ const Suppliers = () => {
       location: '',
       warehouse: ''
     })
+    
     const [supplierdata, setSupplierData] = useState([])
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [storeid, setStoreId] = useState(null)
@@ -61,7 +62,7 @@ const Suppliers = () => {
   const handlefilter = (event) => {
     const resp = filterDatas.filter(s => s.name.includes(event.target.value))
     setSupplierData(resp)
- }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,7 +70,6 @@ const Suppliers = () => {
                .then((result) => {
                    if(result.data.success){
                       toast.success(result.data.success)
-                      setSupplierData({})
                    }
                    if(result.data.error){
                     toast.error(result.data.error)
@@ -147,7 +147,7 @@ function handlePage (id) {
     <div className={`${isModalOpen ? "background" : ""}`}></div>
     <div className={`${isEditOpen ? "background" : ""}`}></div>
     <h2>Suppliers Information</h2>
-   <div className='row'>
+    <div className='row'>
       <button type='button' className='modalopener' onClick={handleOpener}>New Supplier</button>
       <div className={`modal ${isModalOpen ? "open" : ""}`}>
         <div className='modal-dialog'>
@@ -234,7 +234,7 @@ function handlePage (id) {
         </div>
       </div>
 
-   </div>
+    </div>
     <div className='row'>
     <div className='col-divide'>
        <p>Search : </p>

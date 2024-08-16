@@ -218,39 +218,21 @@ function handlePage (id) {
                   var em = expr.emonth;
                   var ey = expr.eyear;
 
-                //time and date
-               var dates = new Date();
-               //var dat = dates.getDate();
-               var mon = dates.getMonth() + 1;
-               var yer = dates.getFullYear();
+                  //time and date
+                  var dates = new Date();
+                  var mon = dates.getMonth() + 1;
+                  var yer = dates.getFullYear();
 
-              
+                  var ths_mon = expr.emonth - mon.toString();
 
-               /*if(expr.edate !== dat){
-                expr =  !expr; 
-                }*/
-               
-              // var sevday = expr.edate - dat;
+                  var  num_year = ey - yer;
 
-               /*if(sevday !== 7){
-                expr =  !expr;     
-               }*/
+                  var numDays = new Date(expr.eyear, expr.emonth, 0).getDate()
+                  var num_days = numDays - expr.edate;
 
-               var ths_mon = expr.emonth - mon.toString();
-
-              /* if(ths_mon !== 0 && ey !== yer.toString()){
-                expr =  !expr;    
-               }*/
-
-            //   if(sevday !== 7 || (expr.edate !== dat) || (ths_mon !== 0 && ey !== yer.toString()) || (ths_mon !== 3 && ey !== yer.toString())){
-             //       return !expr;  
-              // }
-
-              var numDays = new Date(yer, expr.emonth, 0).getDate()
-              var num_days = numDays - expr.edate;
-               if(num_days <= 0 && numDays <= 0){
-                  return num_days === 'Expired';
-               }
+                  if(num_days <= 0 && numDays <= 0){
+                      return num_days === 'Expired';
+                  }
 
                 return ( 
                            <tr className='tr-row'>
@@ -258,7 +240,7 @@ function handlePage (id) {
                                <td>{expr.quantity}</td>
                                <td>{expr.supplier}</td>
                                <td>{ey + '-' + em + '-' + ed}</td>
-                               <td>{num_days + ' Days '}{ths_mon > 0 ? ths_mon + ' Months' : ''}</td>
+                               <td>{num_days + ' Days '}{ths_mon > 0 ? ths_mon + ' Months' : ''}{num_year > 0 ? num_year + ' Years' : ''}</td>
                            </tr>
                 );
                

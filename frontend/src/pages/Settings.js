@@ -10,11 +10,7 @@ const Settings = () => {
   const [isModal, setIsModal] = useState(false)
   const [isonoff, setIsonoff] = useState([])
   const [advanceChange, setAdvanceChange] = useState({
-    minimumqty : '',
-    targetamt : '',
-    date : '',
-    year : '',
-    month : ''
+    minimumqty : ''
   })
   const [istoggled, setIsToggled] = useState("on")
   const {user} = useContext(UserContext)
@@ -116,7 +112,6 @@ const Settings = () => {
 
   }, [isonoff]);
 
-
   return (
     <div className='container-fluid'>
       <h2>My Settings</h2>
@@ -135,18 +130,6 @@ const Settings = () => {
               <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Set miminum quantity for all products:</span>
               <input type='number' className='name-input' name='minimumqty' onChange={handleChange} placeholder='0' style={{width : "30%", borderRadius: '2px'}}/>
-              </div>
-              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
-              <span className='name'>Set end goal/target Amount:</span>
-              <input type='number' className='name-input' name='targetamt' onChange={handleChange} placeholder='0' style={{width : "30%", borderRadius: '2px'}}/> 
-              </div>
-              <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
-              <span className='name'>Set end goal/target period:</span>
-              <div className="digits">
-                 <input type="number" maxLength="2" name="date" id="edit-input" onChange={handleChange} placeholder='date'/>
-                 <input type="number" maxLength="2" name="month" id="edit-input" onChange={handleChange} placeholder='month'/>
-                 <input type="number" maxLength="4" name="year" id="edit-input" onChange={handleChange} placeholder='year'/>
-              </div>
               </div>
               <div style={{display : "flex", flexDirection : "row", justifyContent : "space-between", width: "100%", marginTop : "5px"}}>
               <span className='name'>Email Notifications:</span>

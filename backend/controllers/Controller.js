@@ -2339,10 +2339,6 @@ const allcashreport = async (req, res) => {
                                         Setting.findOneAndUpdate({adminId : adminId}, {
                                             adminId : adminId,
                                             minimumqty : req.body.advanceChange.minimumqty.toString(),
-                                            targetamt : req.body.advanceChange.targetamt.toString(),
-                                            date : req.body.advanceChange.date.toString(),
-                                            month : req.body.advanceChange.month.toString(),
-                                            year : req.body.advanceChange.year.toString(),
                                             toggle: req.body.istoggled, 
                                                      })
                                                    .then((resu) => {

@@ -8,18 +8,6 @@ const settingsSchema = new Schema({
     minimumqty : {
         type : String
     },
-    targetamt : {
-        type : String
-    },
-    date : {
-        type : String
-    },
-    month : {
-        type : String
-    },
-    year : {
-        type : String
-    },
     toggle : {
         type : String
     }   

@@ -139,7 +139,7 @@ function handlePage (id) {
             {!!isProd ? isProd.map((expis) => {
               //time and date
               var dates = new Date();
-              var dat = dates.getDate();
+           //   var dat = dates.getDate();
               var mon = dates.getMonth() + 1; 
               var yer = dates.getFullYear();
 
@@ -152,12 +152,12 @@ function handlePage (id) {
                 
                }
 
-               if(expis.edate !== dat.toString()){
-                  return !expr;
-               }
+             //  if(expis.edate !== dat.toString()){
+              //    return !expr;
+             //  }
 
                return expr;
-              })
+             })
               :
               <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
               }
@@ -220,7 +220,7 @@ function handlePage (id) {
 
                 //time and date
                var dates = new Date();
-               var dat = dates.getDate();
+               //var dat = dates.getDate();
                var mon = dates.getMonth() + 1;
                var yer = dates.getFullYear();
 
@@ -230,7 +230,7 @@ function handlePage (id) {
                 expr =  !expr; 
                 }*/
                
-               var sevday = expr.edate - dat;
+              // var sevday = expr.edate - dat;
 
                /*if(sevday !== 7){
                 expr =  !expr;     
@@ -242,20 +242,26 @@ function handlePage (id) {
                 expr =  !expr;    
                }*/
 
-               if(sevday !== 7 || (expr.edate !== dat) || (ths_mon !== 0 && ey !== yer.toString()) || (ths_mon !== 3 && ey !== yer.toString())){
-                console.log('false')
-                    return !expr;     
+            //   if(sevday !== 7 || (expr.edate !== dat) || (ths_mon !== 0 && ey !== yer.toString()) || (ths_mon !== 3 && ey !== yer.toString())){
+             //       return !expr;  
+              // }
+
+              var numDays = new Date(yer, expr.emonth, 0).getDate()
+              var num_days = numDays - expr.edate;
+               if(num_days <= 0 && numDays <= 0){
+                  return num_days === 'Expired';
                }
-                         
+
                 return ( 
                            <tr className='tr-row'>
                                <td>{expr.name}</td>
                                <td>{expr.quantity}</td>
                                <td>{expr.supplier}</td>
                                <td>{ey + '-' + em + '-' + ed}</td>
+                               <td>{num_days + ' Days '}{ths_mon > 0 ? ths_mon + ' Months' : ''}</td>
                            </tr>
                 );
-                  
+               
               })}
             </table>
         </div>

@@ -213,10 +213,10 @@ function handlePage (id) {
                     <th>Time Left</th>
                 </tr>
                 {!!records && records.map((exp) => {
-
-                  var ed = exp.edate;
-                  var em = exp.emonth;
-                  var ey = exp.eyear;
+                  var expr = exp;
+                  var ed = expr.edate;
+                  var em = expr.emonth;
+                  var ey = expr.eyear;
 
                 //time and date
                var dates = new Date();
@@ -224,35 +224,36 @@ function handlePage (id) {
                var mon = dates.getMonth() + 1;
                var yer = dates.getFullYear();
 
-              var expr = exp;
+              
 
-               if(exp.edate !== dat){
-                  return !expr; 
-                }
+               /*if(expr.edate !== dat){
+                expr =  !expr; 
+                }*/
                
-               var sevday = exp.edate - dat;
+               var sevday = expr.edate - dat;
 
-               if(sevday !== 7){
-                return !expr;    
-               }
+               /*if(sevday !== 7){
+                expr =  !expr;     
+               }*/
 
-               var ths_mon = exp.emonth - mon.toString();
+               var ths_mon = expr.emonth - mon.toString();
 
-               if(ths_mon !== 0 && ey !== yer.toString()){
-                return !expr;   
-               }
+              /* if(ths_mon !== 0 && ey !== yer.toString()){
+                expr =  !expr;    
+               }*/
 
-               if(ths_mon !== 3 && ey !== yer.toString()){
+               if(sevday !== 7 || (expr.edate !== dat) || (ths_mon !== 0 && ey !== yer.toString()) || (ths_mon !== 3 && ey !== yer.toString())){
+                console.log('false')
                     return !expr;     
                }
                          
                 return ( 
-                  <tr className='tr-row'>
+                           <tr className='tr-row'>
                                <td>{expr.name}</td>
                                <td>{expr.quantity}</td>
                                <td>{expr.supplier}</td>
                                <td>{ey + '-' + em + '-' + ed}</td>
-                  </tr>
+                           </tr>
                 );
                   
               })}

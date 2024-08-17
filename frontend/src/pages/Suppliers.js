@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import '../App.css'
 import toast from 'react-hot-toast'
 import axios from 'axios'
-import $ from 'jquery'
 
 const Suppliers = () => {
     const [isModalOpen, setIsOpenModal] = useState(false)
@@ -36,14 +35,16 @@ const Suppliers = () => {
       
        if(result.data.success){
           toast.success(result.data.success);
-          $('#supplier-' + event.target.id).hide();
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
        }
 
        if(result.data.error){
           toast.error(result.data.error);
        }
 
-    })
+     })
     .catch((error) => toast.error(error))
   }
 
@@ -70,6 +71,9 @@ const Suppliers = () => {
                .then((result) => {
                    if(result.data.success){
                       toast.success(result.data.success)
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 3000);
                    }
                    if(result.data.error){
                     toast.error(result.data.error)
@@ -86,7 +90,7 @@ const Suppliers = () => {
           .catch((err) => {
             toast.error(err)
           })
-  }, [supplierdata])
+  }, [])
 
   const submitEditChange = async (e) => {
     e.preventDefault();
@@ -99,11 +103,13 @@ const Suppliers = () => {
 
                  if(result.data.success){
                    toast.success(result.data.success)
-                   setSupplierData({})
+                   setTimeout(() => {
+                    window.location.reload();
+                   }, 3000);
                   }
    })
    .catch(err => toast.error(err.message))
- }
+  }
 
  useEffect(() => {
   axios.get('/storeData')
@@ -111,7 +117,7 @@ const Suppliers = () => {
          setStoreData(result.data)
        })
        .catch(err => console.log(err))
-}, [storedata])
+}, [])
 
 //pagination
 const [currentPage, setCurrentPage] = useState(1)

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import '../App.css'
 import toast from 'react-hot-toast'
-import $ from 'jquery'
 
 const Users = () => {
     const [isModalOpen, setIsOpenModal] = useState(false)
@@ -37,7 +36,9 @@ axios.post('/deleteuser', {deleting : event.target.id})
       }
       if(result.data.success){
        toast.success(result.data.success)
-       $('#user-'+event.target.id).hide()   
+       setTimeout(() => {
+        window.location.reload();
+      }, 3000);  
       }
 
       })
@@ -71,8 +72,10 @@ axios.post('/deleteuser', {deleting : event.target.id})
                  }
 
                  if(result.data.success){
-                   toast.success(result.data.success)
-        
+                   toast.success(result.data.success);
+                   setTimeout(() => {
+                    window.location.reload();
+                  }, 3000);
                   }
 
    })
@@ -85,7 +88,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
               setStoreData(result.data)
             })
             .catch(err => console.log(err))
-  }, [storedata])
+  }, [])
 
   useEffect(() => {
        axios.get('/users')
@@ -97,7 +100,7 @@ axios.post('/deleteuser', {deleting : event.target.id})
               }
             })
             .catch(err => toast.error(err))
-  }, [usersDatas])
+  }, [])
 
   //pagination
 const [currentPage, setCurrentPage] = useState(1)
@@ -138,9 +141,10 @@ const submitUser = async (e) => {
        }
 
        if(result.data.success){
-        setAddUser({})
-        toast.success(result.data.success)
-        
+        toast.success(result.data.success);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
        }
 
         })

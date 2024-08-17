@@ -164,7 +164,7 @@ function handlePage (id) {
             <h3>Expires this month</h3>
            <span className='changes' id='month'></span>
         </div>
-        <div className='col-md-4 monthsexp'>
+         <div className='col-md-4 monthsexp'>
             <i className='bi bi-credit-card-2-front-fill'></i>
             {!!isProd ? isProd.map((expi) => {
               //time and date
@@ -192,14 +192,14 @@ function handlePage (id) {
             <h3>Expires in 3 months</h3>
            
            <span className='changes' id='threemonth'></span>
-        </div>
+         </div>
       </div>
 
       <div className='row'>
-      <div className='col-divide'>
+        <div className='col-divide'>
        <p>Search : </p>
       <input type='search' className='search' placeholder='Search By Product name' onChange={handlefilter}/>
-      </div>
+        </div>
       </div>
 
       <div className='row'>
@@ -244,8 +244,8 @@ function handlePage (id) {
                            </tr>
                 );
                
-              })}
-            </table>
+                })}
+        </table>
         </div>
       </div>
 

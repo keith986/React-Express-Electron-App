@@ -70,8 +70,8 @@ const Settings = () => {
       <div className='row'>
         <div className='col'>
         <h2>Authentication detail</h2>
-        <p>user: {!!user && user.role}</p>
-        <p>Last Login : {!!user && user.date} , {!!user && user.time} </p>
+        <p>Role : {!!user && user.role}</p>
+        <p>Last Logged out : {!!user && user.date} , {!!user && user.time} </p>
       </div>
       </div>
       <button className='logout' onClick={handleLogout}>Logout</button>

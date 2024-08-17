@@ -40,7 +40,7 @@ const Products = () => {
            .catch((error) => {
             toast.error(error)
             })
-    }, [isProd])
+    }, [])
 
     const handleChange = async (e) => {
       setProducts({...products, [e.target.name] : [e.target.value]})
@@ -75,7 +75,10 @@ const Products = () => {
              }
 
              if(result.data.success){
-              toast.success(result.data.success)      
+              toast.success(result.data.success) 
+              setTimeout(() => {
+                window.location.reload();
+              }, 3000);     
              }
 
              })
@@ -99,7 +102,7 @@ const Products = () => {
     axios.get('/storeData')
          .then((result) => {
            setStoreData(result.data)
-         })
+          })
          .catch(err => toast.error(err))
    }, [])
 
@@ -160,7 +163,10 @@ function submitChange (e) {
             toast.error(result.data.error)
          }
          if(result.data.success){
-            toast.success(result.data.success)
+            toast.success(result.data.success);
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
          }
         })
        .catch((error) => toast.error(error))
@@ -171,14 +177,15 @@ const submitEditChange = async (e) => {
 
   await axios.post('/editproduct', {products, storeid})
              .then((result) => {
-
                if(result.data.error){
                  toast.error(result.data.error)
                }
-
                if(result.data.success){
-                 toast.success(result.data.success)
-                }
+                 toast.success(result.data.success);
+                 setTimeout(() => {
+                  window.location.reload();
+                }, 3000);
+               }
  })
  .catch(err => toast.error(err.message))
 }

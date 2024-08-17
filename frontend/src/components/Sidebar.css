@@ -24,7 +24,6 @@
     cursor: pointer;
 }
 
-
 .user-profile{
     align-items: center;
     gap: 20px;
@@ -55,7 +54,7 @@
     background-color: #000;
     color: #fff;
     height: calc(100vh - 70px);
-    width: 220px;
+    width: 190px;
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
@@ -78,13 +77,13 @@
 }
 
 .nav-option:hover, .nav-option:hover > i.bi{
-    background-color: #e9d8ff;;
+    background-color: #dadada;
     color: #000;
     cursor: pointer;
 }
 
 .nav-option:active , .nav-option:active > i.bi{
-    background-color: #e9d8ff;;
+    background-color: #dadada;
     color: #000;
     cursor: pointer;
 }
@@ -153,6 +152,10 @@
     }
 
     .nav-option > h3 {
+        display: none;
+    }
+
+    #cls {
         display: none;
     }
 }

@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import '../App.css'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import $ from 'jquery'
 
 const Categories = () => {
     const [isModalOpen, setIsOpenModal] = useState(false)
@@ -27,15 +26,17 @@ const Categories = () => {
       .then((result) => {
          if(result.data.success){
            toast.success(result.data.success);
-           $('#category-'+event.target.id).hide();
+           setTimeout(() => {
+            window.location.reload();
+          }, 3000);
          }
          if(result.data.error){
            toast.error(result.data.error)
          }
-      })
+       })
       .catch((error) => {
          toast.error(error)
-      })
+       })
     }
 
     const handlefilter = (event) => {
@@ -48,17 +49,18 @@ const Categories = () => {
 
       axios.post('/addcategory', {categorys})
            .then((result) => {
-               
-            console.log(result)
                if(result.data.success){
                   toast.success(result.data.success)
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 3000);
                }
 
                if(result.data.error){
                  toast.error(result.data.error)
                }
 
-           })
+            })
            .catch(err => toast.error(err))
 
     }
@@ -72,7 +74,7 @@ const Categories = () => {
           .catch((error) => {
             toast.error(error)
           })
-  }, [categoryData])  
+  }, [])  
 
     return (
       <div className={`container-fluid`}>

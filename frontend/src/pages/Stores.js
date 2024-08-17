@@ -2,12 +2,8 @@ import React,{useEffect, useState} from 'react'
 import '../App.css'
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
-import $ from 'jquery'
 
 const Stores = () => {
-  
-  const navigate = useNavigate();
   const [usedata, setUseData] = useState([]);
   const [store, setStore] = useState({
     storename: '',
@@ -38,7 +34,9 @@ axios.post('/deletestore', {deleting : event.target.id})
       }
       if(result.data.success){
        toast.success(result.data.success)
-       $('#store-'+event.target.id).hide()   
+       setTimeout(() => {
+        window.location.reload();
+      }, 3000);   
       }
 
       })
@@ -73,9 +71,10 @@ axios.post('/deletestore', {deleting : event.target.id})
                    }
 
                    if(result.data.success){
-                    setStore({})
-                    toast.success(result.data.success)
-                    navigate('/stores')
+                    toast.success(result.data.success);
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 3000);
                    }
 
                  })
@@ -94,8 +93,11 @@ axios.post('/deletestore', {deleting : event.target.id})
                   }
 
                   if(result.data.success){
-                    toast.success(result.data.success)
-                    navigate('/stores')
+                    toast.success(result.data.success);
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 3000);
+                    
                    }
 
     })
@@ -109,7 +111,7 @@ axios.post('/deletestore', {deleting : event.target.id})
               setFilterData(result.data)
             })
             .catch(err => console.log(err))
-  }, [usedata])
+  }, [])
 
 //pagination
 const [currentPage, setCurrentPage] = useState(1)

@@ -34,9 +34,9 @@ const POS = () => {
          .catch((error) => {
           toast.error(error)
          })
-  }, [iscart, isProd])
+  }, [])
 
-  const handlefilter = (event) => {
+ const handlefilter = (event) => {
     const resp = filterDatas.filter(s => s.name.includes(event.target.value))
     setIsProd(resp)
  }
@@ -146,7 +146,7 @@ const POS = () => {
       } 
     }))
 
-  },[user, iscart])
+  },[user])
 
   const submitChange = async (e) => {
     e.preventDefault();
@@ -213,40 +213,10 @@ const POS = () => {
          })
   }
 
-  //pagination
-const [currentPage, setCurrentPage] = useState(1)
-const rowPerPage = 5
-const lastIndex = rowPerPage * currentPage
-const firstIndex = lastIndex - rowPerPage
-const records = iscart && iscart.slice(firstIndex, lastIndex)
-const nPage = Math.ceil(iscart.length / rowPerPage)
-const numbers = [...Array(nPage + 1).keys()].slice(1)
-
-const handlePrev = () => {
-  if(currentPage !== 1){
-    return setCurrentPage(currentPage - 1)
-  }else{
-    return setCurrentPage(1)
-  }
-}
-
-const handleNext = () => {
-  if(currentPage !== nPage){
-     setCurrentPage(currentPage + 1)
-  }else{
-     setCurrentPage(nPage)
-  }
-}
-
-function handlePage (id) {
-   setCurrentPage(id)
-}
-
   return (
     <div className='container-fluid'>
-    
-    <form onSubmit={submitChange}>
-    <div className='cartright'>
+     <form onSubmit={submitChange}>
+     <div className='cartright'>
       <div className='row'>
         <h5 className='name'>Customer Name <i>*Optional*</i></h5>
         <h5 className='name'>Customer Email <i>*Optional*</i></h5>
@@ -255,10 +225,10 @@ function handlePage (id) {
         <input type='text' className='names-input' name='customername' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
         <input type='text' className='names-input' name='customeremail' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/>
       </div>
-        <div className='row'>
+      <div className='row'>
         <h5 className='name'>Customer Phone <i>*Optional*</i></h5>
       </div>
-        <div className='row'>
+      <div className='row'>
         <input type='number' className='names-input' name='customerphone' placeholder='Optional [Required for credit Sales]' onChange={handleChange}/> 
       </div>       
       <div className='row'>
@@ -272,7 +242,7 @@ function handlePage (id) {
                 <th>Action</th>
             </tr>
             
-                {!!records && records.map((data) => {
+                {!!iscart ? iscart.map((data) => {
                   var items = data.item;
                   
                   var detail = items.map((itm) => {
@@ -292,65 +262,51 @@ function handlePage (id) {
                   });  
 
                   return detail;        
-                                                })                         
+                                                })    
+                  :
+                  ''                     
                 }
              
         </table>
         <button className='deleteall' onClick={handleDeleteMany}><i className='bi bi-trash-fill'></i> DELETE ALL</button>
-        </div>
+       </div>
       </div>
-      <div className='row'>
-      <nav className='page-nav'>
-        <ul className='pagination'>
-         
-          <li className='page-item'>
-            <button onClick={handlePrev}>Prev</button>
-          </li>
-
-          {!!numbers && numbers.map((n, i) => {
-            return (
-              <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
-                  <button onClick={() => handlePage(n)}>{n}</button>
-                </li>
-                   );
-          })}
-
-          <li className='page-item'>
-            <button onClick={handleNext}>Next</button>
-          </li>
-
-        </ul>
-      </nav> 
-      </div>
-    </div>
-    <div className='product-list'>
+     </div>
+     <div className='product-list'>
       <h2>Select Product</h2>
-      <input type='search' style={{width: '100%', padding : '7px', borderRadius : '50px', margin: '5px'}} placeholder='Search for product by name' onChange={handlefilter}/>
+      <input type='search' style={{width: '100%', padding : '7px', borderRadius : '50px', marginTop: '10px', marginBottom : '5px'}} placeholder='Search for product by name' onChange={handlefilter}/>
       <div className='list-dropdown'>
-      {!!isProd && isProd.map((stri) => {
+      {!!isProd ? isProd.map((stri) => {
             
             if(stri.quantity <= 0){
                 return !stri;
             }
-               
+              
                 return (
-                    <button type='button'  value={`${stri._id}`} onClick={handleClick2} style={{width: '100%', padding : '20px', margin : '2px', background : 'gray', color : '#fff', border: 'none', boxShadow : '0px 0px 2px 1px black', cursor: 'pointer'}}>{stri.name} [{stri.categories}]  {stri.sellingprice}</button>
+                    <button type='button'  value={`${stri._id}`} onClick={handleClick2} style={{width: '100%', padding : '20px', margin : '2px', background : '#000', color : '#fff', border: 'none', boxShadow : '0px 0px 1px 1px black', cursor: 'pointer'}}>{stri.name} [{stri.categories}]  {stri.sellingprice}</button>
                        )
                 })
+        :
+       ''
       }
       </div>
-    </div>
-    <div className='cash-out'>
+     </div>
+     <div className='cash-out' >
       <div className='row' id='jump'>
        KES. <input type='number' className='names-input' id='grand-total' name='grandtotal' placeholder='0.00' readOnly style={{border: "none", outline : "none", background : "transparent", fontSize : "30px", width: '100%'}}/>
       </div>
+      
       <div className='row' id='jump'>
         <h4>Discount (%)</h4>
-        <input type='number' className='names-input' id='discount' placeholder='0.00' onChange={discountChange} required/>
       </div>
-      <div className='row' id='jump'>
-        <h4>Payment Method *</h4>
-        <select className='names-input' name='payment' onChange={handleChange}>
+      <div className='row' id='jum'>
+        <input type='number' className='names-input' style={{width: '100%', borderRadius: '2px', outline : 'none'}} id='discount' placeholder='0.00' onChange={discountChange} required/>
+      </div>
+      <div className='row ' id='jump'>
+        <h4>Payment Method</h4>
+      </div>
+      <div className='row shadow' id='jum'>
+        <select className='names-input' style={{width: '100%', borderRadius: '2px', outline : 'none'}} name='payment' onChange={handleChange}>
             <option >Choose</option>
             <option value='transfer'>Transfer payment</option>
             <option value='cash'>Cash payment</option>
@@ -359,17 +315,23 @@ function handlePage (id) {
       </div>
       <div className='row' id='jum-down'>
         <h4>Amount Payable</h4>
-        <input type='number' className='names-input' id='amount' name='amount' placeholder='0.00' readOnly/>
+      </div>
+      <div className='row' id='jum'>
+        <input type='number' className='names-input' style={{width: '100%', borderRadius: '2px', outline : 'none', background: '#000', color:'#fff'}} id='amount' name='amount' placeholder='0.00' readOnly/>
       </div>
       <div className='row' id='jum-down'>
-        <h4>Amount Paid *</h4>
-        <input type='number' className='names-input' id='amount' name='paid' placeholder='0.00' onChange={handleChange} required/>
+        <h4>Amount Paid</h4>
       </div>
+      <div className='row' id='jum'>
+        <input type='number' className='names-input' style={{width: '100%', borderRadius: '2px', outline : 'none', background: '#000', color:'#fff'}} id='amount' name='paid' placeholder='0.00' onChange={handleChange} required/>
+      </div>
+
       <div className='row' id='jum-down'>
         <button type='submit' className='generate' style={{position: "absolute", bottom : "5%", width : "90%", borderRadius : "5px", background : "green", padding : '20px', fontSize : "20px", color: '#fff'}}>PAY OUT</button>
       </div>
-    </div>
-    </form>
+
+     </div>
+     </form>
     </div>
   );
 

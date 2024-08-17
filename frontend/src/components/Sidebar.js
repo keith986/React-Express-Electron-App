@@ -17,12 +17,12 @@ const Sidebar = () => {
 
     if(!!user && user.accounttype !== 'Admin'){
     navigate('/login')
-    }
+      }
 
     const [navbarCollapse, setNavCollapse] = useState(false);
     const [notify , setNotify] = useState('')
     const [ischeckin, setIsCheck] = useState([])
-    const [mini , setMini] = useState([])
+    const [mini , setMini] = useState([]) 
 
   const handleClick = () => {
       $('.notification-content').animate({
@@ -89,7 +89,7 @@ const Sidebar = () => {
          .catch((err) => {
           toast.error(err.message)
          })
-  }, [user])
+  }, [user, notify])
 
   const handleRead = async (req, res) => {
     try {
@@ -129,7 +129,7 @@ const Sidebar = () => {
          .catch((errs) => {
              toast.error(errs.message)
          })
-  }, [])
+  }, [user, ischeckin])
 
   useEffect(() => {
     axios.post('/minimum')
@@ -143,7 +143,7 @@ const Sidebar = () => {
            toast.error(err.message)
          })
 
-  }, [])
+  }, [user, mini])
 
   //time and date
   var dates = new Date();
@@ -203,7 +203,7 @@ const Sidebar = () => {
       </span>
       <div className='user-profile'>
       {!!user && (<h3>Hi {user.username}</h3>)}
-      <span>{!!user ? user.accounttype : 'Loading...'}</span>
+      <span>{!!user ? !user && user.accounttype : 'Loading...'}</span>
       </div>
       </nav>
       <Notifications />  

@@ -8,8 +8,7 @@ import $ from 'jquery'
 const Dashboard = () => {
 
    const [istoday, setIsToday] = useState(null)
-   const [istodayInv, setIsTodayInv] = useState(null)
-   const [isexpired, setIsExpired] = useState(null)
+   const [istodayInv, setIsTodayInv] = useState('0')
    const [issuppliers, setIsSuppliers] = useState(null)
    const [isInv, setIsInv] = useState([])
    const [currentMonth, setCurrentMonth] = useState(null)
@@ -70,16 +69,6 @@ const Dashboard = () => {
         });
        $('#todayp').html(sum.toLocaleString());
     }, [istoday])
-
-   useEffect(() => {
-      axios.get('/getproducts')
-           .then((result) => {
-              setIsExpired(result.data)
-           })
-           .catch((error) => {
-            toast.error(error)
-           })
-   }, [])
 
    useEffect(() => {
        var co_unt = $('.exp').length
@@ -280,25 +269,11 @@ const handlePrev = () => {
             <h3>Today Sales</h3>
            KES <span className='changes' id='todayp'></span>
         </div>
-        <div className='col-md-4 ban'>
-            <i className='bi bi-ban-fill'></i>
-            {!!isexpired ? isexpired.map((exp) => {
-               if(exp.quantity === '0'){
-                  var expr = <span className='exp' style={{display: 'none'}}>{exp.quantity}</span>;   
-               }
-                return expr;
-              })
-              :
-              <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>
-              }
-            <h3>Expired</h3>
-           <span className='changes' id='expired'></span>
-        </div>
         <div className='col-md-4 receipt'>
             <i className='bi bi-receipt-cutoff'></i>
             {!!istodayInv ? '' : <span style={{margin: '5px', fontSize : '16px'}}>Loading...</span>}
             <h3>Today Invoice</h3>
-               <span className='changes'>{!!istodayInv ? istodayInv : <span style={{margin: '5px', fontSize : '16px'}}>0</span>}</span>
+               <span className='changes'>{!!istodayInv ? istodayInv : <span style={{margin: '5px', fontSize : '16px'}}></span>}</span>
         </div>
      </div>
 

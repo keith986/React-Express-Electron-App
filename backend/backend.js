@@ -7,7 +7,7 @@ dotenv.config();
 require('colors');
 const notifications = require('../backend/models/notificationsModel');
 
-dbconn(); 
+dbconn();
 
 const app = express();
 
@@ -51,13 +51,12 @@ io.on('connection', async (socket) => {
                        })
         
     })
-
+ 
     socket.on('disconnect', async () => {
         console.log('disconnected user' + socket.handshake.auth.token);
     })
  
 })
-
 
 //listening to ports
 app.listen('5000', function(err){

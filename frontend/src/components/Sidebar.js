@@ -9,6 +9,8 @@ import addNotification from 'react-push-notification';
 import { Notifications } from 'react-push-notification';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useIdleTimer } from "react-idle-timer";
+
 
 const Sidebar = () => {
 
@@ -20,6 +22,7 @@ const Sidebar = () => {
       }
 
     const [navbarCollapse, setNavCollapse] = useState(false);
+    const [idleground, setIdleGround] = useState(false)
     const [notify , setNotify] = useState('')
     const [ischeckin, setIsCheck] = useState([])
     const [mini , setMini] = useState([]) 
@@ -184,14 +187,55 @@ const Sidebar = () => {
            if(result.data.error){
             toast.error(result.data.error)
            }
-         })
+          })
          .catch(error => {
           toast.error(error)
-         })
+          })
   }
 
+  const FIVE_MINS =   30 * 60 * 1000;
+	const GENERAL_DEBOUNCE_TIME = 10000;
+  
+	const handleOnUserIdle = async () => {
+      setIdleGround(true)
+	}
+
+	 /** 
+	 * SET USER IDEAL TIME WITH DEBOUNCE
+	 */
+	useIdleTimer({
+	  timeout: FIVE_MINS, // time in millisecond
+	  onIdle: handleOnUserIdle,
+	  debounce: GENERAL_DEBOUNCE_TIME, // time in millisecond
+	});
+
+  const handleClose = async () => {
+    setIdleGround(false)
+  }
+
+  if(idleground === true){
+    setTimeout(() => {
+      var ids = user._id;
+    axios.post('/adminlogout', {ids,thee_date, thee_time})
+         .then((result) => {
+           if(result.data.success){
+            navigate('/login')
+            toast.success(result.data.success)
+            window.location.reload()
+           }
+           if(result.data.error){
+            toast.error(result.data.error)
+           }
+          })
+         .catch(error => {
+          toast.error(error)
+          })
+    }, 60000);
+  }
+ 
   return (
-    <div className={`container`}>    
+    <div className={`container`}>  
+    <div className={`${idleground ? "back-ground" : ""}`}></div>  
       <nav className='nav'>
       <div className='logo'>
       <h2>POStore</h2>
@@ -202,10 +246,10 @@ const Sidebar = () => {
       <span id='notification-count'>0</span>
       </span>
       <div className='user-profile'>
-      {!!user && (<h3>Hi {user.username}</h3>)}
-      <span>{!!user ? !user && user.accounttype : 'Loading...'}</span>
+       {!!user && (<h3>Hi {user.username}</h3>)}
+       <span>{!!user ? user.accounttype : 'Loading...'}</span>
       </div>
-      </nav>
+      </nav> 
       <Notifications />  
       <div className='sidebar-content'>
       <div className={`sidebar-container ${navbarCollapse ? "navbarCollaps" : " "}`}>
@@ -265,21 +309,23 @@ const Sidebar = () => {
         <div className='note-content' id='notes'>
              
           {
-            !!ischeckin && !!mini?!!ischeckin && ischeckin.map((chec) => {
+            !!ischeckin && !!mini
+            ?
+            !!ischeckin && ischeckin.map((chec) => {
                  var al_ertin = '';
-                var qty = !!mini && mini.map((min) => min.minimumqty)
-               if(chec.quantity === qty.toString()){
-                
-                   return (
+                 var qt_check = chec.quantity;
+                var qty = !!mini && mini.map((min) => min.minimumqty);
+               if(qt_check === qty.toString()){
+                   al_ertin = 
                   <div className='msg-data' id='ads-warning'>
-                  <p>
-                    {chec.name} 
-                  </p>
                    <p>
-                   Remained :: {chec.quantity}
+                    {chec.name} 
+                   </p>
+                   <p>
+                    Remained :: {qt_check}
                    </p>
                   </div>
-                   );
+                   ;
                 }else{
                   al_ertin = '';
                 }
@@ -348,7 +394,31 @@ const Sidebar = () => {
 
         <button id='mark-read' onClick={handleRead}>Mark All as Read</button>
       </div>
-
+      <div className='row'>
+      <div className={`modal ${idleground ? "open" : ""}`} style={{background : 'rgb(107, 0, 0)', color: '#fff', zIndex: '12000'}}>
+        <div className='modal-dialog'>
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <h3>Session Timeout</h3>
+                <i className='bi bi-clock-history'></i>
+              </div>
+              <div className='modal-body' style={{borderBottom: 'none', borderTop : '1px solid #fff'}}>
+                <h2>Hey {!!user && user.username}, ARE YOU STILL ON ?</h2>
+                <div className='col'>
+                <i className='bi bi-exclamation-triangle-fill' style={{fontSize: '100px', color: 'orange'}}></i> 
+                <p style={{color: 'gray'}}>Your session is about to expire.</p>
+                <p>You will be logged out in 60 seconds.</p>
+                </div>
+              </div>   
+              <div className='modal-footer'>
+              <span>.</span>
+              <button type='button' className='back' onClick={handleClose}>Continue Session</button>
+              <button type='submit' className='send' id='autolog' style={{background: 'red'}} onClick={handleLogout}>Log Out</button>
+               </div>      
+          </div>
+        </div>
+      </div>
+      </div>
     </div>
   )
 }

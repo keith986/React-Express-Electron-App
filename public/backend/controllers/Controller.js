@@ -4033,8 +4033,8 @@ const allcashreport = async (req, res) => {
     const transporter = nodemailer.createTransport({
         service : 'gmail',
         auth : {
-            user : 'joanabok2023@gmail.com',
-            pass: 'jrce wvig mfym bjor'
+            user : '',
+            pass: ''
         }
         });
         

@@ -1,0 +1,108 @@
+{
+  "name": "postore.app",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/main.mjs",
+  "author": {
+    "name": "Keith Kelly Baraka",
+    "email": "keithkelly986@gmail.com"
+  },
+  "description": "POStore App",
+  "homepage": "./",
+  "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@reach/router": "^1.3.4",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "boostrap": "^2.0.0",
+    "bootstrap-icons": "^1.11.3",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "electron-is-dev": "^3.0.1",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "fs": "^0.0.1-security",
+    "html-to-image": "^1.11.11",
+    "html2canvas": "^1.4.1",
+    "jquery": "^3.7.1",
+    "jsonwebtoken": "^9.0.2",
+    "jspdf": "^2.5.1",
+    "mongoose": "^8.5.4",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.15",
+    "nodemon": "^3.1.4",
+    "qrcode.react": "^3.1.0",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.2",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.2.1",
+    "react-idle-timer": "^5.7.2",
+    "react-push-notification": "^1.5.4",
+    "react-router-dom": "^6.23.1",
+    "react-scripts": "5.0.1",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
+    "styled-components": "^6.1.11",
+    "url": "^0.11.4"
+  },
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test",
+    "react-eject": "react-scripts eject",
+    "electron-build": "electron-builder",
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron . \""
+  },
+  "build": {
+    "appId": "org.POStore.POStore",
+    "productName": "POStore",
+    "copyright": "Copyright © 2024 ${author}",
+    "win": {
+      "icon": "./public/logo.png"
+    },
+    "files": [
+      "src/main.mjs",
+      "build/**/*",
+      "package.json",
+      "node_modules/**/*",
+      "src/**/*"
+    ],
+    "extends": null,
+    "directories": {
+      "buildResources": "build"
+    },
+    "includeSubNodeModules": true
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^32.0.1",
+    "electron-builder": "^24.13.3",
+    "wait-on": "^8.0.0"
+  }
+}

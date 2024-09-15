@@ -72,4 +72,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### point to note
 
-While working on electron+react+express with a jwt, save your token to your database any query it every time you make a request inorder to it to work. Otherwise , you effort will be in vain ( :
+While working on electron+react+express with a jwt, save your token to your database then query it every time you make a request inorder to it to work. Otherwise , you effort will be in vain )-:

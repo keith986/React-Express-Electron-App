@@ -71,9 +71,6 @@
     "files": [
       "src/main.mjs",
       "build/**/*",
-      "!package.json",
-      "!node_modules/**/*",
-      "src/**/*"
     ],
     "extends": null,
     "directories": {
